@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Gerencial · Fibra · Atento</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="data.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap');
+
+:root {
+  /* Atento Corporate */
+  --atento-red:    #E30613;
+  --atento-dark:   #1A1A2E;
+  --atento-gray:   #2D2D44;
+  --atento-light:  #F4F6F9;
+  --atento-white:  #FFFFFF;
+
+  /* Accent palette */
+  --green:  #00C48C;
+  --yellow: #FFB020;
+  --blue:   #1976D2;
+  --purple: #7B2D8B;
+  --teal:   #00838F;
+
+  /* UI */
+  --bg:       #F0F2F7;
+  --surface:  #FFFFFF;
+  --surface2: #F8F9FC;
+  --border:   #E2E6EF;
+  --text:     #1A1A2E;
+  --muted:    #7B8299;
+
+  --font: 'Montserrat', sans-serif;
+  --mono: 'Roboto Mono', monospace;
+  --radius: 10px;
+  --shadow: 0 2px 12px rgba(26,26,46,.08);
+  --shadow-lg: 0 4px 24px rgba(26,26,46,.13);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  min-height: 100vh;
+}
+
+/* ── NAV ───────────────────────────── */
+.topnav {
+  background: var(--atento-dark);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  height: 58px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,.25);
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: -.3px;
+}
+.nav-logo .dot { color: var(--atento-red); font-size: 22px; line-height: 1; }
+.nav-tabs {
+  display: flex;
+  gap: 2px;
+  height: 100%;
+  align-items: stretch;
+}
+.nav-tab {
+  padding: 0 18px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: rgba(255,255,255,.55);
+  border-bottom: 3px solid transparent;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.nav-tab:hover { color: rgba(255,255,255,.85); }
+.nav-tab.active { color: #fff; border-bottom-color: var(--atento-red); }
+
+.nav-actions { display: flex; gap: 8px; align-items: center; }
+.btn {
+  padding: 7px 16px;
+  border-radius: 6px;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all .15s;
+  letter-spacing: .3px;
+}
+.btn-outline {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.3);
+  color: rgba(255,255,255,.85);
+}
+.btn-outline:hover { background: rgba(255,255,255,.1); border-color: #fff; color: #fff; }
+.btn-red { background: var(--atento-red); color: #fff; }
+.btn-red:hover { background: #c0050f; }
+.btn-green { background: var(--green); color: #fff; }
+.btn-green:hover { filter: brightness(.9); }
+.btn svg { width: 14px; height: 14px; }
+
+/* ── LAYOUT ────────────────────────── */
+.page { max-width: 1480px; margin: 0 auto; padding: 24px 24px 48px; }
+
+/* ── HEADER BAND ───────────────────── */
+.header-band {
+  background: linear-gradient(135deg, var(--atento-dark) 0%, #2D2D4E 100%);
+  border-radius: var(--radius);
+  padding: 24px 32px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  color: #fff;
+}
+.hb-title h2 { font-size: 22px; font-weight: 800; letter-spacing: -.4px; }
+.hb-title p { font-size: 12px; color: rgba(255,255,255,.5); margin-top: 3px; font-family: var(--mono); letter-spacing: 1px; }
+.hb-meta { display: flex; gap: 24px; }
+.hb-stat { text-align: right; }
+.hb-stat .val { font-size: 22px; font-weight: 700; }
+.hb-stat .lbl { font-size: 10px; color: rgba(255,255,255,.45); letter-spacing: 1px; text-transform: uppercase; font-family: var(--mono); }
+
+/* ── FILTER BAR ────────────────────── */
+.filter-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+.filter-bar label { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: .8px; text-transform: uppercase; }
+select, input[type=text] {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 12px;
+  padding: 7px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  outline: none;
+  font-weight: 500;
+  transition: border-color .15s;
+  min-width: 140px;
+}
+select:focus, input:focus { border-color: var(--atento-red); }
+.filter-reset {
+  margin-left: auto;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: var(--font);
+  font-size: 12px;
+  padding: 7px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all .15s;
+}
+.filter-reset:hover { border-color: var(--atento-red); color: var(--atento-red); }
+
+/* ── SECTION ───────────────────────── */
+.section { display: none; }
+.section.active { display: block; }
+
+.section-head {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 6px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-head::before {
+  content: '';
+  display: block;
+  width: 3px; height: 16px;
+  background: var(--atento-red);
+  border-radius: 2px;
+}
+
+/* ── GRID ──────────────────────────── */
+.grid { display: grid; gap: 16px; margin-bottom: 20px; }
+.g12 { grid-template-columns: 1fr; }
+.g21 { grid-template-columns: 2fr 1fr; }
+.g12r { grid-template-columns: 1fr 2fr; }
+.g3 { grid-template-columns: repeat(3, 1fr); }
+.g4 { grid-template-columns: repeat(4, 1fr); }
+.g6 { grid-template-columns: repeat(6, 1fr); }
+.g22 { grid-template-columns: 1fr 1fr; }
+@media (max-width: 1100px) { .g3,.g4,.g6 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 720px) { .g21,.g12r,.g3,.g4,.g6,.g22 { grid-template-columns: 1fr; } }
+
+/* ── CARD ──────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.card-header {
+  padding: 14px 18px 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.card-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .4px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-title .icon {
+  width: 20px; height: 20px;
+  background: rgba(227,6,19,.1);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+.card-body { padding: 16px 18px; }
+.card-body.no-pad { padding: 0; }
+canvas { max-height: 260px; }
+
+/* ── KPI CARD ──────────────────────── */
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  transition: transform .15s, box-shadow .15s;
+}
+.kpi-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+}
+.kpi-card.red::after { background: var(--atento-red); }
+.kpi-card.green::after { background: var(--green); }
+.kpi-card.yellow::after { background: var(--yellow); }
+.kpi-card.blue::after { background: var(--blue); }
+.kpi-card.purple::after { background: var(--purple); }
+.kpi-card.teal::after { background: var(--teal); }
+
+.kpi-label {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-family: var(--mono);
+  margin-bottom: 6px;
+}
+.kpi-value { font-size: 32px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+.kpi-card.red   .kpi-value { color: var(--atento-red); }
+.kpi-card.green .kpi-value { color: var(--green); }
+.kpi-card.yellow .kpi-value { color: var(--yellow); }
+.kpi-card.blue  .kpi-value { color: var(--blue); }
+.kpi-card.purple .kpi-value { color: var(--purple); }
+.kpi-card.teal  .kpi-value { color: var(--teal); }
+.kpi-sub { font-size: 11px; color: var(--muted); font-family: var(--mono); }
+
+/* ── TABLE ─────────────────────────── */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+thead tr { background: var(--surface2); border-bottom: 2px solid var(--border); }
+th {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 10.5px;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+}
+th:hover { color: var(--atento-red); }
+th.sort-asc::after { content: ' ▲'; font-size: 9px; }
+th.sort-desc::after { content: ' ▼'; font-size: 9px; }
+td { padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: #fafbfe; }
+
+/* ── BADGE ─────────────────────────── */
+.badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-size: 10.5px;
+  font-weight: 700;
+  font-family: var(--mono);
+  white-space: nowrap;
+}
+.badge-green  { background: rgba(0,196,140,.12);  color: #00875e; }
+.badge-red    { background: rgba(227,6,19,.10);    color: var(--atento-red); }
+.badge-yellow { background: rgba(255,176,32,.12);  color: #b37400; }
+.badge-blue   { background: rgba(25,118,210,.10);  color: var(--blue); }
+.badge-gray   { background: var(--surface2);       color: var(--muted); }
+.badge-purple { background: rgba(123,45,139,.10);  color: var(--purple); }
+
+.tag-num { font-family: var(--mono); font-weight: 600; }
+.col-green  { color: var(--green); }
+.col-red    { color: var(--atento-red); }
+.col-yellow { color: var(--yellow); }
+.col-blue   { color: var(--blue); }
+.col-muted  { color: var(--muted); }
+
+/* ── HBAR ──────────────────────────── */
+.hbar-list { display: flex; flex-direction: column; gap: 10px; }
+.hbar-meta { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px; }
+.hbar-name { font-weight: 600; max-width: 70%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hbar-val { font-family: var(--mono); color: var(--atento-red); font-weight: 600; }
+.hbar-track { height: 7px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+.hbar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--atento-red), #ff6b35); transition: width .5s ease; }
+
+/* ── PROGRESS RING ─────────────────── */
+.ring-wrap { display: flex; align-items: center; justify-content: center; gap: 24px; padding: 8px 0; }
+.ring-item { text-align: center; }
+.ring-svg { display: block; margin: 0 auto 6px; }
+.ring-val { font-size: 18px; font-weight: 800; }
+.ring-lbl { font-size: 10px; color: var(--muted); font-family: var(--mono); letter-spacing: 1px; text-transform: uppercase; }
+
+/* ── INSIGHT CARD ──────────────────── */
+.insight-card {
+  background: linear-gradient(135deg, #1A1A2E 0%, #2D2D4E 100%);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.insight-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+.insight-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.insight-body  { font-size: 12px; color: rgba(255,255,255,.65); line-height: 1.5; }
+.insight-card.warn { background: linear-gradient(135deg, #7A1A0A 0%, #B03020 100%); }
+.insight-card.good { background: linear-gradient(135deg, #0A4A2F 0%, #0D7A4A 100%); }
+.insight-card.info { background: linear-gradient(135deg, #0A2A4A 0%, #1565C0 100%); }
+
+/* ── FOCO TABLE ────────────────────── */
+.foco-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.foco-item:last-child { border-bottom: none; }
+.foco-rank {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--atento-red);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.foco-name { flex: 1; font-size: 13px; font-weight: 600; }
+.foco-meta { font-size: 11px; color: var(--muted); margin-top: 1px; font-family: var(--mono); }
+.foco-efic { font-size: 14px; font-weight: 700; }
+
+/* ── PROJECTION ────────────────────── */
+.proj-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.proj-label { font-size: 11px; color: var(--muted); font-family: var(--mono); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
+.proj-val { font-size: 26px; font-weight: 800; }
+.proj-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* ── MODAL AGENT ───────────────────── */
+#modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+}
+#modal-overlay.open { display: flex; }
+#modal-box {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: 28px;
+  max-width: 520px;
+  width: 90%;
+  position: relative;
+}
+#modal-close {
+  position: absolute;
+  top: 14px; right: 16px;
+  background: none; border: none;
+  font-size: 20px; cursor: pointer;
+  color: var(--muted);
+}
+#modal-close:hover { color: var(--atento-red); }
+
+/* ── TOAST ─────────────────────────── */
+#toast {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  background: var(--atento-dark);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 300;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all .3s;
+  pointer-events: none;
+}
+#toast.show { opacity: 1; transform: translateY(0); }
+
+/* ── SCROLLBAR ─────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--surface2); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <div class="nav-logo">
+    <span class="dot">●</span>
+    Atento · Fibra
+  </div>
+  <div class="nav-tabs">
+    <div class="nav-tab active" data-tab="t-resumen">Resumen Ejecutivo</div>
+    <div class="nav-tab" data-tab="t-temporal">Análisis Temporal</div>
+    <div class="nav-tab" data-tab="t-asesores">Asesores & QC</div>
+    <div class="nav-tab" data-tab="t-agenda">Agenda & Legalizaciones</div>
+    <div class="nav-tab" data-tab="t-geo">Geografía & Producto</div>
+    <div class="nav-tab" data-tab="t-insights">Insights & Proyección</div>
+  </div>
+  <div class="nav-actions">
+    <button class="btn btn-outline" onclick="downloadExcel()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17"/></svg>
+      Excel
+    </button>
+    <button class="btn btn-red" onclick="downloadPDF()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      PDF
+    </button>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="page" id="main-page">
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- GLOBAL FILTER BAR                          -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="filter-bar" id="global-filters">
+    <label>Filtros:</label>
+    <select id="f-semana">  <option value="">Todas las semanas</option></select>
+    <select id="f-supervisor"><option value="">Todos los supervisores</option></select>
+    <select id="f-asesor">  <option value="">Todos los asesores</option></select>
+    <select id="f-regional"><option value="">Todas las regionales</option></select>
+    <select id="f-producto"><option value="">Todos los productos</option></select>
+    <select id="f-linea">   <option value="">Todas las líneas</option></select>
+    <button class="filter-reset" onclick="resetFilters()">✕ Limpiar</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- TAB 1: RESUMEN EJECUTIVO                   -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section class="section active" id="t-resumen">
+
+    <div class="header-band">
+      <div class="hb-title">
+        <h2>Informe Gerencial de Operaciones · Canal Online</h2>
+        <p id="hb-date">MAYO 2026 · FIBRA · ATENTO COLOMBIA</p>
+      </div>
+      <div class="hb-meta">
+        <div class="hb-stat"><div class="val" id="hb-dias-pdcg">—</div><div class="lbl">Días PDC</div></div>
+        <div class="hb-stat"><div class="val" id="hb-dias-rest">—</div><div class="lbl">Días Restantes</div></div>
+        <div class="hb-stat"><div class="val" id="hb-avance">—%</div><div class="lbl">Avance</div></div>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="section-head">Indicadores Clave</div>
+    <div class="grid g6" id="kpis-grid" style="margin-bottom:20px;">
+      <div class="kpi-card red">   <div class="kpi-label">Total Registros</div><div class="kpi-value" id="k-total">—</div><div class="kpi-sub">órdenes activas</div></div>
+      <div class="kpi-card green"> <div class="kpi-label">Terminadas</div>    <div class="kpi-value" id="k-term">—</div> <div class="kpi-sub" id="k-term-pct">—</div></div>
+      <div class="kpi-card yellow"><div class="kpi-label">Pendientes</div>    <div class="kpi-value" id="k-pend">—</div> <div class="kpi-sub" id="k-pend-pct">—</div></div>
+      <div class="kpi-card red">   <div class="kpi-label">Anuladas</div>      <div class="kpi-value" id="k-anul">—</div> <div class="kpi-sub" id="k-anul-pct">—</div></div>
+      <div class="kpi-card blue">  <div class="kpi-label">Conversión</div>    <div class="kpi-value" id="k-conv">—%</div><div class="kpi-sub">Altas/(Altas+Anul)</div></div>
+      <div class="kpi-card teal">  <div class="kpi-label">Empaquetadas</div> <div class="kpi-value" id="k-empa">—</div> <div class="kpi-sub" id="k-empa-pct">—</div></div>
+    </div>
+
+    <!-- Charts row -->
+    <div class="grid g21">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title"><span class="icon">📊</span>Terminadas · Anuladas · Pendientes por Día</span>
+          <select id="f-diario-view" onchange="renderDiario(getFiltered())">
+            <option value="stacked">Apilado</option>
+            <option value="grouped">Agrupado</option>
+          </select>
+        </div>
+        <div class="card-body"><canvas id="chart-diario"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title"><span class="icon">🎯</span>Estado General</span></div>
+        <div class="card-body"><canvas id="chart-donut"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Por supervisor -->
+    <div class="section-head">Desempeño por Supervisor y Línea</div>
+    <div class="grid g22">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title"><span class="icon">👤</span>Por Supervisor</span>
+          <select onchange="sortTable('tbl-supervisor', this.value)">
+            <option value="">Ordenar por...</option>
+            <option value="total">Total</option><option value="term">Terminadas</option>
+            <option value="conv">Conversión</option><option value="anul">Anuladas</option>
+          </select>
+        </div>
+        <div class="card-body no-pad">
+          <div class="table-wrap"><table id="tbl-supervisor">
+            <thead><tr>
+              <th onclick="sortTableCol(this,'tbl-supervisor',0)">Supervisor</th>
+              <th onclick="sortTableCol(this,'tbl-supervisor',1)">Total</th>
+              <th onclick="sortTableCol(this,'tbl-supervisor',2)">Term.</th>
+              <th onclick="sortTableCol(this,'tbl-supervisor',3)">Pend.</th>
+              <th onclick="sortTableCol(this,'tbl-supervisor',4)">Anuld.</th>
+              <th onclick="sortTableCol(this,'tbl-supervisor',5)">Empa.</th>
+              <th onclick="sortTableCol(this,'tbl-supervisor',6)">Conversión</th>
+            </tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title"><span class="icon">📶</span>Por Línea de Negocio</span></div>
+        <div class="card-body no-pad">
+          <div class="table-wrap"><table id="tbl-linea">
+            <thead><tr>
+              <th onclick="sortTableCol(this,'tbl-linea',0)">Línea</th>
+              <th onclick="sortTableCol(this,'tbl-linea',1)">Total</th>
+              <th onclick="sortTableCol(this,'tbl-linea',2)">Term.</th>
+              <th onclick="sortTableCol(this,'tbl-linea',3)">Pend.</th>
+              <th onclick="sortTableCol(this,'tbl-linea',4)">Anuld.</th>
+              <th onclick="sortTableCol(this,'tbl-linea',5)">Conversión</th>
+            </tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header"><span class="card-title"><span class="icon">📈</span>Conversión por Supervisor</span></div>
+      <div class="card-body"><canvas id="chart-conv-sup"></canvas></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- TAB 2: ANÁLISIS TEMPORAL                   -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section class="section" id="t-temporal">
+    <div class="section-head">Tendencia General · Cortes Diarios y Semanales</div>
+    <div class="grid g21">
+      <div class="card">
+        <div class="card-header"><span class="card-title"><span class="icon">📅</span>Por Día de Segmento (DIA SEG)</span></div>
+        <div class="card-body"><canvas id="chart-diario2"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title"><span class="icon">📆</span>Por Semana</span></div>
+        <div class="card-body"><canvas id="chart-semana"></canvas></div>
+      </div>
+    </div>
+    <div class="grid g22">
+      <div class="card">
+        <div class="card-header"><span class="card-title"><span class="icon">🗓</span>Por Día de Registro</span></div>
+        <div class="card-body"><canvas id="chart-dia-reg"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title"><span class="icon">📊</span>Distribución por Regional</span></div>
+        <div class="card-body"><canvas id="chart-regional"></canvas></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title"><span class="icon">🔥</span>Evolución acumulada de Terminadas</span></div>
+      <div class="card-body"><canvas id="chart-acum"></canvas></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- TAB 3: ASESORES & QC                       -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section class="section" id="t-asesores">
+    <div class="section-head">Estado de Asesores · Rendimiento Individual</div>
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header">
+        <span class="card-title"><span class="icon">👥</span>Tabla de Asesores</span>
+        <div style="display:flex;gap:8px;">
+          <input type="text" id="search-asesor" placeholder="Buscar asesor..." oninput="renderAsesores(getFiltered())" style="min-width:180px;">
+          <select onchange="sortTable('tbl-asesores', this.value)">
+            <option value="">Ordenar...</option>
+            <option value="total">Total</option><option value="term">Terminadas</option>
+            <option value="conv">Conversión</option><option value="quiebres">Quiebres</option>
+          </select>
+        </div>
+      </div>
+      <div class="card-body no-pad">
+        <div class="table-wrap"><table id="tbl-asesores">
+          <thead><tr>
+            <th onclick="sortTableCol(this,'tbl-asesores',0)">Asesor</th>
+            <th onclick="sortTableCol(this,'tbl-asesores',1)">Supervisor</th>
+            <th onclick="sortTableCol(this,'tbl-asesores',2)">Línea</th>
+            <th onclick="sortTableCol(this,'tbl-asesores',3)">Total</th>
+            <th onclick="sortTableCol(this,'tbl-asesores',4)">Term.</th>
+            <th onclick="sortTableCol(this,'tbl-asesores',5)">Pend.</th>
+            <th onclick="sortTableCol(this,'tbl-asesores',6)">Anuld.</th>
+            <th onclick="sortTableCol(this,'tbl-asesores',7)">Conversión</th>
+            <th onclick="sortTableCol(this,'tbl-asesores',8)">Quiebres</th>
+            <th>Estado</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="section-head">Control de Calidad · Quiebres y Cancelaciones</div>
+    <div class="grid g22">
+      <div class="card">
+        <div class="card-header"><span class="card-title"><span class="icon">⚠️</span>Top Motivos de Quiebre</span></div>
+        <div class="card-body"><div class="hbar-list" id="quiebre-bars"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title"><span class="icon">🎯</span>Atribuible</span></div>
+        <div class="card-body"><canvas id="chart-atrib"></canvas></div>
+      </div>
+    </div>
+    <div class="grid g22">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title"><span class="icon">🔴</span>Infractores · Quiebres por Asesor</span>
+          <select id="f-atrib-tipo" onchange="renderQCTables(getFiltered())">
+            <option value="">Todos</option>
+            <option value="asesor">Asesor</option>
+            <option value="tecnico">Técnico</option>
+            <option value="cliente">Cliente</option>
+            <option value="agendamiento">Agendamiento</option>
+          </select>
+        </div>
+        <div class="card-body no-pad">
+          <div class="table-wrap"><table id="tbl-infractores">
+            <thead><tr>
+              <th onclick="sortTableCol(this,'tbl-infractores',0)">Asesor</th>
+              <th onclick="sortTableCol(this,'tbl-infractores',1)">Supervisor</th>
+              <th onclick="sortTableCol(this,'tbl-infractores',2)">Quiebres</th>
+              <th onclick="sortTableCol(this,'tbl-infractores',3)">Motivo Principal</th>
+              <th onclick="sortTableCol(this,'tbl-infractores',4)">Atribuible</th>
+            </tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title"><span class="icon">📊</span>Quiebres por Supervisor</span></div>
+        <div class="card-body"><canvas id="chart-quiebre-sup"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- TAB 4: AGENDA & LEGALIZACIONES             -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section class="section" id="t-agenda">
+    <div class="section-head">Control de Agendamiento</div>
+    <div class="grid g6" style="margin-bottom:20px;">
+      <div class="kpi-card blue">  <div class="kpi-label">Total Agendas</div>  <div class="kpi-value" id="ag-total">—</div><div class="kpi-sub">programadas</div></div>
+      <div class="kpi-card green"> <div class="kpi-label">Pendiente Legalizar</div><div class="kpi-value" id="ag-pdte">—</div><div class="kpi-sub">en proceso</div></div>
+      <div class="kpi-card teal">  <div class="kpi-label">Leg. Grabación</div> <div class="kpi-value" id="ag-leg-gr">—</div><div class="kpi-sub">confirmadas</div></div>
+      <div class="kpi-card green"> <div class="kpi-label">Leg. Automática</div><div class="kpi-value" id="ag-leg-au">—</div><div class="kpi-sub">confirmadas</div></div>
+      <div class="kpi-card red">   <div class="kpi-label">No Cruza</div>       <div class="kpi-value" id="ag-nc">—</div>   <div class="kpi-sub">sin cruce</div></div>
+      <div class="kpi-card yellow"><div class="kpi-label">% Legalización</div><div class="kpi-value" id="ag-pct">—%</div> <div class="kpi-sub">del total activas</div></div>
+    </div>
+
+    <div class="grid g21">
+      <div class="card">
+        <div class="card-header"><span class="card-title"><span class="icon">📋</span>Estado de Legalizaciones (Embudo)</span></div>
+        <div class="card-body"><canvas id="chart-leg-funnel"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title"><span class="icon">💳</span>Control Financiero · % de Pago</span></div>
+        <div class="card-body">
+          <canvas id="chart-pago"></canvas>
+          <div class="grid g3" style="margin-top:14px;gap:10px;">
+            <div class="proj-box" style="flex-direction:column;text-align:center;">
+              <div class="proj-label">100% Pago</div>
+              <div class="proj-val col-green" id="pago-100">—</div>
+            </div>
+            <div class="proj-box" style="flex-direction:column;text-align:center;">
+              <div class="proj-label">50% Pago</div>
+              <div class="proj-val col-yellow" id="pago-50">—</div>
+            </div>
+            <div class="proj-box" style="flex-direction:column;text-align:center;">
+              <div class="proj-label">Sin Pago</div>
+              <div class="proj-val col-red" id="pago-0">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-head">Seguimiento de Pendientes · Días de Mora</div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title"><span class="icon">⏱</span>Días Faltantes / Mora por Asesor</span>
+        <select onchange="sortTable('tbl-mora', this.value)">
+          <option value="">Ordenar...</option>
+          <option value="dif_dias">Días Faltantes</option>
+          <option value="final_lg">Final vs LG</option>
+        </select>
+      </div>
+      <div class="card-body no-pad">
+        <div class="table-wrap"><table id="tbl-mora">
+          <thead><tr>
+            <th onclick="sortTableCol(this,'tbl-mora',0)">Asesor</th>
+            <th onclick="sortTableCol(this,'tbl-mora',1)">Supervisor</th>
+            <th onclick="sortTableCol(this,'tbl-mora',2)">Estado LEG</th>
+            <th onclick="sortTableCol(this,'tbl-mora',3)">DIF Días</th>
+            <th onclick="sortTableCol(this,'tbl-mora',4)">Final vs LG</th>
+            <th onclick="sortTableCol(this,'tbl-mora',5)">% Pago</th>
+            <th onclick="sortTableCol(this,'tbl-mora',6)">Total Reg.</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- TAB 5: GEOGRAFÍA & PRODUCTO                -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section class="section" id="t-geo">
+    <div class="section-head">Despliegue Geográfico · Efectividad por Departamento</div>
+    <div class="grid g21">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title"><span class="icon">🗺</span>Resumen por Departamento</span>
+          <select onchange="sortTable('tbl-depto', this.value)">
+            <option value="">Ordenar...</option>
+            <option value="total">Total</option>
+            <option value="term">Terminadas</option>
+            <option value="conv">Conversión</option>
+          </select>
+        </div>
+        <div class="card-body no-pad">
+          <div class="table-wrap"><table id="tbl-depto">
+            <thead><tr>
+              <th onclick="sortTableCol(this,'tbl-depto',0)">Departamento</th>
+              <th onclick="sortTableCol(this,'tbl-depto',1)">Regional</th>
+              <th onclick="sortTableCol(this,'tbl-depto',2)">Total</th>
+              <th onclick="sortTableCol(this,'tbl-depto',3)">Term.</th>
+              <th onclick="sortTableCol(this,'tbl-depto',4)">Anuld.</th>
+              <th onclick="sortTableCol(this,'tbl-depto',5)">Conversión</th>
+            </tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title"><span class="icon">📊</span>Top Municipios</span></div>
+        <div class="card-body"><div class="hbar-list" id="mun-bars"></div></div>
+      </div>
+    </div>
+
+    <div class="section-head">Mix de Productos · Distribución de Portafolio</div>
+    <div class="grid g22">
+      <div class="card">
+        <div class="card-header"><span class="card-title"><span class="icon">📦</span>Tipo de Producto</span></div>
+        <div class="card-body"><canvas id="chart-producto"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title"><span class="icon">💼</span>Top Planes</span></div>
+        <div class="card-body"><div class="hbar-list" id="plan-bars"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title"><span class="icon">💰</span>Distribución de Tarifas (TarifaMXFinal)</span></div>
+      <div class="card-body"><canvas id="chart-tarifa"></canvas></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- TAB 6: INSIGHTS & PROYECCIÓN               -->
+  <!-- ═══════════════════════════════════════════ -->
+  <section class="section" id="t-insights">
+    <div class="section-head">Proyección de Cierre de Mes</div>
+    <div class="grid g4" style="margin-bottom:20px;">
+      <div class="proj-box" style="flex-direction:column;">
+        <div class="proj-label">Días transcurridos</div>
+        <div class="proj-val" id="pr-dias-trans">—</div>
+        <div class="proj-sub">de <span id="pr-dias-total">—</span> días PDC</div>
+      </div>
+      <div class="proj-box" style="flex-direction:column;">
+        <div class="proj-label">Terminadas actuales</div>
+        <div class="proj-val col-green" id="pr-term-act">—</div>
+        <div class="proj-sub">ritmo: <span id="pr-ritmo">—</span>/día</div>
+      </div>
+      <div class="proj-box" style="flex-direction:column;">
+        <div class="proj-label">Proyección al cierre</div>
+        <div class="proj-val col-blue" id="pr-proy">—</div>
+        <div class="proj-sub">con ritmo actual</div>
+      </div>
+      <div class="proj-box" style="flex-direction:column;">
+        <div class="proj-label">Afectación proyectada</div>
+        <div class="proj-val col-red" id="pr-afect">—</div>
+        <div class="proj-sub">anulaciones proyectadas</div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header"><span class="card-title"><span class="icon">📈</span>Proyección de Terminadas vs Anuladas al Cierre</span></div>
+      <div class="card-body"><canvas id="chart-proyeccion"></canvas></div>
+    </div>
+
+    <div class="section-head">Focos de Acción · Supervisores y Asesores Prioritarios</div>
+    <div class="grid g22">
+      <div class="card">
+        <div class="card-header"><span class="card-title"><span class="icon">🔴</span>Supervisores Foco (menor conversión)</span></div>
+        <div class="card-body no-pad" id="foco-supervisores"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title"><span class="icon">🔴</span>Asesores Foco (menor conversión)</span></div>
+        <div class="card-body no-pad" id="foco-asesores"></div>
+      </div>
+    </div>
+
+    <div class="section-head">Insights y Recomendaciones Gerenciales</div>
+    <div id="insights-container" style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;"></div>
+
+    <div class="section-head">Afectaciones Críticas</div>
+    <div class="card">
+      <div class="card-header"><span class="card-title"><span class="icon">🚨</span>Fugas Operativas Principales</span></div>
+      <div class="card-body no-pad">
+        <div class="table-wrap"><table id="tbl-critico">
+          <thead><tr>
+            <th>Motivo de Quiebre</th>
+            <th>Afectados</th>
+            <th>Atribuible</th>
+            <th>Impacto %</th>
+            <th>Acción Sugerida</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table></div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page -->
+
+<!-- MODAL -->
+<div id="modal-overlay">
+  <div id="modal-box">
+    <button id="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════
+// CHART DEFAULTS
+// ═══════════════════════════════════════════════
+Chart.defaults.color = '#7B8299';
+Chart.defaults.borderColor = '#E2E6EF';
+Chart.defaults.font.family = "'Roboto Mono', monospace";
+Chart.defaults.font.size = 11;
+
+const C = {
+  red:    '#E30613', green:  '#00C48C',
+  yellow: '#FFB020', blue:   '#1976D2',
+  purple: '#7B2D8B', teal:   '#00838F',
+  gray:   '#7B8299',
+};
+const PALETTE = [C.red, C.blue, C.green, C.yellow, C.purple, C.teal, '#FF6B35', '#00B4D8', '#43AA8B'];
+
+// ═══════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+const charts = {};
+
+function destroyChart(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
+function sum(arr, k) { return arr.reduce((s, r) => s + (Number(r[k]) || 0), 0); }
+function pct(n, d) { return d ? ((n / d) * 100).toFixed(1) : '0.0'; }
+function conv(t, a) { return (t + a) > 0 ? ((t / (t + a)) * 100).toFixed(1) : '0.0'; }
+
+function groupBy(arr, key) {
+  return arr.reduce((acc, r) => {
+    const k = r[key] || '(vacío)';
+    if (!acc[k]) acc[k] = [];
+    acc[k].push(r);
+    return acc;
+  }, {});
+}
+
+function sortedKeys(obj, by = 'total') {
+  return Object.keys(obj).sort((a, b) => obj[b].length - obj[a].length);
+}
+
+function showToast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function colorBadge(v) {
+  v = parseFloat(v);
+  if (v >= 80) return 'badge-green';
+  if (v >= 60) return 'badge-yellow';
+  return 'badge-red';
+}
+
+// ═══════════════════════════════════════════════
+// FILTERS
+// ═══════════════════════════════════════════════
+function populateFilters() {
+  const sets = { semana: new Set(), supervisor: new Set(), asesor: new Set(), regional: new Set(), producto: new Set(), linea: new Set() };
+  RAW_DATA.forEach(r => {
+    if (r['SEMANA'])       sets.semana.add(r['SEMANA']);
+    if (r['SUPERVISOR'])   sets.supervisor.add(r['SUPERVISOR']);
+    if (r['Tramitador_Nom']) sets.asesor.add(r['Tramitador_Nom']);
+    if (r['Regional'])     sets.regional.add(r['Regional']);
+    if (r['Producto'])     sets.producto.add(r['Producto']);
+    if (r['LINEA'])        sets.linea.add(r['LINEA']);
+  });
+  const fill = (id, vals) => {
+    const el = $(id);
+    [...vals].sort().forEach(v => { const o = document.createElement('option'); o.value = o.textContent = v; el.appendChild(o); });
+  };
+  fill('f-semana', sets.semana);
+  fill('f-supervisor', sets.supervisor);
+  fill('f-asesor', sets.asesor);
+  fill('f-regional', sets.regional);
+  fill('f-producto', sets.producto);
+  fill('f-linea', sets.linea);
+}
+
+function getFiltered() {
+  const sem = $('f-semana').value;
+  const sup = $('f-supervisor').value;
+  const ase = $('f-asesor').value;
+  const reg = $('f-regional').value;
+  const pro = $('f-producto').value;
+  const lin = $('f-linea').value;
+  return RAW_DATA.filter(r =>
+    (!sem || r['SEMANA'] === sem) &&
+    (!sup || r['SUPERVISOR'] === sup) &&
+    (!ase || r['Tramitador_Nom'] === ase) &&
+    (!reg || r['Regional'] === reg) &&
+    (!pro || r['Producto'] === pro) &&
+    (!lin || r['LINEA'] === lin)
+  );
+}
+
+function resetFilters() {
+  ['f-semana','f-supervisor','f-asesor','f-regional','f-producto','f-linea'].forEach(id => $(id).value = '');
+  render();
+}
+
+// ═══════════════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════════════
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    tab.classList.add('active');
+    $(tab.dataset.tab).classList.add('active');
+    render();
+  });
+});
+
+// ═══════════════════════════════════════════════
+// TABLE SORT
+// ═══════════════════════════════════════════════
+function sortTableCol(th, tableId, colIdx) {
+  const table = $(tableId);
+  const tbody = table.querySelector('tbody');
+  const rows = [...tbody.querySelectorAll('tr')];
+  const ths = table.querySelectorAll('th');
+  const asc = !th.classList.contains('sort-asc');
+  ths.forEach(t => t.classList.remove('sort-asc','sort-desc'));
+  th.classList.add(asc ? 'sort-asc' : 'sort-desc');
+  rows.sort((a, b) => {
+    const av = a.cells[colIdx]?.dataset.val ?? a.cells[colIdx]?.textContent ?? '';
+    const bv = b.cells[colIdx]?.dataset.val ?? b.cells[colIdx]?.textContent ?? '';
+    const an = parseFloat(av), bn = parseFloat(bv);
+    if (!isNaN(an) && !isNaN(bn)) return asc ? an - bn : bn - an;
+    return asc ? av.localeCompare(bv) : bv.localeCompare(av);
+  });
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+// ═══════════════════════════════════════════════
+// KPIs
+// ═══════════════════════════════════════════════
+function renderKPIs(data) {
+  const total = data.length;
+  const term  = sum(data, 'TERMINADA');
+  const pend  = sum(data, 'PENDIENTE');
+  const anul  = sum(data, 'ANULADA');
+  const empa  = sum(data, 'EMPAQUETADAS');
+  const convVal = conv(term, anul);
+
+  $('k-total').textContent = total.toLocaleString();
+  $('k-term').textContent  = term.toLocaleString();
+  $('k-pend').textContent  = pend.toLocaleString();
+  $('k-anul').textContent  = anul.toLocaleString();
+  $('k-conv').textContent  = convVal + '%';
+  $('k-empa').textContent  = empa.toLocaleString();
+
+  $('k-term-pct').textContent = pct(term, total) + '% del total';
+  $('k-pend-pct').textContent = pct(pend, total) + '% del total';
+  $('k-anul-pct').textContent = pct(anul, total) + '% del total';
+  $('k-empa-pct').textContent = pct(empa, total) + '% del total';
+
+  // Header band (uses full data always)
+  const diasPDC  = RAW_DATA[0]?.['DIAS MES PDC'] || 24;
+  const diaPDC   = RAW_DATA[0]?.['DIA PDC'] || 12;
+  const avance   = ((diaPDC / diasPDC) * 100).toFixed(0);
+  $('hb-dias-pdcg').textContent = diasPDC;
+  $('hb-dias-rest').textContent = diasPDC - diaPDC;
+  $('hb-avance').textContent    = avance + '%';
+}
+
+// ═══════════════════════════════════════════════
+// CHART: DIARIO (TAB 1 & 2)
+// ═══════════════════════════════════════════════
+function renderDiario(data, canvasId = 'chart-diario') {
+  destroyChart(canvasId);
+  const grouped = groupBy(data, 'DIA SEG');
+  const days = Object.keys(grouped).map(Number).sort((a, b) => a - b);
+  const stacked = ($('f-diario-view')?.value ?? 'stacked') === 'stacked';
+
+  charts[canvasId] = new Chart($(canvasId), {
+    type: 'bar',
+    data: {
+      labels: days.map(d => 'Día ' + d),
+      datasets: [
+        { label: 'Terminadas', data: days.map(d => sum(grouped[d] || [], 'TERMINADA')), backgroundColor: C.green + 'cc', borderRadius: 4 },
+        { label: 'Anuladas',   data: days.map(d => sum(grouped[d] || [], 'ANULADA')),   backgroundColor: C.red   + 'cc', borderRadius: 4 },
+        { label: 'Pendientes', data: days.map(d => sum(grouped[d] || [], 'PENDIENTE')), backgroundColor: C.yellow + 'cc', borderRadius: 4 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: { legend: { position: 'top' } },
+      scales: {
+        x: { stacked, grid: { display: false } },
+        y: { stacked, grid: { color: '#E2E6EF' } }
+      }
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════
+// CHART: DONUT
+// ═══════════════════════════════════════════════
+function renderDonut(data) {
+  destroyChart('donut');
+  charts['donut'] = new Chart($('chart-donut'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Terminadas','Anuladas','Pendientes'],
+      datasets: [{
+        data: [sum(data,'TERMINADA'), sum(data,'ANULADA'), sum(data,'PENDIENTE')],
+        backgroundColor: [C.green+'dd', C.red+'dd', C.yellow+'dd'],
+        borderColor: '#fff', borderWidth: 3, hoverOffset: 6
+      }]
+    },
+    options: { responsive: true, cutout: '62%', plugins: { legend: { position: 'bottom' } } }
+  });
+}
+
+// ═══════════════════════════════════════════════
+// CHART: CONVERSIÓN SUPERVISOR
+// ═══════════════════════════════════════════════
+function renderConvSup(data) {
+  destroyChart('conv-sup');
+  const bySup = groupBy(data, 'SUPERVISOR');
+  const sups  = Object.keys(bySup).filter(s => s !== '(vacío)').sort();
+  const convs = sups.map(s => {
+    const t = sum(bySup[s], 'TERMINADA'), a = sum(bySup[s], 'ANULADA');
+    return parseFloat(conv(t, a));
+  });
+  charts['conv-sup'] = new Chart($('chart-conv-sup'), {
+    type: 'bar',
+    data: {
+      labels: sups,
+      datasets: [{
+        label: 'Conversión (%)',
+        data: convs,
+        backgroundColor: convs.map(v => v >= 80 ? C.green+'cc' : v >= 60 ? C.yellow+'cc' : C.red+'cc'),
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true, indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { min: 0, max: 100, grid: { color: '#E2E6EF' }, ticks: { callback: v => v + '%' } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════
+// TABLE: SUPERVISOR
+// ═══════════════════════════════════════════════
+function renderTblSupervisor(data) {
+  const bySup = groupBy(data, 'SUPERVISOR');
+  const sups  = Object.keys(bySup).filter(s => s !== '(vacío)').sort();
+  $('tbl-supervisor').querySelector('tbody').innerHTML = sups.map(s => {
+    const rows = bySup[s];
+    const t = sum(rows,'TERMINADA'), a = sum(rows,'ANULADA'), p = sum(rows,'PENDIENTE'), e = sum(rows,'EMPAQUETADAS');
+    const c = conv(t, a);
+    return `<tr>
+      <td><strong>${s}</strong></td>
+      <td class="tag-num">${rows.length}</td>
+      <td class="tag-num col-green">${t}</td>
+      <td class="tag-num col-yellow">${p}</td>
+      <td class="tag-num col-red">${a}</td>
+      <td class="tag-num">${e}</td>
+      <td><span class="badge ${colorBadge(c)}">${c}%</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════
+// TABLE: LÍNEA
+// ═══════════════════════════════════════════════
+function renderTblLinea(data) {
+  const byLin = groupBy(data, 'LINEA');
+  const lins  = Object.keys(byLin).filter(l => l !== '(vacío)').sort();
+  $('tbl-linea').querySelector('tbody').innerHTML = lins.map(l => {
+    const rows = byLin[l];
+    const t = sum(rows,'TERMINADA'), a = sum(rows,'ANULADA'), p = sum(rows,'PENDIENTE');
+    const c = conv(t, a);
+    return `<tr>
+      <td><strong>${l}</strong></td>
+      <td class="tag-num">${rows.length}</td>
+      <td class="tag-num col-green">${t}</td>
+      <td class="tag-num col-yellow">${p}</td>
+      <td class="tag-num col-red">${a}</td>
+      <td><span class="badge ${colorBadge(c)}">${c}%</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════
+// TAB 2: TEMPORAL
+// ═══════════════════════════════════════════════
+function renderTemporal(data) {
+  // Duplicar diario en tab2
+  renderDiario(data, 'chart-diario2');
+
+  // Por semana
+  destroyChart('semana');
+  const bySem = groupBy(data, 'SEMANA');
+  const sems  = Object.keys(bySem).sort();
+  charts['semana'] = new Chart($('chart-semana'), {
+    type: 'bar',
+    data: {
+      labels: sems,
+      datasets: [
+        { label: 'Terminadas', data: sems.map(s => sum(bySem[s],'TERMINADA')), backgroundColor: C.green+'cc', borderRadius: 4 },
+        { label: 'Anuladas',   data: sems.map(s => sum(bySem[s],'ANULADA')),   backgroundColor: C.red+'cc',   borderRadius: 4 },
+        { label: 'Pendientes', data: sems.map(s => sum(bySem[s],'PENDIENTE')), backgroundColor: C.yellow+'cc',borderRadius: 4 },
+      ]
+    },
+    options: {
+      responsive: true, plugins: { legend: { position: 'top' } },
+      scales: { x: { stacked: true, grid:{display:false} }, y: { stacked: true, grid:{color:'#E2E6EF'} } }
+    }
+  });
+
+  // Por Día de Registro
+  destroyChart('dia-reg');
+  const byDiaReg = groupBy(data, 'Dia_Reg');
+  const dias = Object.keys(byDiaReg).map(Number).sort((a,b) => a-b);
+  charts['dia-reg'] = new Chart($('chart-dia-reg'), {
+    type: 'line',
+    data: {
+      labels: dias.map(d => 'D'+d),
+      datasets: [
+        { label: 'Terminadas', data: dias.map(d => sum(byDiaReg[d]||[],'TERMINADA')), borderColor: C.green, backgroundColor: C.green+'22', tension:.35, fill:true, pointRadius:4 },
+        { label: 'Anuladas',   data: dias.map(d => sum(byDiaReg[d]||[],'ANULADA')),   borderColor: C.red,   backgroundColor: C.red+'22',   tension:.35, fill:true, pointRadius:4 },
+      ]
+    },
+    options: { responsive: true, plugins:{legend:{position:'top'}}, scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E6EF'}}} }
+  });
+
+  // Regional
+  destroyChart('regional');
+  const byReg = groupBy(data, 'Regional');
+  const regs  = Object.keys(byReg).filter(r=>r!=='(vacío)').sort();
+  charts['regional'] = new Chart($('chart-regional'), {
+    type: 'bar', indexAxis: 'y',
+    data: {
+      labels: regs,
+      datasets: [
+        { label: 'Terminadas', data: regs.map(r => sum(byReg[r],'TERMINADA')), backgroundColor: C.green+'cc', borderRadius:4 },
+        { label: 'Anuladas',   data: regs.map(r => sum(byReg[r],'ANULADA')),   backgroundColor: C.red+'cc',   borderRadius:4 },
+        { label: 'Pendientes', data: regs.map(r => sum(byReg[r],'PENDIENTE')), backgroundColor: C.yellow+'cc',borderRadius:4 },
+      ]
+    },
+    options: {
+      responsive: true, plugins:{legend:{position:'top'}},
+      scales:{ x:{stacked:true,grid:{color:'#E2E6EF'}}, y:{stacked:true,grid:{display:false}} }
+    }
+  });
+
+  // Acumulado
+  destroyChart('acum');
+  const sortedDays = Object.keys(groupBy(data,'DIA SEG')).map(Number).sort((a,b)=>a-b);
+  let acum = 0, acumA = 0;
+  const acumT = sortedDays.map(d => { acum  += sum((groupBy(data,'DIA SEG')[d]||[]),'TERMINADA'); return acum; });
+  const acumAn = sortedDays.map(d => { acumA += sum((groupBy(data,'DIA SEG')[d]||[]),'ANULADA');   return acumA; });
+  charts['acum'] = new Chart($('chart-acum'), {
+    type: 'line',
+    data: {
+      labels: sortedDays.map(d=>'Día '+d),
+      datasets: [
+        { label: 'Terminadas Acum.', data: acumT, borderColor: C.green, backgroundColor: C.green+'22', tension:.35, fill:true, pointRadius:3 },
+        { label: 'Anuladas Acum.',   data: acumAn, borderColor: C.red,   backgroundColor: C.red+'22',   tension:.35, fill:true, pointRadius:3 },
+      ]
+    },
+    options: { responsive: true, plugins:{legend:{position:'top'}}, scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E6EF'}}} }
+  });
+}
+
+// ═══════════════════════════════════════════════
+// TAB 3: ASESORES & QC
+// ═══════════════════════════════════════════════
+function renderAsesores(data) {
+  const search = ($('search-asesor')?.value || '').toLowerCase();
+  const byAse  = groupBy(data, 'Tramitador_Nom');
+  let ases = Object.keys(byAse).filter(a => a !== '(vacío)');
+  if (search) ases = ases.filter(a => a.toLowerCase().includes(search));
+
+  $('tbl-asesores').querySelector('tbody').innerHTML = ases.map(a => {
+    const rows = byAse[a];
+    const t = sum(rows,'TERMINADA'), an = sum(rows,'ANULADA'), p = sum(rows,'PENDIENTE');
+    const c = conv(t, an);
+    const sup = rows[0]?.['SUPERVISOR'] || '—';
+    const lin = rows[0]?.['LINEA'] || '—';
+    const q   = rows.filter(r => r['QUIEBRE'] && r['QUIEBRE'] !== '').length;
+    const efic = parseFloat(c);
+    const estado = efic >= 75 ? `<span class="badge badge-green">✓ OK</span>` :
+                   efic >= 50 ? `<span class="badge badge-yellow">⚡ Atención</span>` :
+                               `<span class="badge badge-red">🔴 Foco</span>`;
+    return `<tr>
+      <td><strong style="font-size:12px;">${a}</strong></td>
+      <td>${sup}</td>
+      <td>${lin}</td>
+      <td class="tag-num" data-val="${rows.length}">${rows.length}</td>
+      <td class="tag-num col-green" data-val="${t}">${t}</td>
+      <td class="tag-num col-yellow" data-val="${p}">${p}</td>
+      <td class="tag-num col-red" data-val="${an}">${an}</td>
+      <td data-val="${c}"><span class="badge ${colorBadge(c)}">${c}%</span></td>
+      <td class="tag-num col-red" data-val="${q}">${q}</td>
+      <td>${estado}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderQCTables(data) {
+  // Quiebre bars
+  const atribFilter = $('f-atrib-tipo')?.value || '';
+  const qData = data.filter(r => r['QUIEBRE'] && r['QUIEBRE'] !== '' && (!atribFilter || r['ATRIBUIBLE'] === atribFilter));
+  const byQ = {};
+  qData.forEach(r => { const k = r['QUIEBRE'].trim(); if (k) byQ[k] = (byQ[k]||0)+1; });
+  const sorted = Object.entries(byQ).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const maxQ = sorted[0]?.[1] || 1;
+  $('quiebre-bars').innerHTML = sorted.length ? sorted.map(([n,v]) => `
+    <div class="hbar-item">
+      <div class="hbar-meta"><span class="hbar-name" title="${n}">${n}</span><span class="hbar-val">${v}</span></div>
+      <div class="hbar-track"><div class="hbar-fill" style="width:${(v/maxQ*100).toFixed(1)}%"></div></div>
+    </div>`).join('') : '<p style="color:var(--muted);padding:8px;">Sin quiebres en la selección.</p>';
+
+  // Atribuible
+  destroyChart('atrib');
+  const byA = {};
+  data.filter(r=>r['ATRIBUIBLE']).forEach(r => { const k = r['ATRIBUIBLE'].trim(); if(k) byA[k]=(byA[k]||0)+1; });
+  const aLabels = Object.keys(byA), aVals = aLabels.map(k => byA[k]);
+  charts['atrib'] = new Chart($('chart-atrib'), {
+    type: 'doughnut',
+    data: { labels: aLabels, datasets:[{ data:aVals, backgroundColor:PALETTE.map(c=>c+'cc'), borderColor:'#fff', borderWidth:2, hoverOffset:6 }] },
+    options: { responsive:true, cutout:'55%', plugins:{legend:{position:'right'}} }
+  });
+
+  // Infractores
+  const byAseQ = groupBy(qData, 'Tramitador_Nom');
+  const infract = Object.entries(byAseQ)
+    .filter(([k]) => k !== '(vacío)')
+    .map(([a, rows]) => {
+      const topQ = Object.entries(rows.reduce((acc,r)=>{const k=r['QUIEBRE'].trim();acc[k]=(acc[k]||0)+1;return acc;},{})).sort((a,b)=>b[1]-a[1])[0]?.[0] || '—';
+      const topA = rows[0]?.['ATRIBUIBLE'] || '—';
+      return { asesor: a, sup: rows[0]?.['SUPERVISOR']||'—', q: rows.length, topQ, topA };
+    })
+    .sort((a,b) => b.q - a.q);
+  $('tbl-infractores').querySelector('tbody').innerHTML = infract.map(r => `<tr>
+    <td><strong>${r.asesor}</strong></td>
+    <td>${r.sup}</td>
+    <td class="tag-num col-red" data-val="${r.q}">${r.q}</td>
+    <td style="font-size:11px;">${r.topQ}</td>
+    <td><span class="badge badge-gray">${r.topA}</span></td>
+  </tr>`).join('');
+
+  // Quiebre por sup
+  destroyChart('quiebre-sup');
+  const bySQ = groupBy(qData, 'SUPERVISOR');
+  const sups = Object.keys(bySQ).filter(s=>s!=='(vacío)').sort();
+  charts['quiebre-sup'] = new Chart($('chart-quiebre-sup'), {
+    type: 'bar',
+    data: {
+      labels: sups,
+      datasets: [{ label: 'Quiebres', data: sups.map(s=>bySQ[s].length), backgroundColor: C.red+'cc', borderRadius:6 }]
+    },
+    options: { responsive:true, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E6EF'}}} }
+  });
+}
+
+// ═══════════════════════════════════════════════
+// TAB 4: AGENDA & LEGALIZACIONES
+// ═══════════════════════════════════════════════
+function renderAgenda(data) {
+  const byLeg = groupBy(data, 'ESTADO LEG');
+  const legGr = (byLeg['legalizada grabacion']||[]).length;
+  const legAu = (byLeg['legalizada aut']||[]).length;
+  const pdteLeg = (byLeg['pdte legalizar']||[]).length;
+  const noCruza = (byLeg['no cruza']||[]).length;
+  const totalLeg = data.length;
+  const totalLegal = legGr + legAu;
+
+  $('ag-total').textContent  = totalLeg;
+  $('ag-pdte').textContent   = pdteLeg;
+  $('ag-leg-gr').textContent = legGr;
+  $('ag-leg-au').textContent = legAu;
+  $('ag-nc').textContent     = noCruza;
+  $('ag-pct').textContent    = pct(totalLegal, totalLeg) + '%';
+
+  // Funnel
+  destroyChart('leg-funnel');
+  charts['leg-funnel'] = new Chart($('chart-leg-funnel'), {
+    type: 'bar', indexAxis: 'y',
+    data: {
+      labels: ['Total','Leg. Grabación','Leg. Automática','Pdte. Legalizar','No Cruza'],
+      datasets:[{ data:[totalLeg, legGr, legAu, pdteLeg, noCruza],
+        backgroundColor: [C.blue+'cc',C.green+'cc',C.teal+'cc',C.yellow+'cc',C.red+'cc'],
+        borderRadius: 6
+      }]
+    },
+    options: { responsive:true, plugins:{legend:{display:false}}, scales:{x:{grid:{color:'#E2E6EF'}},y:{grid:{display:false}}} }
+  });
+
+  // Pago chart
+  destroyChart('pago');
+  const byPago = {};
+  data.forEach(r => { const k = String(r['% PAGO']||'0').trim(); byPago[k]=(byPago[k]||0)+1; });
+  const pLabels = ['100%','50%','0'];
+  const pVals   = pLabels.map(k => byPago[k]||0);
+  $('pago-100').textContent = pVals[0];
+  $('pago-50').textContent  = pVals[1];
+  $('pago-0').textContent   = pVals[2];
+  charts['pago'] = new Chart($('chart-pago'), {
+    type: 'doughnut',
+    data: { labels:['100% Pago','50% Pago','Sin Pago'], datasets:[{
+      data: pVals, backgroundColor:[C.green+'dd',C.yellow+'dd',C.red+'dd'], borderColor:'#fff', borderWidth:2
+    }]},
+    options: { responsive:true, cutout:'60%', plugins:{legend:{position:'bottom'}} }
+  });
+
+  // Mora por asesor
+  const byAse = groupBy(data, 'Tramitador_Nom');
+  const moraRows = Object.entries(byAse).filter(([k]) => k!=='(vacío)').map(([a, rows]) => {
+    const avgDif  = rows.reduce((s,r)=>s+(parseFloat(r['DIF DIAS'])||0),0) / rows.length;
+    const avgFLG  = rows.reduce((s,r)=>s+(parseFloat(r['FINAL Vs LG'])||0),0) / rows.length;
+    const topPago = rows.reduce((acc,r)=>{const k=String(r['% PAGO']||'0').trim();acc[k]=(acc[k]||0)+1;return acc;},{});
+    const pp = Object.entries(topPago).sort((a,b)=>b[1]-a[1])[0]?.[0]||'—';
+    return { a, sup: rows[0]?.['SUPERVISOR']||'—', estLeg: rows[0]?.['ESTADO LEG']||'—', dif: avgDif.toFixed(1), flg: avgFLG.toFixed(1), pago: pp, total: rows.length };
+  }).sort((a,b) => parseFloat(b.flg)-parseFloat(a.flg));
+
+  $('tbl-mora').querySelector('tbody').innerHTML = moraRows.map(r => {
+    const difColor = parseFloat(r.dif) > 3 ? 'col-red' : parseFloat(r.dif) > 1 ? 'col-yellow' : 'col-green';
+    const flgColor = parseFloat(r.flg) > 5 ? 'col-red' : parseFloat(r.flg) > 2 ? 'col-yellow' : 'col-green';
+    const legBadge = r.estLeg.includes('legalizada') ? 'badge-green' : r.estLeg === 'pdte legalizar' ? 'badge-yellow' : 'badge-gray';
+    return `<tr>
+      <td><strong style="font-size:12px;">${r.a}</strong></td>
+      <td>${r.sup}</td>
+      <td><span class="badge ${legBadge}">${r.estLeg}</span></td>
+      <td class="tag-num ${difColor}" data-val="${r.dif}">${r.dif} días</td>
+      <td class="tag-num ${flgColor}" data-val="${r.flg}">${r.flg} días</td>
+      <td class="tag-num">${r.pago}</td>
+      <td class="tag-num" data-val="${r.total}">${r.total}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════
+// TAB 5: GEOGRAFÍA & PRODUCTO
+// ═══════════════════════════════════════════════
+function renderGeo(data) {
+  // Depto table
+  const byDep = groupBy(data, 'Dpto_Nom');
+  const deps  = Object.keys(byDep).filter(d=>d!=='(vacío)').sort();
+  $('tbl-depto').querySelector('tbody').innerHTML = deps.map(d => {
+    const rows = byDep[d];
+    const t = sum(rows,'TERMINADA'), a = sum(rows,'ANULADA');
+    const c = conv(t, a);
+    const reg = rows[0]?.['Regional']||'—';
+    return `<tr>
+      <td><strong>${d}</strong></td>
+      <td><span class="badge badge-blue">${reg}</span></td>
+      <td class="tag-num" data-val="${rows.length}">${rows.length}</td>
+      <td class="tag-num col-green" data-val="${t}">${t}</td>
+      <td class="tag-num col-red" data-val="${a}">${a}</td>
+      <td data-val="${c}"><span class="badge ${colorBadge(c)}">${c}%</span></td>
+    </tr>`;
+  }).join('');
+
+  // Municipios bars
+  const byMun = groupBy(data, 'Mun_Nom');
+  const munSorted = Object.entries(byMun).filter(([k])=>k!=='(vacío)').sort((a,b)=>b[1].length-a[1].length).slice(0,12);
+  const maxM = munSorted[0]?.[1].length||1;
+  $('mun-bars').innerHTML = munSorted.map(([n,v]) => `
+    <div class="hbar-item">
+      <div class="hbar-meta"><span class="hbar-name">${n}</span><span class="hbar-val">${v.length}</span></div>
+      <div class="hbar-track"><div class="hbar-fill" style="width:${(v.length/maxM*100).toFixed(1)}%"></div></div>
+    </div>`).join('');
+
+  // Producto
+  destroyChart('producto');
+  const byProd = groupBy(data, 'Producto');
+  const prods = Object.keys(byProd).filter(p=>p!=='(vacío)');
+  charts['producto'] = new Chart($('chart-producto'), {
+    type: 'doughnut',
+    data: { labels: prods, datasets:[{ data: prods.map(p=>byProd[p].length), backgroundColor: PALETTE.map(c=>c+'cc'), borderColor:'#fff', borderWidth:2, hoverOffset:6 }] },
+    options: { responsive:true, cutout:'58%', plugins:{legend:{position:'right'}} }
+  });
+
+  // Planes bars
+  const byPlan = groupBy(data, 'Nom_Plan_Tarifario');
+  const planSorted = Object.entries(byPlan).filter(([k])=>k!=='(vacío)').sort((a,b)=>b[1].length-a[1].length).slice(0,8);
+  const maxPl = planSorted[0]?.[1].length||1;
+  $('plan-bars').innerHTML = planSorted.map(([n,v]) => {
+    const short = n.length > 45 ? n.substring(0,45)+'…' : n;
+    return `<div class="hbar-item">
+      <div class="hbar-meta"><span class="hbar-name" title="${n}">${short}</span><span class="hbar-val">${v.length}</span></div>
+      <div class="hbar-track"><div class="hbar-fill" style="width:${(v.length/maxPl*100).toFixed(1)}%"></div></div>
+    </div>`;
+  }).join('');
+
+  // Tarifa
+  destroyChart('tarifa');
+  const byTar = {};
+  data.forEach(r => { const v = r['TarifaMXFinal']; if (v && v !== '' && v !== 0) byTar[v]=(byTar[v]||0)+1; });
+  const tarSorted = Object.entries(byTar).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  charts['tarifa'] = new Chart($('chart-tarifa'), {
+    type: 'bar',
+    data: {
+      labels: tarSorted.map(([k]) => '$' + Number(k).toLocaleString()),
+      datasets:[{ label: 'Registros', data: tarSorted.map(([,v])=>v), backgroundColor: C.blue+'cc', borderRadius:4 }]
+    },
+    options: { responsive:true, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E6EF'}}} }
+  });
+}
+
+// ═══════════════════════════════════════════════
+// TAB 6: INSIGHTS & PROYECCIÓN
+// ═══════════════════════════════════════════════
+function renderInsights(data) {
+  const diasPDC  = Number(RAW_DATA[0]?.['DIAS MES PDC']) || 24;
+  const diaPDC   = Number(RAW_DATA[0]?.['DIA PDC'])      || 12;
+  const diaTrans = diaPDC;
+  const diasRest = diasPDC - diaTrans;
+  const termAct  = sum(data, 'TERMINADA');
+  const anulAct  = sum(data, 'ANULADA');
+  const ritmo    = diaTrans > 0 ? (termAct / diaTrans) : 0;
+  const ritmoA   = diaTrans > 0 ? (anulAct / diaTrans) : 0;
+  const proyTerm = Math.round(termAct + ritmo * diasRest);
+  const proyAnul = Math.round(anulAct + ritmoA * diasRest);
+
+  $('pr-dias-trans').textContent = diaTrans;
+  $('pr-dias-total').textContent = diasPDC;
+  $('pr-term-act').textContent   = termAct;
+  $('pr-ritmo').textContent      = ritmo.toFixed(1);
+  $('pr-proy').textContent       = proyTerm;
+  $('pr-afect').textContent      = proyAnul;
+
+  // Proyección chart
+  destroyChart('proyeccion');
+  const diasEje = Array.from({length: diasPDC}, (_,i) => i+1);
+  const termLine = diasEje.map(d => d <= diaTrans ? null : Math.round(termAct + ritmo * (d - diaTrans)));
+  const anulLine = diasEje.map(d => d <= diaTrans ? null : Math.round(anulAct + ritmoA * (d - diaTrans)));
+  const termReal = diasEje.map(d => {
+    const byDay = groupBy(data, 'DIA SEG');
+    return d <= diaTrans ? (sum(byDay[d]||[], 'TERMINADA') || 0) : null;
+  });
+  charts['proyeccion'] = new Chart($('chart-proyeccion'), {
+    type: 'line',
+    data: {
+      labels: diasEje.map(d => 'Día ' + d),
+      datasets: [
+        { label: 'Terminadas (real)',  data: termReal, borderColor: C.green, backgroundColor: C.green+'22', tension:.3, fill:true, pointRadius:3 },
+        { label: 'Proy. Terminadas',  data: termLine, borderColor: C.green, borderDash:[6,4], tension:.3, fill:false, pointRadius:2 },
+        { label: 'Proy. Anulaciones', data: anulLine, borderColor: C.red,   borderDash:[6,4], tension:.3, fill:false, pointRadius:2 },
+      ]
+    },
+    options: { responsive:true, plugins:{legend:{position:'top'}}, scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E6EF'}}} }
+  });
+
+  // Focos supervisores
+  const bySup = groupBy(data, 'SUPERVISOR');
+  const supFoco = Object.entries(bySup)
+    .filter(([k]) => k !== '(vacío)')
+    .map(([s, rows]) => ({ s, t: sum(rows,'TERMINADA'), a: sum(rows,'ANULADA'), total: rows.length }))
+    .map(o => ({ ...o, c: parseFloat(conv(o.t, o.a)) }))
+    .sort((a,b) => a.c - b.c);
+
+  $('foco-supervisores').innerHTML = supFoco.map((o,i) => `
+    <div class="foco-item">
+      <div class="foco-rank">${i+1}</div>
+      <div>
+        <div class="foco-name">${o.s}</div>
+        <div class="foco-meta">${o.total} órd. · ${o.t} term. · ${o.a} anuld.</div>
+      </div>
+      <div class="foco-efic" style="color:${o.c>=80?'var(--green)':o.c>=60?'var(--yellow)':'var(--atento-red)'}">${o.c}%</div>
+    </div>`).join('');
+
+  // Focos asesores (bottom 8)
+  const byAse = groupBy(data, 'Tramitador_Nom');
+  const aseFoco = Object.entries(byAse)
+    .filter(([k]) => k !== '(vacío)')
+    .map(([a, rows]) => ({ a, t: sum(rows,'TERMINADA'), an: sum(rows,'ANULADA'), total: rows.length, sup: rows[0]?.['SUPERVISOR']||'—' }))
+    .map(o => ({ ...o, c: parseFloat(conv(o.t, o.an)) }))
+    .filter(o => o.total >= 3)
+    .sort((a,b) => a.c - b.c)
+    .slice(0,8);
+
+  $('foco-asesores').innerHTML = aseFoco.map((o,i) => `
+    <div class="foco-item">
+      <div class="foco-rank">${i+1}</div>
+      <div>
+        <div class="foco-name">${o.a}</div>
+        <div class="foco-meta">${o.sup} · ${o.total} órd. · ${o.t} term.</div>
+      </div>
+      <div class="foco-efic" style="color:${o.c>=75?'var(--green)':o.c>=50?'var(--yellow)':'var(--atento-red)'}">${o.c}%</div>
+    </div>`).join('');
+
+  // Insights
+  const totalAll = data.length;
+  const convGlobal = parseFloat(conv(sum(data,'TERMINADA'), sum(data,'ANULADA')));
+  const topQuiebre = (() => {
+    const byQ = {};
+    data.filter(r=>r['QUIEBRE']&&r['QUIEBRE']!=='').forEach(r=>{const k=r['QUIEBRE'].trim();byQ[k]=(byQ[k]||0)+1;});
+    const s = Object.entries(byQ).sort((a,b)=>b[1]-a[1]);
+    return s[0] ? `${s[0][0]} (${s[0][1]} casos)` : '—';
+  })();
+
+  const insights = [
+    {
+      type: convGlobal >= 80 ? 'good' : convGlobal >= 65 ? 'info' : 'warn',
+      icon: convGlobal >= 80 ? '✅' : convGlobal >= 65 ? 'ℹ️' : '🔴',
+      title: `Conversión global: ${convGlobal}%`,
+      body: convGlobal >= 80
+        ? 'La tasa de conversión se encuentra en niveles óptimos. Mantener el ritmo de seguimiento y aseguramiento de calidad.'
+        : convGlobal >= 65
+        ? `La conversión es aceptable pero tiene margen de mejora. Se recomienda revisión de asesores con conversión < 60%.`
+        : `La conversión está por debajo del umbral crítico. Acción inmediata requerida sobre asesores foco y motivos de quiebre principales.`
+    },
+    {
+      type: 'warn',
+      icon: '⚠️',
+      title: `Principal motivo de quiebre: ${topQuiebre}`,
+      body: 'Priorizar plan de acción específico para reducir este motivo. Revisar proceso de agendamiento y contactabilidad de clientes.'
+    },
+    {
+      type: 'info',
+      icon: '📈',
+      title: `Proyección de cierre: ${proyTerm} terminadas`,
+      body: `Con el ritmo actual de ${ritmo.toFixed(1)} órdenes/día y ${diasRest} días restantes, se proyecta cerrar el período con ${proyTerm} órdenes terminadas y ${proyAnul} anulaciones proyectadas. Ajustar estrategia si la meta supera este valor.`
+    },
+    {
+      type: supFoco.filter(o=>o.c<65).length > 0 ? 'warn' : 'good',
+      icon: '👥',
+      title: 'Asesores foco identificados',
+      body: `Se detectaron ${aseFoco.filter(o=>o.c<65).length} asesores con conversión crítica (< 65%). Se recomienda activar planes de trabajo individuales y acompañamiento de supervisores.`
+    },
+  ];
+
+  $('insights-container').innerHTML = insights.map(ins => `
+    <div class="insight-card ${ins.type}">
+      <span class="insight-icon">${ins.icon}</span>
+      <div>
+        <div class="insight-title">${ins.title}</div>
+        <div class="insight-body">${ins.body}</div>
+      </div>
+    </div>`).join('');
+
+  // Afectaciones críticas
+  const byQ = {};
+  const byQAtrib = {};
+  data.filter(r=>r['QUIEBRE']&&r['QUIEBRE']!=='').forEach(r=>{
+    const k = r['QUIEBRE'].trim();
+    byQ[k] = (byQ[k]||0)+1;
+    if (!byQAtrib[k]) byQAtrib[k] = {};
+    const at = r['ATRIBUIBLE']||'—';
+    byQAtrib[k][at] = (byQAtrib[k][at]||0)+1;
+  });
+  const totalQ = Object.values(byQ).reduce((a,b)=>a+b,0)||1;
+  const accionesMapa = {
+    'carrusel': 'Revisar lógica de reasignación y tiempos de contacto',
+    'qc - cliente desiste': 'Mejorar calidad de venta y promesas al cliente',
+    'qc - no se logro contacto para agendar': 'Optimizar estrategia de contactabilidad',
+    'qt - recursos mal aprovisionados': 'Coordinar con área técnica el aprovisionamiento',
+    'qc - plan errado': 'Capacitar asesores en portafolio de productos',
+  };
+  const critRows = Object.entries(byQ).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  $('tbl-critico').querySelector('tbody').innerHTML = critRows.map(([mot, n]) => {
+    const topAtrib = Object.entries(byQAtrib[mot]||{}).sort((a,b)=>b[1]-a[1])[0]?.[0]||'—';
+    const impact = ((n/totalQ)*100).toFixed(1);
+    const accion = accionesMapa[mot.toLowerCase()] || 'Análisis detallado requerido con supervisor responsable';
+    return `<tr>
+      <td style="font-size:12px;">${mot}</td>
+      <td class="tag-num col-red">${n}</td>
+      <td><span class="badge badge-gray">${topAtrib}</span></td>
+      <td class="tag-num">${impact}%</td>
+      <td style="font-size:11px;color:var(--muted);">${accion}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════════════
+function closeModal() { $('modal-overlay').classList.remove('open'); }
+$('modal-overlay').addEventListener('click', e => { if(e.target === $('modal-overlay')) closeModal(); });
+
+// ═══════════════════════════════════════════════
+// DOWNLOAD EXCEL
+// ═══════════════════════════════════════════════
+function downloadExcel() {
+  showToast('⬇️ Descargando Excel...');
+  const link = document.createElement('a');
+  link.href = 'INFORME FIBRA FINAL.xlsx';
+  link.download = 'INFORME FIBRA FINAL.xlsx';
+  link.click();
+}
+
+// ═══════════════════════════════════════════════
+// DOWNLOAD PDF
+// ═══════════════════════════════════════════════
+async function downloadPDF() {
+  showToast('📄 Generando PDF, espere...');
+  try {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    const el  = $('main-page');
+    const canvas = await html2canvas(el, { scale: 1.2, useCORS: true, backgroundColor: '#F0F2F7' });
+    const imgData = canvas.toDataURL('image/jpeg', 0.85);
+    const pw = pdf.internal.pageSize.getWidth();
+    const ph = pdf.internal.pageSize.getHeight();
+    const ratio = Math.min(pw / canvas.width, ph / canvas.height);
+    const imgW = canvas.width * ratio;
+    const imgH = canvas.height * ratio;
+    const x = (pw - imgW) / 2;
+    const y = (ph - imgH) / 2;
+    pdf.addImage(imgData, 'JPEG', x, y, imgW, imgH);
+    pdf.save('Informe_Fibra_Atento.pdf');
+    showToast('✅ PDF descargado');
+  } catch(e) {
+    console.error(e);
+    showToast('❌ Error generando PDF');
+  }
+}
+
+// ═══════════════════════════════════════════════
+// MAIN RENDER
+// ═══════════════════════════════════════════════
+function render() {
+  const data  = getFiltered();
+  const active = document.querySelector('.nav-tab.active')?.dataset.tab;
+
+  // Always render KPIs
+  renderKPIs(data);
+
+  if (active === 't-resumen') {
+    renderDiario(data);
+    renderDonut(data);
+    renderConvSup(data);
+    renderTblSupervisor(data);
+    renderTblLinea(data);
+  }
+  if (active === 't-temporal') renderTemporal(data);
+  if (active === 't-asesores') { renderAsesores(data); renderQCTables(data); }
+  if (active === 't-agenda')   renderAgenda(data);
+  if (active === 't-geo')      renderGeo(data);
+  if (active === 't-insights') renderInsights(data);
+}
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+(function init() {
+  populateFilters();
+  ['f-semana','f-supervisor','f-asesor','f-regional','f-producto','f-linea'].forEach(id =>
+    $(id)?.addEventListener('change', render)
+  );
+  render();
+})();
+</script>
+</body>
+</html>
