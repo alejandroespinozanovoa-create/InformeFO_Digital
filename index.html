@@ -315,14 +315,21 @@ tbody tr:hover td{background:var(--surf2);}
         <th onclick="sc(this,'t-ase',5)">Pend.</th>
         <th onclick="sc(this,'t-ase',6)">Anuld.</th>
         <th onclick="sc(this,'t-ase',7)">BA</th>
-        <th onclick="sc(this,'t-ase',8)">Conv.</th>
-        <th onclick="sc(this,'t-ase',9)">Quiebres</th>
-        <th onclick="sc(this,'t-ase',10)">Reingresos</th>
-        <th onclick="sc(this,'t-ase',11)">Leg.</th>
-        <th onclick="sc(this,'t-ase',12)">Punto Venta</th>
+        <th onclick="sc(this,'t-ase',8)">Empa.</th>
+        <th onclick="sc(this,'t-ase',9)">% Part.</th>
+        <th onclick="sc(this,'t-ase',10)">Conv.</th>
+        <th onclick="sc(this,'t-ase',11)">Quiebres</th>
+        <th onclick="sc(this,'t-ase',12)">Reingresos</th>
+        <th onclick="sc(this,'t-ase',13)">Leg.</th>
+        <th onclick="sc(this,'t-ase',14)">Punto Venta</th>
         <th>Estado</th>
       </tr></thead><tbody></tbody>
     </table></div></div>
+  </div>
+  <div class="sh">Participación en Empaquetadas · Contribución por Asesor</div>
+  <div class="g g2" style="margin-bottom:14px;">
+    <div class="card"><div class="chd"><span class="cttl"><span class="ico">📦</span>Empaquetadas por Asesor · Cantidad y % Participación</span></div><div class="cbd"><canvas id="c-empa-ase" style="max-height:320px;"></canvas></div></div>
+    <div class="card"><div class="chd"><span class="cttl"><span class="ico">🎯</span>Tasa Empaquetada vs Terminadas por Asesor</span></div><div class="cbd"><canvas id="c-empa-rate" style="max-height:320px;"></canvas></div></div>
   </div>
   <div class="sh">Control de Calidad · Quiebres y Cancelaciones</div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center;">
@@ -886,20 +893,25 @@ function rAse(data){
     const rows=byA[a];const t=sum(rows,'TERMINADA'),an=sum(rows,'ANULADA');const c=parseFloat(conv(t,an));
     if(aseF==='ok')return c>=75;if(aseF==='w')return c>=50&&c<75;if(aseF==='cr')return c<50;return true;
   });
+  // Compute total empaquetadas across all data (not just filtered ases) for participation %
+  const totalEmp=sum(data,'EMPAQUETADAS')||1;
   $('t-ase').querySelector('tbody').innerHTML=ases.map(a=>{
     const rows=byA[a];
     const t=sum(rows,'TERMINADA'),an=sum(rows,'ANULADA'),p=sum(rows,'PENDIENTE'),ba=sum(rows,'BA');
+    const emp=sum(rows,'EMPAQUETADAS');
+    const empPart=totalEmp>0?parseFloat((emp/totalEmp*100).toFixed(1)):0;
+    const empRate=t>0?parseFloat((emp/t*100).toFixed(1)):0;
     const c=parseFloat(conv(t,an));
     const q=rows.filter(r=>r['QUIEBRE']&&String(r['QUIEBRE']).trim()!=='').length;
-    // FIXED: REINGRESO has ' dir: 1' format
     const reing=rows.filter(r=>reingNum(r)>1).length;
-    // FIXED: LEG uses exact string matching
     const leg=rows.filter(r=>isLegGrab(r)||isLegAut(r)).length;
     const sup=rows[0]?.['SUPERVISOR']||'—';const lin=rows[0]?.['LINEA']||'—';
     const pv=String(rows[0]?.['Nom_Punto_Venta']||'—');
     const pvShort=pv.replace('CANAL ON LINE - ATENTO ','').replace('CANAL ON LINE - ','').replace('CANAL ON LINE ','');
     const sd=c>=75?'<span class="dok"></span>':c>=50?'<span class="dw"></span>':'<span class="dcr"></span>';
     const sl=c>=75?'OK':c>=50?'Atención':'Foco';
+    const empBadge=emp>0?`<span class="badge bg" style="font-size:11px;">${emp}</span>`:'<span style="color:var(--muted)">—</span>';
+    const partBadge=emp>0?`<span style="font-size:11px;font-weight:700;color:var(--blue);">${empPart}%</span>`:'<span style="color:var(--muted)">—</span>';
     return`<tr>
       <td><strong style="font-size:11px;">${a}</strong></td>
       <td style="font-size:11px;">${sup}</td><td>${lin}</td>
@@ -908,6 +920,8 @@ function rAse(data){
       <td class="num ny" data-val="${p}">${p}</td>
       <td class="num nr" data-val="${an}">${an}</td>
       <td class="num nb" data-val="${ba}">${ba}</td>
+      <td data-val="${emp}">${empBadge}</td>
+      <td data-val="${empPart}">${partBadge}</td>
       <td data-val="${c}"><span class="badge ${cbadge(c)}">${c}%</span></td>
       <td class="num nr" data-val="${q}">${q}</td>
       <td class="num" data-val="${reing}">${reing}</td>
@@ -916,6 +930,88 @@ function rAse(data){
       <td style="display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;">${sd} ${sl}</td>
     </tr>`;
   }).join('');
+  rEmpaAse(data);
+}
+
+function rEmpaAse(data){
+  // Chart 1: Empaquetadas por asesor (barras horizontales) con % participación
+  const byA=gb(data,'Tramitador_Nom');
+  const totalEmp=sum(data,'EMPAQUETADAS')||1;
+  const entries=Object.entries(byA)
+    .filter(([a])=>a!=='(vacío)'&&a!=='')
+    .map(([a,rows])=>({
+      ase:a.split(' ').slice(0,2).join(' '), // short name
+      emp:sum(rows,'EMPAQUETADAS'),
+      term:sum(rows,'TERMINADA')
+    }))
+    .filter(e=>e.emp>0)
+    .sort((a,b)=>b.emp-a.emp);
+
+  if(!entries.length){
+    dc('empa-ase');dc('empa-rate');return;
+  }
+
+  const labels=entries.map(e=>e.ase);
+  const empVals=entries.map(e=>e.emp);
+  const partVals=entries.map(e=>parseFloat((e.emp/totalEmp*100).toFixed(1)));
+  const rateVals=entries.map(e=>e.term>0?parseFloat((e.emp/e.term*100).toFixed(1)):0);
+
+  dc('empa-ase');
+  charts['empa-ase']=new Chart($('c-empa-ase'),{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[
+        {label:'Empaquetadas',data:empVals,backgroundColor:'#8b5cf6cc',borderRadius:5,yAxisID:'y'},
+        {label:'% Participación',data:partVals,type:'line',borderColor:'#f59e0b',backgroundColor:'transparent',
+         pointBackgroundColor:'#f59e0b',borderWidth:2,pointRadius:5,yAxisID:'y2'}
+      ]
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{display:true,position:'bottom'},
+        tooltip:{callbacks:{
+          afterLabel:(ctx)=>ctx.datasetIndex===0?'Part.: '+partVals[ctx.dataIndex]+'%':''
+        }}
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:10}}},
+        y:{title:{display:true,text:'Unidades'},grid:{color:'#E2E8F0'},beginAtZero:true},
+        y2:{title:{display:true,text:'% Participación'},position:'right',grid:{display:false},
+            beginAtZero:true,max:Math.max(...partVals)*1.5||10,
+            ticks:{callback:v=>v+'%'}}
+      }
+    }
+  });
+
+  // Chart 2: Tasa empaquetada (empa/terminadas) por asesor
+  dc('empa-rate');
+  const palette=['#8b5cf6cc','#6366f1cc','#3b82f6cc','#0ea5e9cc','#14b8a6cc','#22c55ecc','#84cc16cc','#f59e0bcc','#ef4444cc','#ec4899cc'];
+  charts['empa-rate']=new Chart($('c-empa-rate'),{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[{
+        label:'% Empa/Terminadas',
+        data:rateVals,
+        backgroundColor:palette.slice(0,labels.length),
+        borderRadius:5
+      }]
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:(ctx)=>ctx.parsed.y.toFixed(1)+'% de terminadas empaquetadas'}}
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:10}}},
+        y:{title:{display:true,text:'% Empa/Terminadas'},grid:{color:'#E2E8F0'},
+           beginAtZero:true,ticks:{callback:v=>v+'%'}}
+      }
+    }
+  });
 }
 
 function rQC(data){
