@@ -34,32 +34,44 @@ def to_recs(frame, cols):
     return [{k: clean(v) for k, v in r.items()} for r in frame.to_dict(orient="records")]
 
 # ─── All relevant columns from BBDD ─────────────────────────────────────
+# First 37 are custom/formula columns added by the user - highest priority
 BBDD_COLS = [
-    # ── Custom cols (user-added formulas) ───────────────────────────────
-    "DIA SEG", "MES SEG", "SEMANA", "QUIEBRE", "ATRIBUIBLE", "REINGRESO",
-    "SUPERVISOR", "LINEA", "ESTADO", "TERMINADA", "ANULADA", "PENDIENTE",
-    "AGENDADAS", "PENDIENTES", "SUSPENDIDAS", "ESTADO AGENDA", "FECHA AGENDA",
-    "FRANJA AGENDA", "DIA AGENDA", "MES AGENDA", "MOTIVO DE SUSPENSION",
-    "CEDULA CLIENTE", "TELEFONO CLIENTE", "LEGALIZADA", "PEND LEGALIZAR",
+    # ── Custom cols (user-added formulas, cols 0-36) ────────────────────
+    "DIA SEG", "MES SEG", "SEMANA",
+    "QUIEBRE", "ATRIBUIBLE", "REINGRESO",
+    "SUPERVISOR", "LINEA", "ESTADO",
+    "TERMINADA", "ANULADA", "PENDIENTE",
+    "AGENDADAS", "PENDIENTES", "SUSPENDIDAS",
+    "ESTADO AGENDA", "FECHA AGENDA", "FRANJA AGENDA",
+    "DIA AGENDA", "MES AGENDA", "MOTIVO DE SUSPENSION",
+    "CEDULA CLIENTE", "TELEFONO CLIENTE",
+    "LEGALIZADA", "PEND LEGALIZAR",
     "ESTADO LEG", "DIF DIAS", "FECHA LEG", "FINAL Vs LG", "% PAGO",
-    "DIA PDC", "DIAS MES PDC", "EMPAQUETADAS", "META", "BA", "DUO", "TRIO",
+    "DIA PDC", "DIAS MES PDC", "EMPAQUETADAS",
+    "META", "BA", "DUO", "TRIO",
     # ── Original source columns ─────────────────────────────────────────
-    "Tramitador_Nom", "Cedula_Tramitador", "FechaRegistroPeticion",
+    "Tramitador_Nom", "Cedula_Tramitador",
+    "FechaRegistroPeticion",
     "Regional", "Dpto_Nom", "Mun_Nom", "Localidad", "Depto",
-    "Producto", "TenenciaPlanta", "Nom_Plan_Tarifario", "TarifaMXFinal", 
-    "Tipo_Venta", "Convergente", "Tipo_Convergente", "Tipo_Cliente",
-    "SubSegmentoCuentaDesc", "Estrato", "Zona", "SubCanal",
-    "UNIDAD_VENTA_DIG", "ATR_VENTA_SOURCE", "ATR_VENTA_CAMPANA", 
-    "ATR_VENTA_MEDIUM", "ATR_VENTA_LANDING", # <- Líneas de efectividad agregadas
-    "ESTADO_VARIABLE_DIG", "MOTIVO_QUIEBRE_DIG", "Altas_Con_Reingreso",
-    "Dia_Reg", "Mes_Reg", "Anio_Reg", "Nom_Ult_Quiebre_Atmp", "TipoQuiebreDesc",
-    "SubCanal_Hom", "Nom_Punto_Venta", "Nom_Barrio_PC", "Oferta_Empaquetada",
-    "REMARK", "Nom_PS", "ProductoPlanCD"
+    "Producto", "TenenciaPlanta", "Nom_Plan_Tarifario",
+    "TarifaMXFinal", "Tipo_Venta", "Convergente", "Tipo_Convergente", "Tipo_Cliente",
+    "SubSegmentoCuentaDesc", "Estrato", "Zona",
+    "UNIDAD_VENTA_DIG", "ATR_VENTA_SOURCE", "SubCanal",
+    "ESTADO_VARIABLE_DIG", "MOTIVO_QUIEBRE_DIG",
+    "Altas_Con_Reingreso",
+    "Dia_Reg", "Mes_Reg", "Anio_Reg",
+    "Nom_Ult_Quiebre_Atmp", "TipoQuiebreDesc",
+    "SubCanal_Hom", "Nom_Punto_Venta", "Nom_Barrio_PC",
+    "Oferta_Empaquetada",
+    "REMARK",
+    # Quiebre catalog cols (embedded in BBDD)
+    "Nom_PS", "ProductoPlanCD",
 ]
 
 bbdd_recs = to_recs(df, BBDD_COLS)
 
 # ─── Build quiebre catalog from BBDD itself ───────────────────────────
+# Map motivo -> atribuible from the data
 quiebre_cat = []
 if "QUIEBRE" in df.columns and "ATRIBUIBLE" in df.columns:
     q_df = df[["QUIEBRE","ATRIBUIBLE"]].dropna(subset=["QUIEBRE"])
@@ -79,13 +91,16 @@ if "QUIEBRE" in df.columns and "ATRIBUIBLE" in df.columns:
 config = {
     "DIA_PDC":      int(df["DIA PDC"].iloc[0])      if "DIA PDC"      in df.columns else 1,
     "DIAS_MES_PDC": int(df["DIAS MES PDC"].iloc[0]) if "DIAS MES PDC" in df.columns else 24,
-    "META":         {"GEN": 1147, "TVT": 48}, # Eliminado FMC
+    "META":         {"GEN": 1147, "FMC": 491, "TVT": 48},
 }
 
 # ─── Write data.js ────────────────────────────────────────────────────────
 payload = json.dumps(
     {
         "BBDD":            bbdd_recs,
+        "CAN":             [],          # empty — data comes from BBDD.QUIEBRE
+        "LEG":             [],          # empty — data comes from BBDD.ESTADO LEG
+        "PLANTA":          [],          # empty — no PLANTA sheet
         "QUIEBRE_CATALOG": quiebre_cat,
         "CONFIG":          config,
     },
@@ -96,4 +111,4 @@ payload = json.dumps(
 with open("data.js", "w", encoding="utf-8") as f:
     f.write("const DB=" + payload + ";")
 
-print(f"data.js written: {len(payload):,} bytes | {len(bbdd_recs)} records")
+print(f"data.js written: {len(payload):,} bytes | {len(bbdd_recs)} records | {len(quiebre_cat)} quiebre types")
