@@ -1,4 +1,3 @@
-cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -20,7 +19,6 @@ cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:var(--font);background:var(--bg);color:var(--txt);font-size:14px;-webkit-font-smoothing:antialiased;}
-/* NAV */
 .nav{background:var(--dark);color:#fff;display:flex;align-items:center;height:54px;padding:0 16px;position:sticky;top:0;z-index:200;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,.3);}
 .brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px;white-space:nowrap;flex-shrink:0;}
 .brand .dot{color:var(--red);font-size:20px;}
@@ -35,21 +33,17 @@ body{font-family:var(--font);background:var(--bg);color:var(--txt);font-size:14p
 .btn-gh{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85);}
 .btn-gh:hover{background:rgba(255,255,255,.15);color:#fff;}
 .btn-rd{background:var(--red);color:#fff;}.btn-rd:hover{background:#c0050f;}
-/* PAGE */
 .page{max-width:1480px;margin:0 auto;padding:16px 14px 60px;}
-/* FILTER BAR */
 .fbar{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:10px 14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px;box-shadow:var(--sh);}
 .flbl{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:1px;text-transform:uppercase;font-family:var(--mono);}
 select,input[type=text]{background:var(--surf2);border:1px solid var(--bdr);color:var(--txt);font-family:var(--font);font-size:12px;padding:6px 10px;border-radius:6px;cursor:pointer;outline:none;font-weight:500;transition:border-color .15s;max-width:170px;min-width:110px;}
 select:focus,input:focus{border-color:var(--red);}
 .brst{background:var(--surf2);border:1px solid var(--bdr);color:var(--muted);font-family:var(--font);font-size:11px;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:700;transition:all .15s;margin-left:auto;}
 .brst:hover{border-color:var(--red);color:var(--red);}
-/* SECTION */
 .sec{display:none;}.sec.on{display:block;}
 .sh{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 0 12px;display:flex;align-items:center;gap:10px;}
 .sh::before{content:'';display:block;width:3px;height:14px;background:var(--red);border-radius:2px;}
 .sh::after{content:'';flex:1;height:1px;background:var(--bdr);}
-/* GRID */
 .g{display:grid;gap:12px;margin-bottom:14px;}
 .g1{grid-template-columns:1fr;}.g2{grid-template-columns:repeat(2,1fr);}.g3{grid-template-columns:repeat(3,1fr);}.g4{grid-template-columns:repeat(4,1fr);}.g6{grid-template-columns:repeat(6,1fr);}
 .g21{grid-template-columns:2fr 1fr;}.g31{grid-template-columns:3fr 1fr;}
@@ -65,14 +59,12 @@ select:focus,input:focus{border-color:var(--red);}
   select,input[type=text]{max-width:100%;min-width:0;width:100%;}
   .fbar{flex-direction:column;align-items:stretch;}.brst{margin-left:0;}
 }
-/* CARD */
 .card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;}
 .chd{padding:11px 14px 9px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
 .cttl{font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px;}
 .ico{width:20px;height:20px;border-radius:4px;background:rgba(227,6,19,.08);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
 .cbd{padding:14px;}.cbd.np{padding:0;}
 canvas{max-height:260px;}
-/* KPI */
 .kpi{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh);position:relative;overflow:hidden;transition:transform .15s;}
 .kpi:hover{transform:translateY(-2px);}
 .kpi::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:4px 0 0 4px;}
@@ -83,13 +75,11 @@ canvas{max-height:260px;}
 .ks{font-size:11px;color:var(--muted);font-family:var(--mono);}
 .kb{height:4px;background:var(--bdr);border-radius:2px;margin-top:8px;overflow:hidden;}
 .kbf{height:100%;border-radius:2px;transition:width .8s ease;}
-/* HEADER BAND */
 .hband{background:linear-gradient(135deg,#0F172A 0%,#1E3A5F 100%);border-radius:var(--r);padding:18px 22px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;color:#fff;}
 .hbt h2{font-size:clamp(15px,2.5vw,23px);font-weight:800;letter-spacing:-.3px;}
 .hbt p{font-size:11px;color:rgba(255,255,255,.4);margin-top:3px;font-family:var(--mono);letter-spacing:1px;}
 .hbs{display:flex;gap:16px;flex-wrap:wrap;}
 .hbs .v{font-size:18px;font-weight:800;}.hbs .l{font-size:9px;color:rgba(255,255,255,.4);letter-spacing:1px;text-transform:uppercase;font-family:var(--mono);}
-/* TABLES */
 .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;}
 table{width:100%;border-collapse:collapse;font-size:12px;}
 thead tr{background:var(--surf2);border-bottom:2px solid var(--bdr);}
@@ -98,12 +88,10 @@ th:hover{color:var(--red);}th.sa::after{content:' ▲';font-size:8px;}th.sd::aft
 td{padding:8px 12px;border-bottom:1px solid var(--bdr);vertical-align:middle;}
 tbody tr:last-child td{border-bottom:none;}
 tbody tr:hover td{background:var(--surf2);}
-/* BADGES */
 .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--mono);white-space:nowrap;}
 .bg{background:rgba(16,185,129,.1);color:#059669;}.br{background:rgba(227,6,19,.08);color:var(--red);}.by{background:rgba(245,158,11,.1);color:#B45309;}.bb{background:rgba(59,130,246,.1);color:#2563EB;}.bp{background:rgba(139,92,246,.1);color:#7C3AED;}.bgr{background:var(--surf2);color:var(--muted);}.bt{background:rgba(20,184,166,.1);color:#0D9488;}.bo{background:rgba(249,115,22,.1);color:#EA580C;}
 .num{font-family:var(--mono);font-weight:600;}
 .ng{color:var(--green);}.nr{color:var(--red);}.ny{color:var(--yellow);}.nb{color:var(--blue);}.np2{color:var(--purple);}.nm{color:var(--muted);}
-/* HBARS */
 .hl{display:flex;flex-direction:column;gap:9px;}
 .hm{display:flex;justify-content:space-between;margin-bottom:3px;font-size:12px;}
 .hn{font-weight:600;max-width:72%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -111,41 +99,30 @@ tbody tr:hover td{background:var(--surf2);}
 .ht{height:7px;background:var(--surf2);border-radius:4px;overflow:hidden;}
 .hf{height:100%;border-radius:4px;transition:width .6s ease;}
 .hfr{background:linear-gradient(90deg,var(--red),#ff6b35);}.hfg{background:linear-gradient(90deg,var(--green),var(--teal));}.hfb{background:linear-gradient(90deg,var(--blue),var(--purple));}
-/* PROGRESS */
 .pw{display:flex;align-items:center;gap:8px;}
 .pt{flex:1;height:8px;background:var(--surf2);border-radius:4px;overflow:hidden;}
 .pf{height:100%;border-radius:4px;transition:width .6s ease;}
-/* FOCO */
-.fi{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--bdr);}
-.fi:last-child{border-bottom:none;}
-.fr{width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.fb{flex:1;min-width:0;}
-.fn{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.fm{font-size:10px;color:var(--muted);font-family:var(--mono);}
-.fe{font-size:14px;font-weight:800;flex-shrink:0;}
-/* INSIGHTS */
-.ins{border-radius:var(--r);padding:12px 16px;display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;}
-.ins-ico{font-size:18px;flex-shrink:0;}
-.ins-t{font-size:13px;font-weight:700;margin-bottom:3px;}
-.ins-b{font-size:12px;line-height:1.55;}
-.ins.warn{background:#FEF2F2;border:1px solid #FCA5A5;}.ins.warn .ins-t{color:#991B1B;}.ins.warn .ins-b{color:#7F1D1D;}
-.ins.good{background:#ECFDF5;border:1px solid #6EE7B7;}.ins.good .ins-t{color:#065F46;}.ins.good .ins-b{color:#064E3B;}
-.ins.info{background:#EFF6FF;border:1px solid #93C5FD;}.ins.info .ins-t{color:#1E40AF;}.ins.info .ins-b{color:#1E3A8A;}
-.ins.tip{background:#FFF7ED;border:1px solid #FCD34D;}.ins.tip .ins-t{color:#92400E;}.ins.tip .ins-b{color:#78350F;}
-/* PROJ */
 .pb{background:var(--surf2);border:1px solid var(--bdr);border-radius:8px;padding:12px 14px;}
 .pl{font-size:10px;color:var(--muted);font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
 .pv{font-size:22px;font-weight:800;line-height:1;}
 .ps{font-size:10px;color:var(--muted);margin-top:3px;font-family:var(--mono);}
-/* PILLS */
 .pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
 .pill{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--bdr);background:var(--surf2);color:var(--muted);transition:all .15s;}
 .pill.on{background:var(--dark);color:#fff;border-color:var(--dark);}
-/* STATUS */
 .dok{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;}
 .dw{width:7px;height:7px;border-radius:50%;background:var(--yellow);display:inline-block;}
 .dcr{width:7px;height:7px;border-radius:50%;background:var(--red);display:inline-block;}
-/* TOAST */
+.fi{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--bdr);}
+.fi:last-child{border-bottom:none;}
+.fr{width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.fb{flex:1;min-width:0;}.fn{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.fm{font-size:10px;color:var(--muted);font-family:var(--mono);}
+.fe{font-size:14px;font-weight:800;flex-shrink:0;}
+.ins{border-radius:var(--r);padding:12px 16px;display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;}
+.ins-ico{font-size:18px;flex-shrink:0;}.ins-t{font-size:13px;font-weight:700;margin-bottom:3px;}.ins-b{font-size:12px;line-height:1.55;}
+.ins.warn{background:#FEF2F2;border:1px solid #FCA5A5;}.ins.warn .ins-t{color:#991B1B;}.ins.warn .ins-b{color:#7F1D1D;}
+.ins.good{background:#ECFDF5;border:1px solid #6EE7B7;}.ins.good .ins-t{color:#065F46;}.ins.good .ins-b{color:#064E3B;}
+.ins.info{background:#EFF6FF;border:1px solid #93C5FD;}.ins.info .ins-t{color:#1E40AF;}.ins.info .ins-b{color:#1E3A8A;}
+.ins.tip{background:#FFF7ED;border:1px solid #FCD34D;}.ins.tip .ins-t{color:#92400E;}.ins.tip .ins-b{color:#78350F;}
 #toast{position:fixed;bottom:20px;right:20px;background:var(--dark);color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;z-index:999;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;}
 #toast.show{opacity:1;transform:translateY(0);}
 ::-webkit-scrollbar{width:5px;height:5px;}::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px;}
@@ -158,10 +135,10 @@ tbody tr:hover td{background:var(--surf2);}
   <div class="tabs" id="ntabs">
     <div class="tab on"  data-tab="t1">Resumen Ejecutivo</div>
     <div class="tab" data-tab="t2">Análisis Temporal</div>
-    <div class="tab" data-tab="t3">Asesores & QC</div>
-    <div class="tab" data-tab="t4">Agenda & Legalizaciones</div>
-    <div class="tab" data-tab="t5">Geografía & Producto</div>
-    <div class="tab" data-tab="t6">Insights & Proyección</div>
+    <div class="tab" data-tab="t3">Asesores &amp; QC</div>
+    <div class="tab" data-tab="t4">Agenda &amp; Legalizaciones</div>
+    <div class="tab" data-tab="t5">Geografía &amp; Producto</div>
+    <div class="tab" data-tab="t6">Insights &amp; Proyección</div>
   </div>
   <div class="nav-acts">
     <button class="btn btn-gh" onclick="dlExcel()">
@@ -176,7 +153,6 @@ tbody tr:hover td{background:var(--surf2);}
 </nav>
 
 <div class="page" id="main">
-<!-- FILTROS -->
 <div class="fbar">
   <span class="flbl">Filtros:</span>
   <select id="f-sem"><option value="">Todas las semanas</option></select>
@@ -189,12 +165,12 @@ tbody tr:hover td{background:var(--surf2);}
   <button class="brst" onclick="reset()">✕ Limpiar</button>
 </div>
 
-<!-- ═══ TAB 1: RESUMEN ═══ -->
+<!-- TAB 1 -->
 <div class="sec on" id="t1">
   <div class="hband">
     <div class="hbt">
       <h2>Informe Gerencial de Operaciones · Canal Online</h2>
-      <p id="hbd">FIBRA · ATENTO COLOMBIA</p>
+      <p>FIBRA · ATENTO COLOMBIA</p>
     </div>
     <div class="hbs">
       <div><div class="v" id="hb-pdc">—</div><div class="l">Días PDC</div></div>
@@ -203,7 +179,6 @@ tbody tr:hover td{background:var(--surf2);}
       <div><div class="v" id="hb-meta">—</div><div class="l">Meta GEN</div></div>
     </div>
   </div>
-
   <div class="sh">KPIs Principales</div>
   <div class="g g6" style="margin-bottom:14px;">
     <div class="kpi cr"><div class="kl">Total Registros</div><div class="kv" id="k-tot">—</div><div class="ks">en seguimiento</div></div>
@@ -213,8 +188,6 @@ tbody tr:hover td{background:var(--surf2);}
     <div class="kpi cb"><div class="kl">Conversión</div><div class="kv" id="k-cv">—%</div><div class="ks">Altas/(Altas+Anuld.)</div><div class="kb"><div class="kbf" id="k-cvb" style="width:0%;background:var(--blue)"></div></div></div>
     <div class="kpi cp"><div class="kl">Empaquetadas</div><div class="kv" id="k-emp">—</div><div class="ks" id="k-emps">—</div></div>
   </div>
-
-  <!-- Meta desde DATA -->
   <div class="g g3" style="margin-bottom:14px;">
     <div class="card"><div class="cbd">
       <div class="kl" style="margin-bottom:8px;">Avance vs Meta GEN (<span id="m-gen-tot">—</span>)</div>
@@ -227,12 +200,11 @@ tbody tr:hover td{background:var(--surf2);}
       <div style="display:flex;justify-content:space-between;margin-top:4px;"><span class="num nm" id="m-ba-v" style="font-size:11px;">— BA</span><span class="num nm" id="m-trio-v" style="font-size:11px;">— TRIO</span></div>
     </div></div>
     <div class="card"><div class="cbd">
-      <div class="kl" style="margin-bottom:8px;">Empaquetadas vs Meta (<span id="m-emp-tot">—</span>)</div>
+      <div class="kl" style="margin-bottom:8px;">Empaquetadas vs Terminadas</div>
       <div class="pw"><div class="pt"><div class="pf" id="m-emp" style="width:0%;background:var(--purple)"></div></div><span class="num np2" id="m-emp-p" style="font-size:13px;min-width:42px;text-align:right;">—%</span></div>
       <div style="display:flex;justify-content:space-between;margin-top:4px;"><span class="num nm" id="m-emp-v" style="font-size:11px;">—</span><span class="num nm" style="font-size:11px;">empaquetadas</span></div>
     </div></div>
   </div>
-
   <div class="g g21">
     <div class="card">
       <div class="chd"><span class="cttl"><span class="ico">📊</span>Terminadas · Anuladas · Pendientes por Día</span>
@@ -245,8 +217,6 @@ tbody tr:hover td{background:var(--surf2);}
       <div class="cbd"><canvas id="c-estado"></canvas></div>
     </div>
   </div>
-
-  <!-- Supervisor / Línea -->
   <div class="sh">Desempeño por Supervisor y Línea</div>
   <div class="g g2">
     <div class="card">
@@ -281,14 +251,11 @@ tbody tr:hover td{background:var(--surf2);}
       </table></div></div>
     </div>
   </div>
-
   <div class="card" style="margin-bottom:14px;">
     <div class="chd"><span class="cttl"><span class="ico">📈</span>Conversión (%) por Supervisor</span></div>
     <div class="cbd"><canvas id="c-cv-sup"></canvas></div>
   </div>
-
-  <!-- FUENTES DE ORIGEN (desde ATR cols) -->
-  <div class="sh">Efectividad de Líneas & Canal de Origen</div>
+  <div class="sh">Efectividad de Líneas &amp; Canal de Origen</div>
   <div class="g g3">
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">📡</span>Fuente (ATR_VENTA_SOURCE)</span></div><div class="cbd"><canvas id="c-src"></canvas></div></div>
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">📢</span>Campaña (ATR_VENTA_CAMPANA)</span></div><div class="cbd"><div class="hl" id="bars-campana"></div></div></div>
@@ -300,7 +267,7 @@ tbody tr:hover td{background:var(--surf2);}
   </div>
 </div>
 
-<!-- ═══ TAB 2: TEMPORAL ═══ -->
+<!-- TAB 2 -->
 <div class="sec" id="t2">
   <div class="sh">Tendencia Diaria y Semanal</div>
   <div class="g g2">
@@ -317,11 +284,11 @@ tbody tr:hover td{background:var(--surf2);}
   </div>
   <div class="g g2">
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">🎯</span>Conversión por Semana</span></div><div class="cbd"><canvas id="c-cv-sem"></canvas></div></div>
-    <div class="card"><div class="chd"><span class="cttl"><span class="ico">⚡</span>Reingresos (dir: 1 vs dir: 2+)</span></div><div class="cbd"><canvas id="c-reing"></canvas></div></div>
+    <div class="card"><div class="chd"><span class="cttl"><span class="ico">⚡</span>Reingresos (dir:1 vs dir:2+)</span></div><div class="cbd"><canvas id="c-reing"></canvas></div></div>
   </div>
 </div>
 
-<!-- ═══ TAB 3: ASESORES & QC ═══ -->
+<!-- TAB 3 -->
 <div class="sec" id="t3">
   <div class="sh">Estado de Asesores · Rendimiento Individual</div>
   <div class="pills">
@@ -357,16 +324,12 @@ tbody tr:hover td{background:var(--surf2);}
       </tr></thead><tbody></tbody>
     </table></div></div>
   </div>
-
-  <!-- QC -->
   <div class="sh">Control de Calidad · Quiebres y Cancelaciones</div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center;">
-    <span class="flbl">Filtrar Quiebres:</span>
+    <span class="flbl">Filtrar:</span>
     <select id="f-atrib" onchange="rQC(gf())"><option value="">Todos los atribuibles</option><option value="carrusel">Carrusel</option><option value="asesor">Asesor</option><option value="tecnico">Técnico</option><option value="cliente">Cliente</option><option value="agendamiento">Agendamiento</option></select>
     <select id="f-qmot" onchange="rDrill(gf())"><option value="">Seleccionar motivo → ver asesores…</option></select>
   </div>
-
-  <!-- ESTADO anulación detalle -->
   <div class="g g3" style="margin-bottom:14px;">
     <div class="kpi cr"><div class="kl">Carrusel</div><div class="kv" id="q-carrusel">—</div><div class="ks">fraude automático</div></div>
     <div class="kpi cr"><div class="kl">Asesor</div><div class="kv" id="q-asesor">—</div><div class="ks">error de asesor</div></div>
@@ -375,7 +338,6 @@ tbody tr:hover td{background:var(--surf2);}
     <div class="kpi cr"><div class="kl">Agendamiento</div><div class="kv" id="q-agend">—</div><div class="ks">falla agenda</div></div>
     <div class="kpi cr"><div class="kl">Total Anuladas</div><div class="kv" id="q-total">—</div><div class="ks">todas las causas</div></div>
   </div>
-
   <div class="g g2">
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">⚠️</span>Top Motivos de Quiebre</span></div><div class="cbd"><div class="hl" id="q-bars"></div></div></div>
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">🎯</span>Distribución Atribuible</span></div><div class="cbd"><canvas id="c-atrib"></canvas></div></div>
@@ -390,7 +352,6 @@ tbody tr:hover td{background:var(--surf2);}
     </div>
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">📊</span>Quiebres por Supervisor</span></div><div class="cbd"><canvas id="c-q-sup"></canvas></div></div>
   </div>
-  <!-- Drill-down motivo -->
   <div class="card" style="margin-bottom:14px;">
     <div class="chd"><span class="cttl"><span class="ico">🔍</span>Drill-down: Motivo → Asesores Impactados</span></div>
     <div class="cbd np"><div class="tw"><table id="t-drill">
@@ -400,7 +361,7 @@ tbody tr:hover td{background:var(--surf2);}
   </div>
 </div>
 
-<!-- ═══ TAB 4: AGENDA & LEG ═══ -->
+<!-- TAB 4 -->
 <div class="sec" id="t4">
   <div class="sh">Control de Agendamiento · Instalaciones Programadas</div>
   <div class="g g6" style="margin-bottom:14px;">
@@ -411,22 +372,17 @@ tbody tr:hover td{background:var(--surf2);}
     <div class="kpi ct"><div class="kl">Leg. Grabación</div><div class="kv" id="ag-lg">—</div></div>
     <div class="kpi cg"><div class="kl">Leg. Automática</div><div class="kv" id="ag-la">—</div></div>
   </div>
-
   <div class="g g2">
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">📅</span>Agendas por Día (DIA AGENDA)</span></div><div class="cbd"><canvas id="c-ag-dia"></canvas></div></div>
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">🕐</span>Agendas por Franja Horaria</span></div><div class="cbd"><canvas id="c-ag-franja"></canvas></div></div>
   </div>
-
-  <!-- Suspendidas detalle -->
   <div class="card" style="margin-bottom:14px;">
     <div class="chd"><span class="cttl"><span class="ico">🚫</span>Suspendidas · Motivos y Asesores</span></div>
     <div class="cbd np"><div class="tw"><table id="t-sus">
-      <thead><tr><th onclick="sc(this,'t-sus',0)">Asesor</th><th onclick="sc(this,'t-sus',1)">Supervisor</th><th onclick="sc(this,'t-sus',2)">Motivo de Suspensión</th><th onclick="sc(this,'t-sus',3)">Q</th><th onclick="sc(this,'t-sus',4)">Atribuible</th></tr></thead>
+      <thead><tr><th onclick="sc(this,'t-sus',0)">Asesor</th><th onclick="sc(this,'t-sus',1)">Supervisor</th><th onclick="sc(this,'t-sus',2)">Motivo de Suspensión</th><th onclick="sc(this,'t-sus',3)">Q</th></tr></thead>
       <tbody></tbody>
     </table></div></div>
   </div>
-
-  <!-- LEGALIZACIONES -->
   <div class="sh">Estado de Legalizaciones · Control Financiero</div>
   <div class="g g4" style="margin-bottom:14px;">
     <div class="kpi ct"><div class="kl">Legalizadas</div><div class="kv" id="leg-tot">—</div><div class="ks" id="leg-pct">—% del total</div></div>
@@ -434,7 +390,6 @@ tbody tr:hover td{background:var(--surf2);}
     <div class="kpi cr"><div class="kl">No Cruza</div><div class="kv" id="leg-nc">—</div></div>
     <div class="kpi cp"><div class="kl">% Pago 100%</div><div class="kv" id="leg-p100">—</div></div>
   </div>
-
   <div class="g g21">
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">📋</span>LEG por Día de Segmento (estado)</span></div><div class="cbd"><canvas id="c-leg-dia"></canvas></div></div>
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">💰</span>Distribución % Pago</span></div><div class="cbd">
@@ -446,7 +401,6 @@ tbody tr:hover td{background:var(--surf2);}
       </div>
     </div></div>
   </div>
-
   <div class="g g2">
     <div class="card">
       <div class="chd"><span class="cttl"><span class="ico">📊</span>LEG por Supervisor</span></div>
@@ -457,7 +411,7 @@ tbody tr:hover td{background:var(--surf2);}
     </div>
     <div class="card">
       <div class="chd">
-        <span class="cttl"><span class="ico">⏱</span>Mora & DIF DIAS por Asesor</span>
+        <span class="cttl"><span class="ico">⏱</span>Mora &amp; DIF DIAS por Asesor</span>
         <select onchange="sSel('t-mora',this.value)"><option value="">Ordenar…</option><option value="3">Dif Días ↓</option><option value="4">Final vs LG ↓</option></select>
       </div>
       <div class="cbd np"><div class="tw"><table id="t-mora">
@@ -468,7 +422,7 @@ tbody tr:hover td{background:var(--surf2);}
   </div>
 </div>
 
-<!-- ═══ TAB 5: GEO & PRODUCTO ═══ -->
+<!-- TAB 5 -->
 <div class="sec" id="t5">
   <div class="sh">Despliegue Geográfico · Regional · Departamento · Localidad</div>
   <div class="g g2">
@@ -481,29 +435,25 @@ tbody tr:hover td{background:var(--surf2);}
     </div>
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">🏙</span>Top Municipios</span></div><div class="cbd"><div class="hl" id="mun-bars"></div></div></div>
   </div>
-
-  <!-- Tipología cliente y segmento -->
-  <div class="sh">Tipología de Cliente · Segmento & Convergencia</div>
+  <div class="sh">Tipología de Cliente · Segmento &amp; Convergencia</div>
   <div class="g g3">
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">👤</span>Segmento Homologado</span></div><div class="cbd"><canvas id="c-seg"></canvas></div></div>
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">🔗</span>Tipo Convergente</span></div><div class="cbd"><canvas id="c-conv2"></canvas></div></div>
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">⭐</span>Por Estrato</span></div><div class="cbd"><canvas id="c-estrato"></canvas></div></div>
   </div>
-
   <div class="sh">Mix de Producto · BA / DUO / TRIO</div>
   <div class="g g3">
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">📦</span>Producto (BA/DUO/TRIO)</span></div><div class="cbd"><canvas id="c-prod"></canvas></div></div>
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">🔗</span>Tenencia de Planta</span></div><div class="cbd"><canvas id="c-planta"></canvas></div></div>
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">💰</span>Tarifas MX Final</span></div><div class="cbd"><canvas id="c-tarifa"></canvas></div></div>
   </div>
-
   <div class="g g2">
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">💼</span>Top Planes Tarifarios</span></div><div class="cbd"><div class="hl" id="plan-bars"></div></div></div>
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">📡</span>Conversión por Regional</span></div><div class="cbd"><canvas id="c-cv-reg"></canvas></div></div>
   </div>
 </div>
 
-<!-- ═══ TAB 6: INSIGHTS ═══ -->
+<!-- TAB 6 -->
 <div class="sec" id="t6">
   <div class="sh">Proyección Especializada de Cierre · Meta desde Datos</div>
   <div class="g g4" style="margin-bottom:14px;">
@@ -518,21 +468,17 @@ tbody tr:hover td{background:var(--surf2);}
     <div class="pb"><div class="pl">Eficiencia Proyectada</div><div class="pv np2" id="p-efic">—%</div><div class="ps">conversión estimada</div></div>
     <div class="pb"><div class="pl">Pendientes en Riesgo</div><div class="pv ny" id="p-riesgo">—</div><div class="ps">estimado anulables</div></div>
   </div>
-
   <div class="g g2">
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">📈</span>Proyección al Cierre (3 escenarios)</span></div><div class="cbd"><canvas id="c-proy"></canvas></div></div>
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">⚡</span>Comparativa de Escenarios vs Meta</span></div><div class="cbd"><canvas id="c-esc"></canvas></div></div>
   </div>
-
   <div class="sh">Focos de Acción · Supervisores y Asesores Prioritarios</div>
   <div class="g g2">
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">🔴</span>Supervisores · Menor Conversión</span></div><div class="cbd np" id="foco-sup"></div></div>
     <div class="card"><div class="chd"><span class="cttl"><span class="ico">🔴</span>Asesores Foco · Intervención Urgente</span></div><div class="cbd np" id="foco-ase"></div></div>
   </div>
-
-  <div class="sh">Insights & Recomendaciones</div>
+  <div class="sh">Insights &amp; Recomendaciones</div>
   <div id="ins-box" style="margin-bottom:14px;"></div>
-
   <div class="sh">Afectaciones Críticas · Fugas Operativas</div>
   <div class="card">
     <div class="chd"><span class="cttl"><span class="ico">🚨</span>Fugas y Acciones Sugeridas</span></div>
@@ -542,8 +488,7 @@ tbody tr:hover td{background:var(--surf2);}
     </table></div></div>
   </div>
 </div>
-
-</div><!-- /page -->
+</div>
 <div id="toast"></div>
 
 <script>
@@ -561,9 +506,37 @@ function sum(arr,k){return arr.reduce((s,r)=>s+(Number(r[k])||0),0);}
 function pct(n,d){return d?((n/d)*100).toFixed(1):'0.0';}
 function conv(t,a){return(t+a)>0?((t/(t+a))*100).toFixed(1):'0.0';}
 function fmt(n){return Number(n).toLocaleString('es-CO');}
-function gb(arr,k){return arr.reduce((acc,r)=>{const v=r[k]||'(vacío)';if(!acc[v])acc[v]=[];acc[v].push(r);return acc;},{});}
+function gb(arr,k){return arr.reduce((acc,r)=>{const v=(r[k]===''||r[k]===null||r[k]===undefined)?'(vacío)':String(r[k]);if(!acc[v])acc[v]=[];acc[v].push(r);return acc;},{});}
 function cbadge(v){v=parseFloat(v);return v>=75?'bg':v>=50?'by':'br';}
 function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+
+// FIXED: check ESTADO LEG using exact lowercase matching
+function isLegGrab(r){const v=String(r['ESTADO LEG']||'').toLowerCase();return v==='legalizada grabacion'||v.includes('grabacion');}
+function isLegAut(r){const v=String(r['ESTADO LEG']||'').toLowerCase();return v==='legalizada aut'||v.includes('legalizada aut');}
+function isPdteLeg(r){const v=String(r['ESTADO LEG']||'').toLowerCase();return v==='pdte legalizar'||v.includes('pdte');}
+function isNoCruza(r){const v=String(r['ESTADO LEG']||'').toLowerCase();return v==='no cruza'||v.includes('no cruza');}
+function isAnuladaLeg(r){return String(r['ESTADO LEG']||'').toUpperCase()==='ANULADA';}
+function isPendienteLeg(r){return String(r['ESTADO LEG']||'').toUpperCase()==='PENDIENTE';}
+
+// FIXED: REINGRESO has leading space: ' dir: 1' — use trim and flexible regex
+function reingNum(r){
+  const s=String(r['REINGRESO']||'').trim();
+  const m=s.match(/dir[:\s]+(\d+)/);
+  return m?parseInt(m[1]):1;
+}
+
+// FIXED: % PAGO can be '100%', '50%', or integer 0
+function pagoKey(r){
+  const v=r['% PAGO'];
+  if(v==='100%'||v===100)return '100%';
+  if(v==='50%'||v===50)return '50%';
+  return '0';
+}
+
+// FIXED: AGENDADAS / SUSPENDIDAS / PENDIENTES are 0/1 integers
+function isAgendada(r){return Number(r['AGENDADAS'])===1;}
+function isSuspendida(r){return Number(r['SUSPENDIDAS'])===1;}
+function isPendienteAgenda(r){return Number(r['PENDIENTES'])===1;}
 
 // ── MOBILE NAV ──────────────────────────────────────────────────────────
 function tNav(){const n=$('ntabs');n.classList.toggle('open');$('hb').textContent=n.classList.contains('open')?'✕':'☰';}
@@ -573,7 +546,7 @@ document.querySelectorAll('.tab').forEach(t=>{
   t.addEventListener('click',()=>{
     document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
     document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
-    t.classList.add('on'); $(t.dataset.tab).classList.add('on');
+    t.classList.add('on');$(t.dataset.tab).classList.add('on');
     const n=$('ntabs');if(n.classList.contains('open')){n.classList.remove('open');$('hb').textContent='☰';}
     render();
   });
@@ -597,9 +570,9 @@ function sc(th,tid,ci){
 }
 function sSel(tid,col){
   if(!col)return;
+  const ci=parseInt(col);
   const tb=$(tid).querySelector('tbody');
   const rows=[...tb.querySelectorAll('tr')];
-  const ci=parseInt(col);
   rows.sort((a,b)=>{
     const av=a.cells[ci]?.dataset.val??a.cells[ci]?.textContent??'';
     const bv=b.cells[ci]?.dataset.val??b.cells[ci]?.textContent??'';
@@ -613,18 +586,19 @@ function sSel(tid,col){
 function initFilters(){
   const s={sem:new Set(),sup:new Set(),ase:new Set(),reg:new Set(),lin:new Set(),pro:new Set(),src:new Set()};
   DB.BBDD.forEach(r=>{
-    if(r['SEMANA'])s.sem.add(r['SEMANA']);
-    if(r['SUPERVISOR']&&r['SUPERVISOR']!=='No Cruza')s.sup.add(r['SUPERVISOR']);
-    if(r['Tramitador_Nom'])s.ase.add(r['Tramitador_Nom']);
-    if(r['Regional'])s.reg.add(r['Regional']);
-    if(r['LINEA']&&r['LINEA']!=='No Cruza')s.lin.add(r['LINEA']);
-    if(r['Producto'])s.pro.add(r['Producto']);
-    if(r['ATR_VENTA_SOURCE'])s.src.add(r['ATR_VENTA_SOURCE']);
+    if(r['SEMANA']&&r['SEMANA']!=='')s.sem.add(r['SEMANA']);
+    if(r['SUPERVISOR']&&r['SUPERVISOR']!=='')s.sup.add(r['SUPERVISOR']);
+    if(r['Tramitador_Nom']&&r['Tramitador_Nom']!=='')s.ase.add(r['Tramitador_Nom']);
+    if(r['Regional']&&r['Regional']!=='')s.reg.add(r['Regional']);
+    if(r['LINEA']&&r['LINEA']!=='')s.lin.add(r['LINEA']);
+    if(r['Producto']&&r['Producto']!=='')s.pro.add(r['Producto']);
+    if(r['ATR_VENTA_SOURCE']&&r['ATR_VENTA_SOURCE']!=='')s.src.add(r['ATR_VENTA_SOURCE']);
   });
   const fill=(id,vals)=>{const el=$(id);[...vals].sort().forEach(v=>{const o=document.createElement('option');o.value=o.textContent=v;el.appendChild(o);});};
   fill('f-sem',s.sem);fill('f-sup',s.sup);fill('f-ase',s.ase);fill('f-reg',s.reg);fill('f-lin',s.lin);fill('f-pro',s.pro);fill('f-src',s.src);
   // Motivos drill-down
-  const ms=new Set();DB.BBDD.filter(r=>r['QUIEBRE']&&r['QUIEBRE']!=='').forEach(r=>ms.add(r['QUIEBRE'].trim()));
+  const ms=new Set();
+  DB.BBDD.filter(r=>r['QUIEBRE']&&String(r['QUIEBRE']).trim()!=='').forEach(r=>ms.add(String(r['QUIEBRE']).trim()));
   const sel=$('f-qmot');[...ms].sort().forEach(m=>{const o=document.createElement('option');o.value=o.textContent=m;sel.appendChild(o);});
 }
 
@@ -644,11 +618,10 @@ function rKPIs(data){
   const trm=sum(data,'TERMINADA'),pnd=sum(data,'PENDIENTE'),anl=sum(data,'ANULADA'),emp=sum(data,'EMPAQUETADAS');
   const ba=sum(data,'BA'),trio=sum(data,'TRIO');
   const cv=conv(trm,anl);
-  // Config from data
   const cfg=DB.CONFIG;
-  const dPDC=cfg.DIA_PDC,dTot=cfg.DIAS_MES_PDC,dRest=dTot-dPDC;
+  const dPDC=cfg.DIA_PDC||14,dTot=cfg.DIAS_MES_PDC||24,dRest=dTot-dPDC;
   const metaGen=cfg.META_GEN||0;
-  const av=dTot>0?((dPDC/dTot)*100).toFixed(0):'0';
+  const av=dTot>0?Math.round((dPDC/dTot)*100):0;
 
   $('k-tot').textContent=fmt(tot);
   $('k-trm').textContent=fmt(trm);$('k-trms').textContent=pct(trm,tot)+'% del total';$('k-trmb').style.width=pct(trm,tot)+'%';
@@ -656,63 +629,67 @@ function rKPIs(data){
   $('k-anl').textContent=fmt(anl);$('k-anls').textContent=pct(anl,tot)+'% del total';$('k-anlb').style.width=pct(anl,tot)+'%';
   $('k-cv').textContent=cv+'%';$('k-cvb').style.width=cv+'%';
   $('k-emp').textContent=fmt(emp);$('k-emps').textContent=pct(emp,trm)+'% de terminadas';
-  $('hb-pdc').textContent=dPDC;$('hb-rest').textContent=dRest;$('hb-av').textContent=av+'%';
-  $('hb-meta').textContent=fmt(metaGen);
+  $('hb-pdc').textContent=dPDC;$('hb-rest').textContent=dRest;$('hb-av').textContent=av+'%';$('hb-meta').textContent=fmt(metaGen);
 
-  // META bars — computed from real data
   const mGPct=metaGen>0?Math.min(100,parseFloat(pct(trm,metaGen))):0;
   $('m-gen-tot').textContent=fmt(metaGen);
   $('m-gen').style.width=mGPct+'%';$('m-gen-p').textContent=mGPct.toFixed(1)+'%';
-  $('m-gen-v').textContent=fmt(trm)+' terminadas';
-  $('m-gen-sub').textContent='de '+fmt(metaGen);
+  $('m-gen-v').textContent=fmt(trm)+' terminadas';$('m-gen-sub').textContent='de '+fmt(metaGen);
 
-  // BA/TRIO bar
   const baPct=trm>0?Math.min(100,parseFloat(pct(ba,trm))):0;
   $('m-ba').style.width=baPct+'%';$('m-ba-p').textContent=baPct.toFixed(1)+'%';
   $('m-ba-v').textContent=fmt(ba)+' BA';$('m-trio-v').textContent=fmt(trio)+' TRIO';
 
-  // Empaquetadas — use META col as daily target per asesor to compute emp meta
-  // emp meta = not in data directly, show vs total terminadas
   const empPct=trm>0?Math.min(100,parseFloat(pct(emp,trm))):0;
-  $('m-emp-tot').textContent=fmt(trm)+' term';
-  $('m-emp').style.width=empPct+'%';$('m-emp-p').textContent=empPct.toFixed(1)+'%';
-  $('m-emp-v').textContent=fmt(emp);
+  $('m-emp').style.width=empPct+'%';$('m-emp-p').textContent=empPct.toFixed(1)+'%';$('m-emp-v').textContent=fmt(emp);
 }
 
-// ── CHART: DIARIO ────────────────────────────────────────────────────────
+// ── CHART: DIARIO (uses DIA SEG) ─────────────────────────────────────────
 function rDiario(data,cid='c-diario'){
   dc(cid);
-  const byD=gb(data,'DIA SEG');const days=Object.keys(byD).map(Number).sort((a,b)=>a-b);
+  // Group by DIA SEG (now correctly named in data.js)
+  const byD={};
+  data.forEach(r=>{const d=Number(r['DIA SEG']);if(d&&!isNaN(d)){if(!byD[d])byD[d]=[];byD[d].push(r);}});
+  const days=Object.keys(byD).map(Number).sort((a,b)=>a-b);
+  if(!days.length){dc(cid);return;}
   const stk=($('dm')?.value??'stacked')==='stacked';
   charts[cid]=new Chart($(cid),{type:'bar',data:{
     labels:days.map(d=>'D'+d),
     datasets:[
-      {label:'Terminadas',data:days.map(d=>sum(byD[d]||[],'TERMINADA')),backgroundColor:C.green+'cc',borderRadius:3},
-      {label:'Anuladas',data:days.map(d=>sum(byD[d]||[],'ANULADA')),backgroundColor:C.red+'cc',borderRadius:3},
-      {label:'Pendientes',data:days.map(d=>sum(byD[d]||[],'PENDIENTE')),backgroundColor:C.yellow+'cc',borderRadius:3},
+      {label:'Terminadas',data:days.map(d=>sum(byD[d],'TERMINADA')),backgroundColor:C.green+'cc',borderRadius:3},
+      {label:'Anuladas',data:days.map(d=>sum(byD[d],'ANULADA')),backgroundColor:C.red+'cc',borderRadius:3},
+      {label:'Pendientes',data:days.map(d=>sum(byD[d],'PENDIENTE')),backgroundColor:C.yellow+'cc',borderRadius:3},
     ]
   },options:{responsive:true,plugins:{legend:{position:'top'}},scales:{x:{stacked:stk,grid:{display:false}},y:{stacked:stk,grid:{color:'#E2E8F0'}}}}});
 }
 
-// ── CHART: ESTADO (con subtipos de anulación) ────────────────────────────
+// ── CHART: ESTADO ────────────────────────────────────────────────────────
 function rEstado(data){
   dc('estado');
-  const estados={};data.forEach(r=>{const e=r['ESTADO']||'otro';estados[e]=(estados[e]||0)+1;});
-  const lbl=Object.keys(estados),vals=lbl.map(k=>estados[k]);
-  const colors=lbl.map(k=>k==='terminada'?C.green+'dd':k==='pendiente'?C.yellow+'dd':C.red+'dd');
+  // ESTADO values: 'terminada','pendiente','asesor','cliente','tecnico','carrusel','agendamiento'
+  const estados={};
+  data.forEach(r=>{const e=r['ESTADO']||'otro';estados[e]=(estados[e]||0)+1;});
+  const lbl=Object.keys(estados);const vals=lbl.map(k=>estados[k]);
+  const colorMap={terminada:C.green+'dd',pendiente:C.yellow+'dd',asesor:C.red+'dd',cliente:C.red+'bb',tecnico:C.orange+'dd',carrusel:C.purple+'dd',agendamiento:C.blue+'dd'};
+  const colors=lbl.map(k=>colorMap[k]||C.teal+'dd');
   charts['estado']=new Chart($('c-estado'),{type:'doughnut',data:{
     labels:lbl,datasets:[{data:vals,backgroundColor:colors,borderColor:'#fff',borderWidth:2,hoverOffset:6}]
   },options:{responsive:true,cutout:'58%',plugins:{legend:{position:'bottom'}}}});
 }
 
-// ── TABLE: SUP ────────────────────────────────────────────────────────────
+// ── TABLE: SUPERVISOR — FIXED: uses META_SUP from config ─────────────────
 function rTblSup(data){
-  const byS=gb(data,'SUPERVISOR');const supMeta=DB.CONFIG.META_SUP||{};
+  const byS=gb(data,'SUPERVISOR');
+  // FIXED: META per supervisor comes from CONFIG.META_SUP
+  const metaSup=DB.CONFIG.META_SUP||{};
   $('t-sup').querySelector('tbody').innerHTML=Object.keys(byS).filter(s=>s!=='(vacío)').sort().map(s=>{
     const rows=byS[s];
     const t=sum(rows,'TERMINADA'),a=sum(rows,'ANULADA'),p=sum(rows,'PENDIENTE'),e=sum(rows,'EMPAQUETADAS');
     const ba=sum(rows,'BA'),trio=sum(rows,'TRIO');
-    const cv=conv(t,a);const meta=supMeta[s]||0;const vsMeta=meta>0?parseFloat(pct(t,meta)):0;
+    const cv=conv(t,a);
+    // Use supervisor-specific meta from CONFIG.META_SUP
+    const meta=metaSup[s]||0;
+    const vsMeta=meta>0?parseFloat(pct(t,meta)):0;
     return`<tr>
       <td><strong>${s}</strong></td>
       <td class="num" data-val="${rows.length}">${fmt(rows.length)}</td>
@@ -724,7 +701,7 @@ function rTblSup(data){
       <td class="num" data-val="${e}">${fmt(e)}</td>
       <td data-val="${cv}"><span class="badge ${cbadge(cv)}">${cv}%</span></td>
       <td class="num nm" data-val="${meta}">${meta>0?fmt(meta):'—'}</td>
-      <td data-val="${vsMeta}"><span class="badge ${vsMeta>=100?'bg':vsMeta>=80?'by':'br'}">${meta>0?vsMeta.toFixed(1)+'%':'—'}</span></td>
+      <td data-val="${vsMeta}"><span class="badge ${meta>0?(vsMeta>=100?'bg':vsMeta>=80?'by':'br'):'bgr'}">${meta>0?vsMeta.toFixed(1)+'%':'—'}</span></td>
     </tr>`;
   }).join('');
 }
@@ -740,7 +717,7 @@ function rTblLin(data){
 
 function rCvSup(data){
   dc('cv-sup');const byS=gb(data,'SUPERVISOR');
-  const sups=Object.keys(byS).filter(s=>s!=='No Cruza'&&s!=='(vacío)').sort();
+  const sups=Object.keys(byS).filter(s=>s!=='(vacío)').sort();
   const cvs=sups.map(s=>{const t=sum(byS[s],'TERMINADA'),a=sum(byS[s],'ANULADA');return parseFloat(conv(t,a));});
   charts['cv-sup']=new Chart($('c-cv-sup'),{type:'bar',data:{
     labels:sups,datasets:[{data:cvs,backgroundColor:cvs.map(v=>v>=75?C.green+'cc':v>=50?C.yellow+'cc':C.red+'cc'),borderRadius:6}]
@@ -749,89 +726,129 @@ function rCvSup(data){
 
 // ── CHARTS: FUENTES ──────────────────────────────────────────────────────
 function rFuentes(data){
-  // ATR_VENTA_SOURCE
-  dc('src');const byS={};data.forEach(r=>{const k=r['ATR_VENTA_SOURCE']||'Sin definir';if(k)byS[k]=(byS[k]||0)+1;});
+  dc('src');
+  const byS={};data.forEach(r=>{const k=r['ATR_VENTA_SOURCE']||'Sin definir';if(k)byS[k]=(byS[k]||0)+1;});
   const srt=Object.entries(byS).sort((a,b)=>b[1]-a[1]).slice(0,10);
   charts['src']=new Chart($('c-src'),{type:'bar',data:{
     labels:srt.map(([k])=>k),datasets:[{label:'Registros',data:srt.map(([,v])=>v),backgroundColor:PAL.map(c=>c+'cc'),borderRadius:4}]
   },options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E8F0'}}}}});
 
-  // ATR_VENTA_CAMPANA — hbars
-  const byC={};data.forEach(r=>{const k=r['ATR_VENTA_CAMPANA']||'';if(k&&k!=='-')byC[k]=(byC[k]||0)+1;});
+  const byC={};data.forEach(r=>{const k=r['ATR_VENTA_CAMPANA']||'';if(k&&k!=='-'&&k!=='')byC[k]=(byC[k]||0)+1;});
   const cSrt=Object.entries(byC).sort((a,b)=>b[1]-a[1]).slice(0,8);
   const cMax=cSrt[0]?.[1]||1;
-  $('bars-campana').innerHTML=cSrt.length?cSrt.map(([n,v])=>`
-    <div>
-      <div class="hm"><span class="hn" title="${n}">${n.length>40?n.substring(0,40)+'…':n}</span><span class="hv">${v}</span></div>
-      <div class="ht"><div class="hf hfb" style="width:${(v/cMax*100).toFixed(1)}%"></div></div>
-    </div>`).join(''):'<p style="color:var(--muted);font-size:12px;">Sin datos de campaña</p>';
+  $('bars-campana').innerHTML=cSrt.length?cSrt.map(([n,v])=>{
+    const label=n.length>50?n.substring(0,50)+'…':n;
+    return`<div><div class="hm"><span class="hn" title="${n}">${label}</span><span class="hv">${v}</span></div><div class="ht"><div class="hf hfb" style="width:${(v/cMax*100).toFixed(1)}%"></div></div></div>`;
+  }).join(''):'<p style="color:var(--muted);font-size:12px;padding:8px;">Sin datos de campaña</p>';
 
-  // ATR_VENTA_MEDIUM
-  dc('medium');const byM={};data.forEach(r=>{const k=r['ATR_VENTA_MEDIUM']||'';if(k&&k!=='-')byM[k]=(byM[k]||0)+1;});
-  charts['medium']=new Chart($('c-medium'),{type:'doughnut',data:{
-    labels:Object.keys(byM).slice(0,8),datasets:[{data:Object.values(byM).slice(0,8),backgroundColor:PAL.map(c=>c+'cc'),borderColor:'#fff',borderWidth:2}]
-  },options:{responsive:true,cutout:'55%',plugins:{legend:{position:'bottom'}}}});
+  dc('medium');const byM={};data.forEach(r=>{const k=r['ATR_VENTA_MEDIUM']||'';if(k&&k!=='-'&&k!=='')byM[k]=(byM[k]||0)+1;});
+  const mKeys=Object.keys(byM).slice(0,8);
+  if(mKeys.length){
+    charts['medium']=new Chart($('c-medium'),{type:'doughnut',data:{
+      labels:mKeys,datasets:[{data:mKeys.map(k=>byM[k]),backgroundColor:PAL.map(c=>c+'cc'),borderColor:'#fff',borderWidth:2}]
+    },options:{responsive:true,cutout:'55%',plugins:{legend:{position:'bottom'}}}});
+  }
 
-  // UNIDAD_VENTA_DIG
-  dc('und');const byU={};data.forEach(r=>{const k=r['UNIDAD_VENTA_DIG']||'Sin definir';byU[k]=(byU[k]||0)+1;});
-  charts['und']=new Chart($('c-und'),{type:'doughnut',data:{
-    labels:Object.keys(byU),datasets:[{data:Object.values(byU),backgroundColor:PAL.map(c=>c+'cc'),borderColor:'#fff',borderWidth:2,hoverOffset:6}]
-  },options:{responsive:true,cutout:'55%',plugins:{legend:{position:'bottom'}}}});
+  dc('und');const byU={};data.forEach(r=>{const k=r['UNIDAD_VENTA_DIG']||'Sin definir';if(k)byU[k]=(byU[k]||0)+1;});
+  const uKeys=Object.keys(byU);
+  if(uKeys.length){
+    charts['und']=new Chart($('c-und'),{type:'doughnut',data:{
+      labels:uKeys,datasets:[{data:uKeys.map(k=>byU[k]),backgroundColor:PAL.map(c=>c+'cc'),borderColor:'#fff',borderWidth:2,hoverOffset:6}]
+    },options:{responsive:true,cutout:'55%',plugins:{legend:{position:'bottom'}}}});
+  }
 
-  // Convergente
+  // FIXED: Convergente uses exact column values 'Si'/'No'
   dc('conv-tipo');const byCV={};
-  data.forEach(r=>{const k=r['Convergente']==='Si'?'Convergente':'No Convergente';byCV[k]=(byCV[k]||0)+1;});
+  data.forEach(r=>{
+    const k=r['Tipo_Convergente']||'';
+    if(k&&k!=='')byCV[k]=(byCV[k]||0)+1;
+    else{const c2=r['Convergente']==='Si'?'Convergente':'No Convergente';byCV[c2]=(byCV[c2]||0)+1;}
+  });
   charts['conv-tipo']=new Chart($('c-conv-tipo'),{type:'doughnut',data:{
-    labels:Object.keys(byCV),datasets:[{data:Object.values(byCV),backgroundColor:[C.blue+'cc',C.green+'cc'],borderColor:'#fff',borderWidth:2,hoverOffset:6}]
+    labels:Object.keys(byCV),datasets:[{data:Object.values(byCV),backgroundColor:[C.blue+'cc',C.green+'cc',C.teal+'cc'],borderColor:'#fff',borderWidth:2,hoverOffset:6}]
   },options:{responsive:true,cutout:'55%',plugins:{legend:{position:'bottom'}}}});
 }
 
 // ── TAB 2: TEMPORAL ──────────────────────────────────────────────────────
 function rTemporal(data){
-  rDiario(data,'c-d2');
-  dc('sem');const byS=gb(data,'SEMANA');const sems=Object.keys(byS).sort();
-  charts['sem']=new Chart($('c-sem'),{type:'bar',data:{
-    labels:sems,datasets:[
-      {label:'Terminadas',data:sems.map(s=>sum(byS[s],'TERMINADA')),backgroundColor:C.green+'cc',borderRadius:3},
-      {label:'Anuladas',data:sems.map(s=>sum(byS[s],'ANULADA')),backgroundColor:C.red+'cc',borderRadius:3},
-      {label:'Pendientes',data:sems.map(s=>sum(byS[s],'PENDIENTE')),backgroundColor:C.yellow+'cc',borderRadius:3},
-    ]
-  },options:{responsive:true,plugins:{legend:{position:'top'}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#E2E8F0'}}}}});
-  dc('dreg');const byDR=gb(data,'Dia_Reg');const drs=Object.keys(byDR).map(Number).sort((a,b)=>a-b);
-  charts['dreg']=new Chart($('c-dreg'),{type:'line',data:{
-    labels:drs.map(d=>'D'+d),datasets:[
-      {label:'Terminadas',data:drs.map(d=>sum(byDR[d]||[],'TERMINADA')),borderColor:C.green,backgroundColor:C.green+'22',tension:.35,fill:true,pointRadius:4},
-      {label:'Anuladas',data:drs.map(d=>sum(byDR[d]||[],'ANULADA')),borderColor:C.red,backgroundColor:C.red+'22',tension:.35,fill:true,pointRadius:4},
-    ]
-  },options:{responsive:true,plugins:{legend:{position:'top'}},scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E8F0'}}}}});
+  // Día Seg chart (reuse rDiario logic)
+  dc('c-d2');
+  const byD={};
+  data.forEach(r=>{const d=Number(r['DIA SEG']);if(d&&!isNaN(d)){if(!byD[d])byD[d]=[];byD[d].push(r);}});
+  const days=Object.keys(byD).map(Number).sort((a,b)=>a-b);
+  if(days.length){
+    charts['c-d2']=new Chart($('c-d2'),{type:'bar',data:{
+      labels:days.map(d=>'D'+d),
+      datasets:[
+        {label:'Terminadas',data:days.map(d=>sum(byD[d],'TERMINADA')),backgroundColor:C.green+'cc',borderRadius:3},
+        {label:'Anuladas',data:days.map(d=>sum(byD[d],'ANULADA')),backgroundColor:C.red+'cc',borderRadius:3},
+        {label:'Pendientes',data:days.map(d=>sum(byD[d],'PENDIENTE')),backgroundColor:C.yellow+'cc',borderRadius:3},
+      ]
+    },options:{responsive:true,plugins:{legend:{position:'top'}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#E2E8F0'}}}}});
+  }
+
+  // Por semana
+  dc('sem');const byS=gb(data,'SEMANA');const sems=Object.keys(byS).filter(s=>s!=='(vacío)').sort();
+  if(sems.length){
+    charts['sem']=new Chart($('c-sem'),{type:'bar',data:{
+      labels:sems,datasets:[
+        {label:'Terminadas',data:sems.map(s=>sum(byS[s],'TERMINADA')),backgroundColor:C.green+'cc',borderRadius:3},
+        {label:'Anuladas',data:sems.map(s=>sum(byS[s],'ANULADA')),backgroundColor:C.red+'cc',borderRadius:3},
+        {label:'Pendientes',data:sems.map(s=>sum(byS[s],'PENDIENTE')),backgroundColor:C.yellow+'cc',borderRadius:3},
+      ]
+    },options:{responsive:true,plugins:{legend:{position:'top'}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#E2E8F0'}}}}});
+  }
+
+  // Por día registro
+  dc('dreg');const byDR={};
+  data.forEach(r=>{const d=Number(r['Dia_Reg']);if(d&&!isNaN(d)){if(!byDR[d])byDR[d]=[];byDR[d].push(r);}});
+  const drs=Object.keys(byDR).map(Number).sort((a,b)=>a-b);
+  if(drs.length){
+    charts['dreg']=new Chart($('c-dreg'),{type:'line',data:{
+      labels:drs.map(d=>'D'+d),datasets:[
+        {label:'Terminadas',data:drs.map(d=>sum(byDR[d],'TERMINADA')),borderColor:C.green,backgroundColor:C.green+'22',tension:.35,fill:true,pointRadius:4},
+        {label:'Anuladas',data:drs.map(d=>sum(byDR[d],'ANULADA')),borderColor:C.red,backgroundColor:C.red+'22',tension:.35,fill:true,pointRadius:4},
+      ]
+    },options:{responsive:true,plugins:{legend:{position:'top'}},scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E8F0'}}}}});
+  }
+
+  // Por regional
   dc('reg');const byR=gb(data,'Regional');const regs=Object.keys(byR).filter(r=>r!=='(vacío)').sort();
-  charts['reg']=new Chart($('c-reg'),{type:'bar',indexAxis:'y',data:{
-    labels:regs,datasets:[
-      {label:'Terminadas',data:regs.map(r=>sum(byR[r],'TERMINADA')),backgroundColor:C.green+'cc',borderRadius:3},
-      {label:'Anuladas',data:regs.map(r=>sum(byR[r],'ANULADA')),backgroundColor:C.red+'cc',borderRadius:3},
-      {label:'Pendientes',data:regs.map(r=>sum(byR[r],'PENDIENTE')),backgroundColor:C.yellow+'cc',borderRadius:3},
-    ]
-  },options:{responsive:true,plugins:{legend:{position:'top'}},scales:{x:{stacked:true,grid:{color:'#E2E8F0'}},y:{stacked:true,grid:{display:false}}}}});
-  dc('acum');const days=Object.keys(gb(data,'DIA SEG')).map(Number).sort((a,b)=>a-b);const byD=gb(data,'DIA SEG');
+  if(regs.length){
+    charts['reg']=new Chart($('c-reg'),{type:'bar',indexAxis:'y',data:{
+      labels:regs,datasets:[
+        {label:'Terminadas',data:regs.map(r=>sum(byR[r],'TERMINADA')),backgroundColor:C.green+'cc',borderRadius:3},
+        {label:'Anuladas',data:regs.map(r=>sum(byR[r],'ANULADA')),backgroundColor:C.red+'cc',borderRadius:3},
+        {label:'Pendientes',data:regs.map(r=>sum(byR[r],'PENDIENTE')),backgroundColor:C.yellow+'cc',borderRadius:3},
+      ]
+    },options:{responsive:true,plugins:{legend:{position:'top'}},scales:{x:{stacked:true,grid:{color:'#E2E8F0'}},y:{stacked:true,grid:{display:false}}}}});
+  }
+
+  // Acumulado
+  dc('acum');
   let at=0,aa=0;
-  charts['acum']=new Chart($('c-acum'),{type:'line',data:{
-    labels:days.map(d=>'Día '+d),datasets:[
-      {label:'Terminadas Acum.',data:days.map(d=>{at+=sum(byD[d]||[],'TERMINADA');return at;}),borderColor:C.green,backgroundColor:C.green+'22',tension:.35,fill:true,pointRadius:3},
-      {label:'Anuladas Acum.',data:days.map(d=>{aa+=sum(byD[d]||[],'ANULADA');return aa;}),borderColor:C.red,backgroundColor:C.red+'22',tension:.35,fill:true,pointRadius:3},
-    ]
-  },options:{responsive:true,plugins:{legend:{position:'top'}},scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E8F0'}}}}});
-  dc('cv-sem');const cvSems=sems.map(s=>{const t=sum(byS[s],'TERMINADA'),a=sum(byS[s],'ANULADA');return parseFloat(conv(t,a));});
-  charts['cv-sem']=new Chart($('c-cv-sem'),{type:'line',data:{
-    labels:sems,datasets:[{label:'Conversión %',data:cvSems,borderColor:C.blue,backgroundColor:C.blue+'22',tension:.3,fill:true,pointRadius:6,pointBackgroundColor:C.blue}]
-  },options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{min:0,max:100,grid:{color:'#E2E8F0'},ticks:{callback:v=>v+'%'}}}}});
-  // Reingresos: dir:1 vs dir:2+
+  if(days.length){
+    charts['acum']=new Chart($('c-acum'),{type:'line',data:{
+      labels:days.map(d=>'Día '+d),datasets:[
+        {label:'Terminadas Acum.',data:days.map(d=>{at+=sum(byD[d],'TERMINADA');return at;}),borderColor:C.green,backgroundColor:C.green+'22',tension:.35,fill:true,pointRadius:3},
+        {label:'Anuladas Acum.',data:days.map(d=>{aa+=sum(byD[d],'ANULADA');return aa;}),borderColor:C.red,backgroundColor:C.red+'22',tension:.35,fill:true,pointRadius:3},
+      ]
+    },options:{responsive:true,plugins:{legend:{position:'top'}},scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E8F0'}}}}});
+  }
+
+  // Conversión por semana
+  dc('cv-sem');
+  if(sems.length){
+    const cvSems=sems.map(s=>{const t=sum(byS[s],'TERMINADA'),a=sum(byS[s],'ANULADA');return parseFloat(conv(t,a));});
+    charts['cv-sem']=new Chart($('c-cv-sem'),{type:'line',data:{
+      labels:sems,datasets:[{label:'Conversión %',data:cvSems,borderColor:C.blue,backgroundColor:C.blue+'22',tension:.3,fill:true,pointRadius:6,pointBackgroundColor:C.blue}]
+    },options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{min:0,max:100,grid:{color:'#E2E8F0'},ticks:{callback:v=>v+'%'}}}}});
+  }
+
+  // FIXED: Reingresos — REINGRESO col has ' dir: 1' format with leading space
   dc('reing');
   let r1=0,r2=0;
-  data.forEach(r=>{
-    const rein=String(r['REINGRESO']||'');
-    const m=rein.match(/dir:\s*(\d+)/);
-    if(m){if(parseInt(m[1])>1)r2++;else r1++;}else r1++;
-  });
+  data.forEach(r=>{if(reingNum(r)>1)r2++;else r1++;});
   charts['reing']=new Chart($('c-reing'),{type:'doughnut',data:{
     labels:['Directo (dir:1)','Reingreso (dir:2+)'],datasets:[{data:[r1,r2],backgroundColor:[C.green+'cc',C.orange+'cc'],borderColor:'#fff',borderWidth:2}]
   },options:{responsive:true,cutout:'58%',plugins:{legend:{position:'bottom'}}}});
@@ -844,7 +861,7 @@ function sPill(el){document.querySelectorAll('.pill').forEach(p=>p.classList.rem
 function rAse(data){
   const srch=($('ase-q')?.value||'').toLowerCase();
   const byA=gb(data,'Tramitador_Nom');
-  let ases=Object.keys(byA).filter(a=>a!=='(vacío)');
+  let ases=Object.keys(byA).filter(a=>a!=='(vacío)'&&a!=='');
   if(srch)ases=ases.filter(a=>a.toLowerCase().includes(srch));
   ases=ases.filter(a=>{
     const rows=byA[a];const t=sum(rows,'TERMINADA'),an=sum(rows,'ANULADA');const c=parseFloat(conv(t,an));
@@ -853,12 +870,15 @@ function rAse(data){
   $('t-ase').querySelector('tbody').innerHTML=ases.map(a=>{
     const rows=byA[a];
     const t=sum(rows,'TERMINADA'),an=sum(rows,'ANULADA'),p=sum(rows,'PENDIENTE'),ba=sum(rows,'BA');
-    const c=parseFloat(conv(t,an));const q=rows.filter(r=>r['QUIEBRE']&&r['QUIEBRE']!=='').length;
-    const reing=rows.filter(r=>{const m=String(r['REINGRESO']||'').match(/dir:\s*(\d+)/);return m&&parseInt(m[1])>1;}).length;
-    const leg=rows.filter(r=>String(r['ESTADO LEG']||'').includes('legalizada')).length;
+    const c=parseFloat(conv(t,an));
+    const q=rows.filter(r=>r['QUIEBRE']&&String(r['QUIEBRE']).trim()!=='').length;
+    // FIXED: REINGRESO has ' dir: 1' format
+    const reing=rows.filter(r=>reingNum(r)>1).length;
+    // FIXED: LEG uses exact string matching
+    const leg=rows.filter(r=>isLegGrab(r)||isLegAut(r)).length;
     const sup=rows[0]?.['SUPERVISOR']||'—';const lin=rows[0]?.['LINEA']||'—';
-    const pv=rows[0]?.['Nom_Punto_Venta']||'—';
-    const pvShort=pv.replace('CANAL ON LINE - ATENTO ','').replace('CANAL ON LINE - ','');
+    const pv=String(rows[0]?.['Nom_Punto_Venta']||'—');
+    const pvShort=pv.replace('CANAL ON LINE - ATENTO ','').replace('CANAL ON LINE - ','').replace('CANAL ON LINE ','');
     const sd=c>=75?'<span class="dok"></span>':c>=50?'<span class="dw"></span>':'<span class="dcr"></span>';
     const sl=c>=75?'OK':c>=50?'Atención':'Foco';
     return`<tr>
@@ -880,61 +900,76 @@ function rAse(data){
 }
 
 function rQC(data){
-  const atrib=$('f-atrib')?.value||'';
-  const qdata=data.filter(r=>r['QUIEBRE']&&r['QUIEBRE']!==''&&(!atrib||String(r['ATRIBUIBLE']).toLowerCase()===atrib));
-  // Estado anulación counts
-  ['carrusel','asesor','cliente','tecnico','agendamiento'].forEach(e=>{
-    const el=$('q-'+e.replace('agendamiento','agend'));
-    if(el)el.textContent=data.filter(r=>r['ESTADO']===e).length;
+  const atrib=($('f-atrib')?.value||'').toLowerCase();
+  const qdata=data.filter(r=>r['QUIEBRE']&&String(r['QUIEBRE']).trim()!=='');
+  const qfilt=atrib?qdata.filter(r=>String(r['ATRIBUIBLE']||'').toLowerCase()===atrib):qdata;
+
+  // FIXED: ESTADO subtypes are the actual ESTADO values for anulaciones
+  const estadoTypes=['carrusel','asesor','cliente','tecnico','agendamiento'];
+  estadoTypes.forEach(e=>{
+    const elId=e==='agendamiento'?'q-agend':'q-'+e;
+    const el=$(elId);
+    if(el)el.textContent=fmt(data.filter(r=>String(r['ESTADO']||'').toLowerCase()===e).length);
   });
-  $('q-total').textContent=sum(data,'ANULADA');
-  // Hbars
-  const byQ={};qdata.forEach(r=>{const k=r['QUIEBRE'].trim();byQ[k]=(byQ[k]||0)+1;});
+  $('q-total').textContent=fmt(sum(data,'ANULADA'));
+
+  // Hbars quiebres
+  const byQ={};qfilt.forEach(r=>{const k=String(r['QUIEBRE']).trim();byQ[k]=(byQ[k]||0)+1;});
   const srt=Object.entries(byQ).sort((a,b)=>b[1]-a[1]).slice(0,10);const mx=srt[0]?.[1]||1;
   $('q-bars').innerHTML=srt.length?srt.map(([n,v])=>`
     <div>
       <div class="hm"><span class="hn" title="${n}">${n}</span><span class="hv">${v}</span></div>
       <div class="ht"><div class="hf hfr" style="width:${(v/mx*100).toFixed(1)}%"></div></div>
     </div>`).join(''):'<p style="color:var(--muted);padding:8px;">Sin quiebres en selección.</p>';
-  // Atribuible
-  dc('atrib');const byAt={};qdata.forEach(r=>{const k=r['ATRIBUIBLE']||'?';byAt[k]=(byAt[k]||0)+1;});
-  charts['atrib']=new Chart($('c-atrib'),{type:'doughnut',data:{
-    labels:Object.keys(byAt),datasets:[{data:Object.values(byAt),backgroundColor:PAL.map(c=>c+'cc'),borderColor:'#fff',borderWidth:2,hoverOffset:6}]
-  },options:{responsive:true,cutout:'55%',plugins:{legend:{position:'right'}}}});
+
+  // Atribuible doughnut
+  dc('atrib');const byAt={};qfilt.forEach(r=>{const k=r['ATRIBUIBLE']||'Sin definir';byAt[k]=(byAt[k]||0)+1;});
+  const atKeys=Object.keys(byAt);
+  if(atKeys.length){
+    charts['atrib']=new Chart($('c-atrib'),{type:'doughnut',data:{
+      labels:atKeys,datasets:[{data:atKeys.map(k=>byAt[k]),backgroundColor:PAL.map(c=>c+'cc'),borderColor:'#fff',borderWidth:2,hoverOffset:6}]
+    },options:{responsive:true,cutout:'55%',plugins:{legend:{position:'right'}}}});
+  }
+
   // Infractores
-  const byAQ=gb(qdata,'Tramitador_Nom');
-  $('t-infr').querySelector('tbody').innerHTML=Object.entries(byAQ).filter(([k])=>k!=='(vacío)').map(([a,rows])=>{
-    const topQM={};rows.forEach(r=>{const k=r['QUIEBRE'].trim();topQM[k]=(topQM[k]||0)+1;});
+  const byAQ=gb(qfilt,'Tramitador_Nom');
+  $('t-infr').querySelector('tbody').innerHTML=Object.entries(byAQ).filter(([k])=>k!=='(vacío)'&&k!=='').map(([a,rows])=>{
+    const topQM={};rows.forEach(r=>{const k=String(r['QUIEBRE']).trim();topQM[k]=(topQM[k]||0)+1;});
     const tQ=Object.entries(topQM).sort((a,b)=>b[1]-a[1])[0];
     const tAt=rows[0]?.['ATRIBUIBLE']||'—';const sup=rows[0]?.['SUPERVISOR']||'—';
     return{html:`<tr><td><strong style="font-size:11px;">${a}</strong></td><td style="font-size:11px;">${sup}</td><td class="num nr" data-val="${rows.length}">${rows.length}</td><td style="font-size:10px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${tQ?.[0]||''}">${tQ?.[0]||'—'}</td><td><span class="badge bo">${tAt}</span></td></tr>`,n:rows.length};
   }).sort((a,b)=>b.n-a.n).map(x=>x.html).join('');
-  // Q sup
-  dc('q-sup');const bySQ=gb(qdata,'SUPERVISOR');const sqs=Object.keys(bySQ).filter(s=>s!=='(vacío)').sort();
-  charts['q-sup']=new Chart($('c-q-sup'),{type:'bar',data:{
-    labels:sqs,datasets:[{label:'Quiebres',data:sqs.map(s=>bySQ[s].length),backgroundColor:C.red+'cc',borderRadius:6}]
-  },options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E8F0'}}}}});
+
+  // Q por supervisor
+  dc('q-sup');const bySQ=gb(qfilt,'SUPERVISOR');const sqs=Object.keys(bySQ).filter(s=>s!=='(vacío)'&&s!=='').sort();
+  if(sqs.length){
+    charts['q-sup']=new Chart($('c-q-sup'),{type:'bar',data:{
+      labels:sqs,datasets:[{label:'Quiebres',data:sqs.map(s=>bySQ[s].length),backgroundColor:C.red+'cc',borderRadius:6}]
+    },options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E8F0'}}}}});
+  }
 }
 
 function rDrill(data){
   const mot=$('f-qmot').value;
   if(!mot){$('t-drill').querySelector('tbody').innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px;">Selecciona un motivo arriba</td></tr>';return;}
-  const filtered=data.filter(r=>r['QUIEBRE']&&r['QUIEBRE'].trim()===mot);
+  const filtered=data.filter(r=>r['QUIEBRE']&&String(r['QUIEBRE']).trim()===mot);
   const total=filtered.length||1;
   const byA=gb(filtered,'Tramitador_Nom');
-  const rows=Object.entries(byA).filter(([k])=>k!=='(vacío)').map(([a,rs])=>({a,sup:rs[0]?.['SUPERVISOR']||'—',q:rs.length,at:rs[0]?.['ATRIBUIBLE']||'—'})).sort((a,b)=>b.q-a.q);
+  const rows=Object.entries(byA).filter(([k])=>k!=='(vacío)'&&k!=='').map(([a,rs])=>({a,sup:rs[0]?.['SUPERVISOR']||'—',q:rs.length,at:rs[0]?.['ATRIBUIBLE']||'—'})).sort((a,b)=>b.q-a.q);
   $('t-drill').querySelector('tbody').innerHTML=rows.length?rows.map(r=>`<tr><td><strong>${r.a}</strong></td><td>${r.sup}</td><td class="num nr">${r.q}</td><td class="num">${pct(r.q,total)}%</td><td><span class="badge bo">${r.at}</span></td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px;">Sin datos.</td></tr>';
 }
 
-// ── TAB 4: AGENDA & LEG ──────────────────────────────────────────────────
+// ── TAB 4: AGENDA & LEG — FIXED all flag and string checks ───────────────
 function rAgenda(data){
-  const agend=data.filter(r=>r['AGENDADAS']===1||Number(r['AGENDADAS'])===1);
-  const pend=data.filter(r=>r['PENDIENTES']===1||Number(r['PENDIENTES'])===1);
-  const susp=data.filter(r=>r['SUSPENDIDAS']===1||Number(r['SUSPENDIDAS'])===1);
-  const lgr=data.filter(r=>String(r['ESTADO LEG']||'').includes('grabacion'));
-  const lau=data.filter(r=>String(r['ESTADO LEG']||'').includes('legalizada aut'));
-  const pdtLeg=data.filter(r=>String(r['ESTADO LEG']||'').includes('pdte'));
-  const nc=data.filter(r=>String(r['ESTADO LEG']||'').includes('cruza'));
+  // FIXED: AGENDADAS/SUSPENDIDAS/PENDIENTES are 0/1 integers
+  const agend=data.filter(isAgendada);
+  const pend=data.filter(isPendienteAgenda);
+  const susp=data.filter(isSuspendida);
+  // FIXED: ESTADO LEG exact string matching
+  const lgr=data.filter(isLegGrab);
+  const lau=data.filter(isLegAut);
+  const pdtLeg=data.filter(isPdteLeg);
+  const nc=data.filter(isNoCruza);
 
   $('ag-tot').textContent=fmt(data.length);
   $('ag-ag').textContent=fmt(agend.length);
@@ -945,44 +980,58 @@ function rAgenda(data){
 
   // Agendas por DIA AGENDA
   dc('ag-dia');const byDA={};
-  agend.forEach(r=>{const d=r['DIA AGENDA'];if(d&&d!==0&&d!=='')byDA[Number(d)]=(byDA[Number(d)]||0)+1;});
-  const dias=Object.keys(byDA).map(Number).sort((a,b)=>a-b);
-  charts['ag-dia']=new Chart($('c-ag-dia'),{type:'bar',data:{
-    labels:dias.map(d=>'Día '+d),datasets:[{label:'Agendas',data:dias.map(d=>byDA[d]),backgroundColor:C.blue+'cc',borderRadius:4}]
-  },options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E8F0'}}}}});
+  agend.forEach(r=>{const d=Number(r['DIA AGENDA']);if(d&&d!==0&&!isNaN(d))byDA[d]=(byDA[d]||0)+1;});
+  const diasA=Object.keys(byDA).map(Number).sort((a,b)=>a-b);
+  if(diasA.length){
+    charts['ag-dia']=new Chart($('c-ag-dia'),{type:'bar',data:{
+      labels:diasA.map(d=>'Día '+d),datasets:[{label:'Agendas',data:diasA.map(d=>byDA[d]),backgroundColor:C.blue+'cc',borderRadius:4}]
+    },options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E8F0'}}}}});
+  }
 
-  // Franja
-  dc('ag-franja');const byF={};agend.forEach(r=>{const f=r['FRANJA AGENDA']||'Sin definir';if(f&&f!=='0')byF[f]=(byF[f]||0)+1;});
-  charts['ag-franja']=new Chart($('c-ag-franja'),{type:'doughnut',data:{
-    labels:Object.keys(byF),datasets:[{data:Object.values(byF),backgroundColor:PAL.map(c=>c+'cc'),borderColor:'#fff',borderWidth:2}]
-  },options:{responsive:true,cutout:'55%',plugins:{legend:{position:'bottom'}}}});
+  // Franja — FIXED: skip 0 values, only show 'AM', 'PM'
+  dc('ag-franja');const byF={};
+  agend.forEach(r=>{const f=r['FRANJA AGENDA'];if(f&&f!==0&&f!=='0'&&f!=='')byF[String(f)]=(byF[String(f)]||0)+1;});
+  const fKeys=Object.keys(byF);
+  if(fKeys.length){
+    charts['ag-franja']=new Chart($('c-ag-franja'),{type:'doughnut',data:{
+      labels:fKeys,datasets:[{data:fKeys.map(k=>byF[k]),backgroundColor:PAL.map(c=>c+'cc'),borderColor:'#fff',borderWidth:2}]
+    },options:{responsive:true,cutout:'55%',plugins:{legend:{position:'bottom'}}}});
+  }
 
   // Suspendidas tabla
   const bySus=gb(susp,'Tramitador_Nom');
-  $('t-sus').querySelector('tbody').innerHTML=Object.entries(bySus).filter(([k])=>k!=='(vacío)').map(([a,rows])=>{
-    const topMot=Object.entries(rows.reduce((acc,r)=>{const k=r['MOTIVO DE SUSPENSION']||'Sin motivo';acc[k]=(acc[k]||0)+1;return acc;},{})).sort((a,b)=>b[1]-a[1])[0];
-    const at=rows[0]?.['ATRIBUIBLE']||rows[0]?.['QUIEBRE']||'—';const sup=rows[0]?.['SUPERVISOR']||'—';
-    return`<tr><td><strong style="font-size:11px;">${a}</strong></td><td style="font-size:11px;">${sup}</td><td style="font-size:10px;max-width:200px;">${topMot?.[0]||'—'}</td><td class="num nr">${rows.length}</td><td><span class="badge bo">${at}</span></td></tr>`;
-  }).sort((a,b)=>{const va=parseInt(a.querySelector('.nr')?.textContent||0),vb=parseInt(b.querySelector('.nr')?.textContent||0);return vb-va;}).map(r=>r.outerHTML).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px;">Sin suspensiones en selección</td></tr>';
+  const susRows=Object.entries(bySus).filter(([k])=>k!=='(vacío)'&&k!=='').map(([a,rows])=>{
+    const motivos={};rows.forEach(r=>{const m=r['MOTIVO DE SUSPENSION'];if(m&&m!==0&&m!=='0'&&m!=='')motivos[String(m)]=(motivos[String(m)]||0)+1;});
+    const topMot=Object.entries(motivos).sort((a,b)=>b[1]-a[1])[0];
+    const sup=rows[0]?.['SUPERVISOR']||'—';
+    return{html:`<tr><td><strong style="font-size:11px;">${a}</strong></td><td style="font-size:11px;">${sup}</td><td style="font-size:10px;max-width:200px;">${topMot?.[0]||'Sin motivo registrado'}</td><td class="num nr">${rows.length}</td></tr>`,n:rows.length};
+  }).sort((a,b)=>b.n-a.n);
+  $('t-sus').querySelector('tbody').innerHTML=susRows.length?susRows.map(r=>r.html).join(''):'<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:20px;">Sin suspensiones en selección</td></tr>';
 
   // LEG por DIA SEG
-  dc('leg-dia');const byDS=gb(data,'DIA SEG');const ds=Object.keys(byDS).map(Number).sort((a,b)=>a-b);
-  charts['leg-dia']=new Chart($('c-leg-dia'),{type:'bar',data:{
-    labels:ds.map(d=>'Día '+d),datasets:[
-      {label:'Leg.Grab.',data:ds.map(d=>byDS[d].filter(r=>String(r['ESTADO LEG']||'').includes('grabacion')).length),backgroundColor:C.green+'cc',borderRadius:3},
-      {label:'Leg.Aut.',data:ds.map(d=>byDS[d].filter(r=>String(r['ESTADO LEG']||'').includes('legalizada aut')).length),backgroundColor:C.teal+'cc',borderRadius:3},
-      {label:'Pdte.Leg.',data:ds.map(d=>byDS[d].filter(r=>String(r['ESTADO LEG']||'').includes('pdte')).length),backgroundColor:C.yellow+'cc',borderRadius:3},
-      {label:'No Cruza',data:ds.map(d=>byDS[d].filter(r=>String(r['ESTADO LEG']||'').includes('cruza')).length),backgroundColor:C.red+'cc',borderRadius:3},
-      {label:'ANULADA',data:ds.map(d=>byDS[d].filter(r=>r['ESTADO LEG']==='ANULADA').length),backgroundColor:C.orange+'cc',borderRadius:3},
-    ]
-  },options:{responsive:true,plugins:{legend:{position:'top'}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#E2E8F0'}}}}});
+  dc('leg-dia');
+  const byDS={};
+  data.forEach(r=>{const d=Number(r['DIA SEG']);if(d&&!isNaN(d)){if(!byDS[d])byDS[d]=[];byDS[d].push(r);}});
+  const ds=Object.keys(byDS).map(Number).sort((a,b)=>a-b);
+  if(ds.length){
+    charts['leg-dia']=new Chart($('c-leg-dia'),{type:'bar',data:{
+      labels:ds.map(d=>'Día '+d),datasets:[
+        {label:'Leg.Grab.',data:ds.map(d=>byDS[d].filter(isLegGrab).length),backgroundColor:C.green+'cc',borderRadius:3},
+        {label:'Leg.Aut.',data:ds.map(d=>byDS[d].filter(isLegAut).length),backgroundColor:C.teal+'cc',borderRadius:3},
+        {label:'Pdte.Leg.',data:ds.map(d=>byDS[d].filter(isPdteLeg).length),backgroundColor:C.yellow+'cc',borderRadius:3},
+        {label:'No Cruza',data:ds.map(d=>byDS[d].filter(isNoCruza).length),backgroundColor:C.red+'cc',borderRadius:3},
+        {label:'ANULADA',data:ds.map(d=>byDS[d].filter(isAnuladaLeg).length),backgroundColor:C.orange+'cc',borderRadius:3},
+      ]
+    },options:{responsive:true,plugins:{legend:{position:'top'}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#E2E8F0'}}}}});
+  }
 
-  // Pago
-  dc('pago');const byP={};data.forEach(r=>{const k=String(r['% PAGO']||0).trim();byP[k]=(byP[k]||0)+1;});
-  $('pago-100').textContent=fmt(byP['100%']||0);$('pago-50').textContent=fmt(byP['50%']||0);
-  $('pago-0').textContent=fmt((byP['0']||0)+(byP[0]||0));
+  // FIXED: % PAGO can be '100%','50%', or integer 0
+  dc('pago');
+  let p100=0,p50=0,p0=0;
+  data.forEach(r=>{const k=pagoKey(r);if(k==='100%')p100++;else if(k==='50%')p50++;else p0++;});
+  $('pago-100').textContent=fmt(p100);$('pago-50').textContent=fmt(p50);$('pago-0').textContent=fmt(p0);
   charts['pago']=new Chart($('c-pago'),{type:'doughnut',data:{
-    labels:['100% Pago','50% Pago','Sin Pago'],datasets:[{data:[byP['100%']||0,byP['50%']||0,(byP['0']||0)+(byP[0]||0)],backgroundColor:[C.green+'dd',C.yellow+'dd',C.red+'dd'],borderColor:'#fff',borderWidth:2}]
+    labels:['100% Pago','50% Pago','Sin Pago'],datasets:[{data:[p100,p50,p0],backgroundColor:[C.green+'dd',C.yellow+'dd',C.red+'dd'],borderColor:'#fff',borderWidth:2}]
   },options:{responsive:true,cutout:'60%',plugins:{legend:{position:'bottom'}}}});
 
   // LEG KPIs
@@ -990,105 +1039,147 @@ function rAgenda(data){
   $('leg-pct').textContent=pct(lgr.length+lau.length,data.length)+'% del total';
   $('leg-pdt').textContent=fmt(pdtLeg.length);
   $('leg-nc').textContent=fmt(nc.length);
-  $('leg-p100').textContent=fmt(byP['100%']||0);
+  $('leg-p100').textContent=fmt(p100);
 
-  // LEG sup
-  const byS=gb(data,'SUPERVISOR');const sups=Object.keys(byS).filter(s=>s!=='(vacío)').sort();
+  // LEG por supervisor
+  const byS=gb(data,'SUPERVISOR');const sups=Object.keys(byS).filter(s=>s!=='(vacío)'&&s!=='').sort();
   $('t-leg-sup').querySelector('tbody').innerHTML=sups.map(s=>{
-    const rows=byS[s];const lg2=rows.filter(r=>String(r['ESTADO LEG']||'').includes('grabacion')).length;
-    const la2=rows.filter(r=>String(r['ESTADO LEG']||'').includes('legalizada aut')).length;
-    const pd2=rows.filter(r=>String(r['ESTADO LEG']||'').includes('pdte')).length;
-    const nc2=rows.filter(r=>String(r['ESTADO LEG']||'').includes('cruza')).length;
+    const rows=byS[s];
+    const lg2=rows.filter(isLegGrab).length;
+    const la2=rows.filter(isLegAut).length;
+    const pd2=rows.filter(isPdteLeg).length;
+    const nc2=rows.filter(isNoCruza).length;
     const pp=pct(lg2+la2,rows.length);
     return`<tr><td><strong>${s}</strong></td><td class="num" data-val="${rows.length}">${rows.length}</td><td class="num ng" data-val="${lg2}">${lg2}</td><td class="num" data-val="${la2}">${la2}</td><td class="num ny" data-val="${pd2}">${pd2}</td><td class="num nr" data-val="${nc2}">${nc2}</td><td data-val="${pp}"><span class="badge ${cbadge(pp)}">${pp}%</span></td></tr>`;
   }).join('');
 
   // Mora por asesor
   const byA=gb(data,'Tramitador_Nom');
-  $('t-mora').querySelector('tbody').innerHTML=Object.entries(byA).filter(([k])=>k!=='(vacío)').map(([a,rows])=>{
-    const avgD=rows.reduce((s,r)=>s+(parseFloat(r['DIF DIAS'])||0),0)/rows.length;
-    const avgF=rows.reduce((s,r)=>s+(parseFloat(r['FINAL Vs LG'])||0),0)/rows.length;
-    const topP=Object.entries(rows.reduce((acc,r)=>{const k=String(r['% PAGO']||0);acc[k]=(acc[k]||0)+1;return acc;},{})).sort((a,b)=>b[1]-a[1])[0]?.[0]||'—';
+  const moraRows=Object.entries(byA).filter(([k])=>k!=='(vacío)'&&k!=='').map(([a,rows])=>{
+    const legRows=rows.filter(r=>r['DIF DIAS']!==''&&r['DIF DIAS']!==null);
+    const avgD=legRows.length?legRows.reduce((s,r)=>s+(parseFloat(r['DIF DIAS'])||0),0)/legRows.length:0;
+    const fRows=rows.filter(r=>r['FINAL Vs LG']!==''&&r['FINAL Vs LG']!==null);
+    const avgF=fRows.length?fRows.reduce((s,r)=>s+(parseFloat(r['FINAL Vs LG'])||0),0)/fRows.length:0;
+    // FIXED: % PAGO counts
+    let tp100=0;rows.forEach(r=>{if(pagoKey(r)==='100%')tp100++;});
+    const topP=tp100+' (100%)';
     const est=rows[0]?.['ESTADO LEG']||'—';const sup=rows[0]?.['SUPERVISOR']||'—';
     const al=avgF>5?'🔴 Mora':avgF>2?'⚡ Atención':'✓ OK';const ab=avgF>5?'br':avgF>2?'by':'bg';
-    const lb=String(est).includes('legalizada')?'bg':String(est).includes('pdte')?'by':'bgr';
-    return{html:`<tr><td><strong style="font-size:11px;">${a}</strong></td><td style="font-size:11px;">${sup}</td><td><span class="badge ${lb}">${est}</span></td><td class="num ${avgD>4?'nr':avgD>2?'ny':'ng'}" data-val="${avgD.toFixed(1)}">${avgD.toFixed(1)} días</td><td class="num ${avgF>5?'nr':avgF>2?'ny':'ng'}" data-val="${avgF.toFixed(1)}">${avgF.toFixed(1)} días</td><td class="num">${topP}</td><td class="num" data-val="${rows.length}">${rows.length}</td><td><span class="badge ${ab}">${al}</span></td></tr>`,f:avgF};
-  }).sort((a,b)=>b.f-a.f).map(x=>x.html).join('');
+    const lb=isLegGrab(rows[0])||isLegAut(rows[0])?'bg':isPdteLeg(rows[0])?'by':'bgr';
+    return{html:`<tr><td><strong style="font-size:11px;">${a}</strong></td><td style="font-size:11px;">${sup}</td><td><span class="badge ${lb}">${est}</span></td><td class="num ${avgD>4?'nr':avgD>2?'ny':'ng'}" data-val="${avgD.toFixed(1)}">${avgD.toFixed(1)}d</td><td class="num ${avgF>5?'nr':avgF>2?'ny':'ng'}" data-val="${avgF.toFixed(1)}">${avgF.toFixed(1)}d</td><td class="num">${topP}</td><td class="num" data-val="${rows.length}">${rows.length}</td><td><span class="badge ${ab}">${al}</span></td></tr>`,f:avgF};
+  }).sort((a,b)=>b.f-a.f);
+  $('t-mora').querySelector('tbody').innerHTML=moraRows.map(x=>x.html).join('');
 }
 
 // ── TAB 5: GEO ───────────────────────────────────────────────────────────
 function rGeo(data){
-  const byD=gb(data,'Dpto_Nom');const deps=Object.keys(byD).filter(d=>d!=='(vacío)').sort();
+  const byDep=gb(data,'Dpto_Nom');const deps=Object.keys(byDep).filter(d=>d!=='(vacío)'&&d!=='').sort();
   $('t-dep').querySelector('tbody').innerHTML=deps.map(d=>{
-    const rows=byD[d];const t=sum(rows,'TERMINADA'),a=sum(rows,'ANULADA');const c=conv(t,a);
+    const rows=byDep[d];const t=sum(rows,'TERMINADA'),a=sum(rows,'ANULADA');const c=conv(t,a);
     return`<tr><td><strong>${d}</strong></td><td><span class="badge bb">${rows[0]?.['Regional']||'—'}</span></td><td class="num" data-val="${rows.length}">${rows.length}</td><td class="num ng" data-val="${t}">${t}</td><td class="num nr" data-val="${a}">${a}</td><td data-val="${c}"><span class="badge ${cbadge(c)}">${c}%</span></td></tr>`;
   }).join('');
-  const byM=gb(data,'Mun_Nom');const msrt=Object.entries(byM).filter(([k])=>k!=='(vacío)').sort((a,b)=>b[1].length-a[1].length).slice(0,15);
+
+  const byM=gb(data,'Mun_Nom');const msrt=Object.entries(byM).filter(([k])=>k!=='(vacío)'&&k!=='').sort((a,b)=>b[1].length-a[1].length).slice(0,15);
   const mmax=msrt[0]?.[1].length||1;
   $('mun-bars').innerHTML=msrt.map(([n,v])=>`<div><div class="hm"><span class="hn">${n}</span><span class="hv">${v.length}</span></div><div class="ht"><div class="hf hfb" style="width:${(v.length/mmax*100).toFixed(1)}%"></div></div></div>`).join('');
-  // Segmento (SubSegmentoCuentaDesc = tipología cliente)
-  dc('seg');const bySg={};data.forEach(r=>{const k=r['SubSegmentoCuentaDesc']||'Sin segmento';bySg[k]=(bySg[k]||0)+1;});
+
+  // FIXED: use Segmento_Homologado (has real values: Individual, Pymes)
+  dc('seg');const bySg={};
+  data.forEach(r=>{
+    const k=r['Segmento_Homologado']||r['SubSegmentoCuentaDesc']||'Sin segmento';
+    if(k&&k!=='')bySg[k]=(bySg[k]||0)+1;
+  });
   const sgSrt=Object.entries(bySg).sort((a,b)=>b[1]-a[1]).slice(0,8);
-  charts['seg']=new Chart($('c-seg'),{type:'bar',data:{
-    labels:sgSrt.map(([k])=>k),datasets:[{data:sgSrt.map(([,v])=>v),backgroundColor:PAL.map(c=>c+'cc'),borderRadius:4}]
-  },options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E8F0'}}}}});
-  // Tipo convergente (Pot_Conv / Convergente)
+  if(sgSrt.length){
+    charts['seg']=new Chart($('c-seg'),{type:'bar',data:{
+      labels:sgSrt.map(([k])=>k),datasets:[{data:sgSrt.map(([,v])=>v),backgroundColor:PAL.map(c=>c+'cc'),borderRadius:4}]
+    },options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E8F0'}}}}});
+  }
+
+  // FIXED: use Tipo_Convergente which has 'Convergente Nuevo','Convergente Existente','No Convergente'
   dc('conv2');const byCV={};
-  data.forEach(r=>{const k=r['Tipo_Convergente']||r['Convergente']==='Si'?'Convergente':'No Convergente';byCV[k]=(byCV[k]||0)+1;});
-  charts['conv2']=new Chart($('c-conv2'),{type:'doughnut',data:{
-    labels:Object.keys(byCV),datasets:[{data:Object.values(byCV),backgroundColor:PAL.map(c=>c+'cc'),borderColor:'#fff',borderWidth:2}]
-  },options:{responsive:true,cutout:'55%',plugins:{legend:{position:'bottom'}}}});
+  data.forEach(r=>{const k=r['Tipo_Convergente']||'Sin definir';if(k&&k!=='')byCV[k]=(byCV[k]||0)+1;});
+  const cvKeys=Object.keys(byCV);
+  if(cvKeys.length){
+    charts['conv2']=new Chart($('c-conv2'),{type:'doughnut',data:{
+      labels:cvKeys,datasets:[{data:cvKeys.map(k=>byCV[k]),backgroundColor:PAL.map(c=>c+'cc'),borderColor:'#fff',borderWidth:2}]
+    },options:{responsive:true,cutout:'55%',plugins:{legend:{position:'bottom'}}}});
+  }
+
   // Estrato
-  dc('estrato');const byE=gb(data,'Estrato');const eKeys=Object.keys(byE).filter(k=>k!==''&&k!=='(vacío)').sort((a,b)=>Number(a)-Number(b));
-  charts['estrato']=new Chart($('c-estrato'),{type:'bar',data:{
-    labels:eKeys.map(k=>'E'+k),datasets:[{data:eKeys.map(k=>byE[k].length),backgroundColor:C.purple+'cc',borderRadius:4}]
-  },options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E8F0'}}}}});
+  dc('estrato');const byE={};
+  data.forEach(r=>{const e=r['Estrato'];if(e!==''&&e!==null&&e!==undefined&&!isNaN(Number(e))){const k='E'+Number(e);byE[k]=(byE[k]||0)+1;}});
+  const eKeys=Object.keys(byE).sort((a,b)=>parseInt(a.substring(1))-parseInt(b.substring(1)));
+  if(eKeys.length){
+    charts['estrato']=new Chart($('c-estrato'),{type:'bar',data:{
+      labels:eKeys,datasets:[{data:eKeys.map(k=>byE[k]),backgroundColor:C.purple+'cc',borderRadius:4}]
+    },options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E8F0'}}}}});
+  }
+
   // Producto BA/DUO/TRIO
-  dc('prod');const byPr={BA:sum(data,'BA'),DUO:sum(data,'DUO'),TRIO:sum(data,'TRIO')};
+  dc('prod');const baProd=sum(data,'BA'),duoProd=sum(data,'DUO'),trioProd=sum(data,'TRIO');
   charts['prod']=new Chart($('c-prod'),{type:'doughnut',data:{
-    labels:Object.keys(byPr),datasets:[{data:Object.values(byPr),backgroundColor:[C.blue+'cc',C.teal+'cc',C.green+'cc'],borderColor:'#fff',borderWidth:2,hoverOffset:6}]
+    labels:['BA','DUO','TRIO'],datasets:[{data:[baProd,duoProd,trioProd],backgroundColor:[C.blue+'cc',C.teal+'cc',C.green+'cc'],borderColor:'#fff',borderWidth:2,hoverOffset:6}]
   },options:{responsive:true,cutout:'58%',plugins:{legend:{position:'bottom'}}}});
+
   // Tenencia planta
-  dc('planta');const byPl=gb(data,'TenenciaPlanta');const plK=Object.keys(byPl).filter(k=>k!=='(vacío)');
-  charts['planta']=new Chart($('c-planta'),{type:'doughnut',data:{
-    labels:plK,datasets:[{data:plK.map(k=>byPl[k].length),backgroundColor:PAL.map(c=>c+'cc'),borderColor:'#fff',borderWidth:2}]
-  },options:{responsive:true,cutout:'58%',plugins:{legend:{position:'bottom'}}}});
+  dc('planta');const byPl=gb(data,'TenenciaPlanta');const plK=Object.keys(byPl).filter(k=>k!=='(vacío)'&&k!=='');
+  if(plK.length){
+    charts['planta']=new Chart($('c-planta'),{type:'doughnut',data:{
+      labels:plK,datasets:[{data:plK.map(k=>byPl[k].length),backgroundColor:PAL.map(c=>c+'cc'),borderColor:'#fff',borderWidth:2}]
+    },options:{responsive:true,cutout:'58%',plugins:{legend:{position:'bottom'}}}});
+  }
+
   // Tarifa
-  dc('tarifa');const byT={};data.forEach(r=>{const v=r['TarifaMXFinal'];if(v&&Number(v)>0)byT[Number(v)]=(byT[Number(v)]||0)+1;});
+  dc('tarifa');const byT={};
+  data.forEach(r=>{const v=r['TarifaMXFinal'];if(v&&v!==''&&Number(v)>0)byT[Number(v)]=(byT[Number(v)]||0)+1;});
   const tSrt=Object.entries(byT).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  charts['tarifa']=new Chart($('c-tarifa'),{type:'bar',data:{
-    labels:tSrt.map(([k])=>'$'+Number(k).toLocaleString()),datasets:[{data:tSrt.map(([,v])=>v),backgroundColor:C.orange+'cc',borderRadius:4}]
-  },options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E8F0'}}}}});
-  // Planes
-  const byPlan=gb(data,'Nom_Plan_Tarifario');const planSrt=Object.entries(byPlan).filter(([k])=>k!=='(vacío)').sort((a,b)=>b[1].length-a[1].length).slice(0,8);const planMax=planSrt[0]?.[1].length||1;
-  $('plan-bars').innerHTML=planSrt.map(([n,v])=>{const sh=n.length>45?n.substring(0,45)+'…':n;return`<div><div class="hm"><span class="hn" title="${n}">${sh}</span><span class="hv">${v.length}</span></div><div class="ht"><div class="hf hfg" style="width:${(v.length/planMax*100).toFixed(1)}%"></div></div></div>`;}).join('');
-  // Conv por regional
-  dc('cv-reg');const byR=gb(data,'Regional');const regs=Object.keys(byR).filter(r=>r!=='(vacío)').sort();
-  const cvR=regs.map(r=>{const t=sum(byR[r],'TERMINADA'),a=sum(byR[r],'ANULADA');return parseFloat(conv(t,a));});
-  charts['cv-reg']=new Chart($('c-cv-reg'),{type:'bar',data:{
-    labels:regs,datasets:[{data:cvR,backgroundColor:cvR.map(v=>v>=75?C.green+'cc':v>=50?C.yellow+'cc':C.red+'cc'),borderRadius:6}]
-  },options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{min:0,max:100,grid:{color:'#E2E8F0'},ticks:{callback:v=>v+'%'}}}}});
+  if(tSrt.length){
+    charts['tarifa']=new Chart($('c-tarifa'),{type:'bar',data:{
+      labels:tSrt.map(([k])=>'$'+Number(k).toLocaleString('es-CO')),datasets:[{data:tSrt.map(([,v])=>v),backgroundColor:C.orange+'cc',borderRadius:4}]
+    },options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E8F0'}}}}});
+  }
+
+  // Planes tarifarios
+  const byPlan=gb(data,'Nom_Plan_Tarifario');
+  const planSrt=Object.entries(byPlan).filter(([k])=>k!=='(vacío)'&&k!=='').sort((a,b)=>b[1].length-a[1].length).slice(0,8);
+  const planMax=planSrt[0]?.[1].length||1;
+  $('plan-bars').innerHTML=planSrt.map(([n,v])=>{const sh=n.length>50?n.substring(0,50)+'…':n;return`<div><div class="hm"><span class="hn" title="${n}">${sh}</span><span class="hv">${v.length}</span></div><div class="ht"><div class="hf hfg" style="width:${(v.length/planMax*100).toFixed(1)}%"></div></div></div>`;}).join('');
+
+  // Conversión por regional
+  dc('cv-reg');const byR=gb(data,'Regional');const regs=Object.keys(byR).filter(r=>r!=='(vacío)'&&r!=='').sort();
+  if(regs.length){
+    const cvR=regs.map(r=>{const t=sum(byR[r],'TERMINADA'),a=sum(byR[r],'ANULADA');return parseFloat(conv(t,a));});
+    charts['cv-reg']=new Chart($('c-cv-reg'),{type:'bar',data:{
+      labels:regs,datasets:[{data:cvR,backgroundColor:cvR.map(v=>v>=75?C.green+'cc':v>=50?C.yellow+'cc':C.red+'cc'),borderRadius:6}]
+    },options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{min:0,max:100,grid:{color:'#E2E8F0'},ticks:{callback:v=>v+'%'}}}}});
+  }
 }
 
 // ── TAB 6: INSIGHTS ──────────────────────────────────────────────────────
 function rInsights(data){
   const cfg=DB.CONFIG;
-  const dPDC=cfg.DIA_PDC,dTot=cfg.DIAS_MES_PDC,dRest=dTot-dPDC;
+  const dPDC=cfg.DIA_PDC||14,dTot=cfg.DIAS_MES_PDC||24,dRest=dTot-dPDC;
   const metaGen=cfg.META_GEN||0;
   const trm=sum(data,'TERMINADA'),anl=sum(data,'ANULADA'),pnd=sum(data,'PENDIENTE');
   const ritmo=dPDC>0?trm/dPDC:0,ritmoA=dPDC>0?anl/dPDC:0;
   const proyT=Math.round(trm+ritmo*dRest),proyA=Math.round(anl+ritmoA*dRest);
   const gap=metaGen-proyT,reqR=dRest>0&&metaGen>trm?Math.ceil((metaGen-trm)/dRest):0;
   const efProy=parseFloat(conv(proyT,proyA));
-  const histAnR=anl/(trm+anl+pnd)||0;const riesgo=Math.round(pnd*histAnR);
+  const histAnR=(trm+anl+pnd)>0?anl/(trm+anl+pnd):0;const riesgo=Math.round(pnd*histAnR);
 
   $('p-trans').textContent=dPDC;$('p-trans-s').textContent=`de ${dTot} días PDC`;
   $('p-trm').textContent=fmt(trm);$('p-ritmo').textContent=`ritmo ${ritmo.toFixed(1)} / día`;
   $('p-proy').textContent=fmt(proyT);$('p-proy-s').textContent=`vs meta ${fmt(metaGen)}`;
   $('p-gap').textContent=(gap>0?'-':'+')+''+fmt(Math.abs(gap));$('p-gap').className='pv '+(gap<=0?'ng':'nr');
-  $('p-req').textContent=reqR>0?reqR+'/día':'Meta superada';$('p-anl-p').textContent=fmt(proyA);$('p-efic').textContent=efProy+'%';$('p-riesgo').textContent=fmt(riesgo);
+  $('p-req').textContent=reqR>0?reqR+'/día':'✓ Meta alcanzable';
+  $('p-anl-p').textContent=fmt(proyA);$('p-efic').textContent=efProy+'%';$('p-riesgo').textContent=fmt(riesgo);
 
-  dc('proy');const diasEje=Array.from({length:dTot},(_,i)=>i+1);const byDay=gb(data,'DIA SEG');
+  // Proyección chart — uses DIA SEG
+  dc('proy');
+  const byDay={};
+  data.forEach(r=>{const d=Number(r['DIA SEG']);if(d&&!isNaN(d)){if(!byDay[d])byDay[d]=[];byDay[d].push(r);}});
+  const diasEje=Array.from({length:dTot},(_,i)=>i+1);
   let acT=0;
   charts['proy']=new Chart($('c-proy'),{type:'line',data:{
     labels:diasEje.map(d=>'D'+d),
@@ -1097,25 +1188,27 @@ function rInsights(data){
       {label:'Base',data:diasEje.map(d=>d>=dPDC?Math.round(trm+ritmo*(d-dPDC)):null),borderColor:C.blue,borderDash:[6,4],tension:.3,fill:false,pointRadius:0,borderWidth:2},
       {label:'Optimista (+15%)',data:diasEje.map(d=>d>=dPDC?Math.round(trm+(ritmo*1.15)*(d-dPDC)):null),borderColor:C.teal,borderDash:[4,6],tension:.3,fill:false,pointRadius:0,borderWidth:1.5},
       {label:'Pesimista (-15%)',data:diasEje.map(d=>d>=dPDC?Math.round(trm+(ritmo*0.85)*(d-dPDC)):null),borderColor:C.red,borderDash:[4,6],tension:.3,fill:false,pointRadius:0,borderWidth:1.5},
-      {label:'Meta',data:diasEje.map(()=>metaGen>0?Math.round(metaGen/dTot*(diasEje.indexOf(diasEje[0])+1)):null).map((_,i)=>metaGen>0?Math.round(metaGen/dTot*(i+1)):null),borderColor:C.orange,borderDash:[2,4],tension:0,fill:false,pointRadius:0,borderWidth:1},
+      {label:'Meta',data:diasEje.map((_,i)=>metaGen>0?Math.round(metaGen/dTot*(i+1)):null),borderColor:C.orange,borderDash:[2,4],tension:0,fill:false,pointRadius:0,borderWidth:1},
     ]
   },options:{responsive:true,plugins:{legend:{position:'top'}},scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E8F0'}}}}});
+
   dc('esc');charts['esc']=new Chart($('c-esc'),{type:'bar',data:{
-    labels:['Pesimista (-15%)','Base (actual)','Optimista (+15%)',metaGen>0?'Meta GEN':'Sin meta'],
+    labels:['Pesimista (-15%)','Base (actual)','Optimista (+15%)','Meta GEN'],
     datasets:[{data:[Math.round(trm+ritmo*0.85*dRest),proyT,Math.round(trm+ritmo*1.15*dRest),metaGen||0],backgroundColor:[C.red+'cc',C.blue+'cc',C.green+'cc',C.orange+'cc'],borderRadius:8}]
   },options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E8F0'}}}}});
 
   // Focos
   const byS=gb(data,'SUPERVISOR');
-  $('foco-sup').innerHTML=Object.entries(byS).filter(([k])=>k!=='(vacío)'&&k!=='No Cruza').map(([s,rows])=>{
+  $('foco-sup').innerHTML=Object.entries(byS).filter(([k])=>k!=='(vacío)'&&k!=='').map(([s,rows])=>{
     const t=sum(rows,'TERMINADA'),a=sum(rows,'ANULADA');return{s,t,a,tot:rows.length,c:parseFloat(conv(t,a))};
   }).sort((a,b)=>a.c-b.c).map((o,i)=>`
     <div class="fi"><div class="fr">${i+1}</div>
       <div class="fb"><div class="fn">${o.s}</div><div class="fm">${o.tot} órd · ${o.t} term · ${o.a} anuld</div></div>
       <div class="fe" style="color:${o.c>=75?'var(--green)':o.c>=50?'var(--yellow)':'var(--red)'}">${o.c}%</div>
     </div>`).join('');
+
   const byA=gb(data,'Tramitador_Nom');
-  $('foco-ase').innerHTML=Object.entries(byA).filter(([k])=>k!=='(vacío)').map(([a,rows])=>{
+  $('foco-ase').innerHTML=Object.entries(byA).filter(([k])=>k!=='(vacío)'&&k!=='').map(([a,rows])=>{
     const t=sum(rows,'TERMINADA'),an=sum(rows,'ANULADA');return{a,t,an,tot:rows.length,sup:rows[0]?.['SUPERVISOR']||'—',c:parseFloat(conv(t,an))};
   }).filter(o=>o.tot>=2).sort((a,b)=>a.c-b.c).slice(0,10).map((o,i)=>`
     <div class="fi"><div class="fr">${i+1}</div>
@@ -1125,53 +1218,47 @@ function rInsights(data){
 
   // Insights
   const cvG=parseFloat(conv(trm,anl));
-  const byQ={};data.filter(r=>r['QUIEBRE']&&r['QUIEBRE']!=='').forEach(r=>{const k=r['QUIEBRE'].trim();byQ[k]=(byQ[k]||0)+1;});
+  const byQ={};data.filter(r=>r['QUIEBRE']&&String(r['QUIEBRE']).trim()!=='').forEach(r=>{const k=String(r['QUIEBRE']).trim();byQ[k]=(byQ[k]||0)+1;});
   const topQ=Object.entries(byQ).sort((a,b)=>b[1]-a[1])[0];
-  const aseFoco=Object.entries(byA).filter(([k])=>k!=='(vacío)').filter(([a,rows])=>parseFloat(conv(sum(rows,'TERMINADA'),sum(rows,'ANULADA')))<65).length;
+  const aseFoco=Object.entries(byA).filter(([k])=>k!=='(vacío)'&&k!=='').filter(([a,rows])=>parseFloat(conv(sum(rows,'TERMINADA'),sum(rows,'ANULADA')))<65).length;
+  const totalQAll=Object.values(byQ).reduce((a,b)=>a+b,0)||1;
+
   $('ins-box').innerHTML=[
     {type:cvG>=80?'good':cvG>=65?'info':'warn',icon:cvG>=80?'✅':cvG>=65?'ℹ️':'🔴',
       title:`Conversión global: ${cvG}%`,
-      body:cvG>=80?`Tasa en niveles óptimos. Enfocarse en empaquetadas y crecimiento.`:
+      body:cvG>=80?'Tasa en niveles óptimos. Enfocarse en empaquetadas y crecimiento.':
            cvG>=65?`Conversión aceptable. Oportunidad de mejorar ~${(80-cvG).toFixed(1)}pp. Revisar asesores con conversión <60%.`:
            `Conversión crítica. Activar planes de trabajo para ${aseFoco} asesores foco identificados.`},
     {type:gap>0&&metaGen>0?'warn':'good',icon:gap>0&&metaGen>0?'📉':'📈',
       title:metaGen>0?(gap>0?`Gap vs meta: ${fmt(gap)} terminadas faltantes`:`Proyección favorable: +${fmt(Math.abs(gap))} sobre meta`):'Meta calculada desde datos Excel',
-      body:metaGen>0?(gap>0?`Ritmo actual: ${ritmo.toFixed(1)} term/día. Para alcanzar meta ${fmt(metaGen)} se necesitan ${reqR} term/día en ${dRest} días restantes. Gestionar ${fmt(pnd)} pendientes.`:`El ritmo actual supera lo requerido.`):`META calculada desde columna META del Excel: ${cfg.META_POR_ASESOR_DIA} term/asesor/día × ${cfg.N_ASESORES} asesores × ${dTot} días = ${fmt(metaGen)}.`},
-    {type:'warn',icon:'⚠️',title:topQ?`Quiebre principal: ${topQ[0]} (${topQ[1]} casos)`:'Sin quiebres en selección',
-      body:topQ?`Representa ${pct(topQ[1],Object.values(byQ).reduce((a,b)=>a+b,0))}% del total. Acción prioritaria con supervisores.`:'Sin quiebres.'},
+      body:metaGen>0?(gap>0?`Ritmo actual: ${ritmo.toFixed(1)} term/día. Para alcanzar meta ${fmt(metaGen)} se necesitan ${reqR} term/día en ${dRest} días restantes.`:`El ritmo actual supera lo requerido.`):''},
+    {type:'warn',icon:'⚠️',
+      title:topQ?`Quiebre principal: ${topQ[0]} (${topQ[1]} casos)`:'Sin quiebres',
+      body:topQ?`Representa ${pct(topQ[1],totalQAll)}% del total de quiebres. Acción prioritaria.`:'Sin quiebres en selección.'},
     {type:riesgo>30?'warn':'tip',icon:'💡',
       title:`${fmt(pnd)} pendientes · ${riesgo} en riesgo`,
-      body:`Tasa histórica de anulación: ${(histAnR*100).toFixed(1)}%. Contacto proactivo urgente para confirmar ${riesgo} pendientes en riesgo.`},
+      body:`Tasa histórica de anulación: ${(histAnR*100).toFixed(1)}%. Contacto proactivo para confirmar pendientes en riesgo.`},
   ].map(o=>`<div class="ins ${o.type}"><span class="ins-ico">${o.icon}</span><div><div class="ins-t">${o.title}</div><div class="ins-b">${o.body}</div></div></div>`).join('');
 
   // Críticos
-  const totalQ=Object.values(byQ).reduce((a,b)=>a+b,0)||1;
-  const acc={'carrusel':'Activar validación anti-fraude. Alertar área de riesgo.','qc - cliente desiste del servicio / elige la competencia':'Mejorar calidad de venta y confirmación previa al agendamiento.','qc - no se logro contacto para agendar':'Optimizar ventanas y canales de contacto.','qc - direccion errada':'Validar dirección en tiempo real durante la venta.','qt - no existe red ftth':'Verificar cobertura antes de concretar la venta.','qc-plan errado oferta primaria':'Capacitar asesores en portafolio actual.','qt - falta de apoyo para acometida':'Coordinar con equipo técnico.'};
+  const acciones={'carrusel':'Activar validación anti-fraude. Alertar área de riesgo.','qc - cliente desiste del servicio / elige la competencia':'Mejorar calidad de venta y confirmación previa al agendamiento.','qc - no se logro contacto para agendar':'Optimizar ventanas y canales de contacto.','qc - direccion errada':'Validar dirección en tiempo real durante la venta.','qt - no existe red ftth':'Verificar cobertura antes de concretar la venta.','qc-plan errado oferta primaria':'Capacitar asesores en portafolio actual.','qt - falta de apoyo para acometida':'Coordinar con equipo técnico.'};
   $('t-crit').querySelector('tbody').innerHTML=Object.entries(byQ).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([mot,n])=>{
-    const at=data.filter(r=>r['QUIEBRE']&&r['QUIEBRE'].trim()===mot)[0]?.['ATRIBUIBLE']||'—';
-    const accion=acc[mot.toLowerCase()]||'Análisis detallado con supervisores responsables.';
-    return`<tr><td style="font-size:11px;font-weight:600;">${mot}</td><td class="num nr">${n}</td><td><span class="badge bo">${at}</span></td><td class="num">${pct(n,totalQ)}%</td><td style="font-size:10px;color:var(--muted);">${accion}</td></tr>`;
+    const at=data.filter(r=>r['QUIEBRE']&&String(r['QUIEBRE']).trim()===mot)[0]?.['ATRIBUIBLE']||'—';
+    const accion=acciones[mot.toLowerCase()]||'Análisis detallado con supervisores responsables.';
+    return`<tr><td style="font-size:11px;font-weight:600;">${mot}</td><td class="num nr">${n}</td><td><span class="badge bo">${at}</span></td><td class="num">${pct(n,totalQAll)}%</td><td style="font-size:10px;color:var(--muted);">${accion}</td></tr>`;
   }).join('');
 }
 
 // ── DOWNLOADS ────────────────────────────────────────────────────────────
 function dlExcel(){
   toast('⬇️ Descargando Excel...');
-  fetch('INFORME FIBRA FINAL.xlsx').then(r=>{
-    if(!r.ok)throw new Error('Not found');
-    return r.blob();
+  fetch('INFORME_FIBRA_FINAL.xlsx').then(r=>{
+    if(!r.ok)throw new Error('Not found');return r.blob();
   }).then(blob=>{
     const url=URL.createObjectURL(blob);const a=document.createElement('a');
-    a.href=url;a.download='INFORME FIBRA FINAL.xlsx';document.body.appendChild(a);a.click();
+    a.href=url;a.download='INFORME_FIBRA_FINAL.xlsx';document.body.appendChild(a);a.click();
     document.body.removeChild(a);URL.revokeObjectURL(url);toast('✅ Excel descargado');
-  }).catch(()=>{
-    // Try alternate name
-    fetch('INFORME%20FIBRA%20FINAL.xlsx').then(r=>r.blob()).then(blob=>{
-      const url=URL.createObjectURL(blob);const a=document.createElement('a');
-      a.href=url;a.download='INFORME FIBRA FINAL.xlsx';document.body.appendChild(a);a.click();
-      document.body.removeChild(a);URL.revokeObjectURL(url);toast('✅ Excel descargado');
-    }).catch(()=>toast('❌ No se encontró el archivo Excel en el repositorio'));
-  });
+  }).catch(()=>toast('❌ No se encontró el archivo Excel'));
 }
 async function dlPDF(){
   toast('📄 Generando PDF...');
@@ -1203,12 +1290,10 @@ function render(){
 (function(){
   initFilters();
   ['f-sem','f-sup','f-ase','f-reg','f-lin','f-pro','f-src'].forEach(id=>$(id)?.addEventListener('change',render));
-  $('f-atrib')?.addEventListener('change',()=>{rQC(gf());});
+  $('f-atrib')?.addEventListener('change',()=>rQC(gf()));
   $('f-qmot')?.addEventListener('change',()=>rDrill(gf()));
   render();
 })();
 </script>
 </body>
 </html>
-HTMLEOF
-echo "Done. Size: $(wc -c < /mnt/user-data/outputs/index.html) bytes"
