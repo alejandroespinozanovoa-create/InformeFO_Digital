@@ -71,7 +71,7 @@ BBDD_COLS = [
     "Producto", "TenenciaPlanta", "Nom_Plan_Tarifario",
     "TarifaMXFinal", "Tipo_Venta", "Convergente", "Tipo_Convergente", "Tipo_Cliente",
     "SubSegmentoCuentaDesc", "Estrato", "Zona",
-    "UNIDAD_VENTA_DIG", "ATR_VENTA_SOURCE", "SubCanal",
+    "UNIDAD_VENTA_DIG", "ATR_VENTA_SOURCE", "ATR_VENTA_CAMPANA", "ATR_VENTA_MEDIUM", "SubCanal",
     "ESTADO_VARIABLE_DIG", "MOTIVO_QUIEBRE_DIG",
     "Altas_Con_Reingreso",
     "Dia_Reg", "Mes_Reg", "Anio_Reg",
@@ -206,13 +206,27 @@ if "DIAS MES PDC" in df.columns:
     if not val.empty:
         dias_mes_pdc = int(val.iloc[0])
 
+# ─── Extract META per supervisor from BBDD ──────────────────────────────
+meta_sup_dict = {}
+if "META" in df.columns and "SUPERVISOR" in df.columns:
+    grp = df[df["SUPERVISOR"].astype(str).str.strip() != ""].groupby("SUPERVISOR")["META"]
+    for sup, vals in grp:
+        v = pd.to_numeric(vals, errors="coerce").dropna()
+        if not v.empty:
+            meta_val = int(v.iloc[0])
+            if meta_val > 0:
+                meta_sup_dict[str(sup).strip()] = meta_val
+meta_gen = sum(meta_sup_dict.values())
+
 config = {
     "DIA_PDC":      dia_pdc,
     "DIAS_MES_PDC": dias_mes_pdc,
-    "META":         {"GEN": 1147, "FMC": 491, "TVT": 48},
+    "META_GEN":     meta_gen,
+    "META_SUP":     meta_sup_dict,
 }
 
-print(f"  ↳ CONFIG: DIA_PDC={dia_pdc}, DIAS_MES_PDC={dias_mes_pdc}")
+print(f"  ↳ CONFIG: DIA_PDC={dia_pdc}, DIAS_MES_PDC={dias_mes_pdc}, META_GEN={meta_gen}")
+print(f"  ↳ META_SUP: {meta_sup_dict}")
 
 # ─── Write data.js ───────────────────────────────────────────────────────
 payload = json.dumps(

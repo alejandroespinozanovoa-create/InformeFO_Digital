@@ -1,0 +1,51 @@
+name: Update Dashboard Data
+
+on:
+  push:
+    paths:
+      - '**.xlsx'
+      - '**.XLSX'
+      - '**.xls'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install openpyxl pandas numpy
+
+      - name: List files (debug)
+        run: |
+          echo "=== Files in root ==="
+          ls -la
+          echo "=== Excel files found ==="
+          find . -name "*.xlsx" -o -name "*.XLSX" -o -name "*.xls" | head -20
+
+      - name: Convert Excel to JS
+        run: python convert.py
+
+      - name: Commit and push updated data.js
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data.js
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Auto-update: data.js desde Excel [$(date +'%Y-%m-%d %H:%M UTC')]"
+            git push
+          fi

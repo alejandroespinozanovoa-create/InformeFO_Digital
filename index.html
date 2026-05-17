@@ -727,18 +727,37 @@ function rCvSup(data){
 // ── CHARTS: FUENTES ──────────────────────────────────────────────────────
 function rFuentes(data){
   dc('src');
-  const byS={};data.forEach(r=>{const k=r['ATR_VENTA_SOURCE']||'Sin definir';if(k)byS[k]=(byS[k]||0)+1;});
-  const srt=Object.entries(byS).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  // Efectividad por fuente: terminadas / total registros por fuente
+  const byST={},bySA={},bySN={};
+  data.forEach(r=>{
+    const k=r['ATR_VENTA_SOURCE']||'Sin definir';
+    bySN[k]=(bySN[k]||0)+1;
+    if(r['TERMINADA']===1)byST[k]=(byST[k]||0)+1;
+    if(r['ANULADA']===1)bySA[k]=(bySA[k]||0)+1;
+  });
+  const srt=Object.entries(bySN).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const efectividad=srt.map(([k])=>bySN[k]>0?parseFloat(((byST[k]||0)/bySN[k]*100).toFixed(1)):0);
+  const terminadas=srt.map(([k])=>byST[k]||0);
+  const totales=srt.map(([,v])=>v);
   charts['src']=new Chart($('c-src'),{type:'bar',data:{
-    labels:srt.map(([k])=>k),datasets:[{label:'Registros',data:srt.map(([,v])=>v),backgroundColor:PAL.map(c=>c+'cc'),borderRadius:4}]
-  },options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#E2E8F0'}}}}});
+    labels:srt.map(([k])=>k),
+    datasets:[
+      {label:'Terminadas',data:terminadas,backgroundColor:'#22c55ecc',borderRadius:4,stack:'s'},
+      {label:'Anuladas',data:srt.map(([k])=>bySA[k]||0),backgroundColor:'#ef4444cc',borderRadius:4,stack:'s'},
+      {label:'Pendientes',data:srt.map(([k])=>Math.max(0,(bySN[k]||0)-(byST[k]||0)-(bySA[k]||0))),backgroundColor:'#f59e0bcc',borderRadius:4,stack:'s'}
+    ]
+  },options:{responsive:true,plugins:{
+    legend:{display:true,position:'bottom'},
+    tooltip:{callbacks:{afterBody:(ctx)=>{const i=ctx[0].dataIndex;return'Efectividad: '+efectividad[i]+'%  ('+terminadas[i]+'/'+totales[i]+')';}}}
+  },scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:'#E2E8F0'}}}}});
 
-  const byC={};data.forEach(r=>{const k=r['ATR_VENTA_CAMPANA']||'';if(k&&k!=='-'&&k!=='')byC[k]=(byC[k]||0)+1;});
+  const byC={};data.forEach(r=>{const k=r['ATR_VENTA_CAMPANA']||'';if(k&&k!=='-'&&k!==''&&k!=='none')byC[k]=(byC[k]||0)+1;});
   const cSrt=Object.entries(byC).sort((a,b)=>b[1]-a[1]).slice(0,8);
   const cMax=cSrt[0]?.[1]||1;
   $('bars-campana').innerHTML=cSrt.length?cSrt.map(([n,v])=>{
-    const label=n.length>50?n.substring(0,50)+'…':n;
-    return`<div><div class="hm"><span class="hn" title="${n}">${label}</span><span class="hv">${v}</span></div><div class="ht"><div class="hf hfb" style="width:${(v/cMax*100).toFixed(1)}%"></div></div></div>`;
+    const label=n.length>55?n.substring(0,55)+'…':n;
+    const pct=(v/cMax*100).toFixed(1);
+    return`<div><div class="hm"><span class="hn" title="${n}">${label}</span><span class="hv">${v}</span></div><div class="ht"><div class="hf hfb" style="width:${pct}%"></div></div></div>`;
   }).join(''):'<p style="color:var(--muted);font-size:12px;padding:8px;">Sin datos de campaña</p>';
 
   dc('medium');const byM={};data.forEach(r=>{const k=r['ATR_VENTA_MEDIUM']||'';if(k&&k!=='-'&&k!=='')byM[k]=(byM[k]||0)+1;});
@@ -1252,11 +1271,11 @@ function rInsights(data){
 // ── DOWNLOADS ────────────────────────────────────────────────────────────
 function dlExcel(){
   toast('⬇️ Descargando Excel...');
-  fetch('INFORME_FIBRA_FINAL.xlsx').then(r=>{
+  fetch('INFORME FIBRA FINAL.xlsx').then(r=>{
     if(!r.ok)throw new Error('Not found');return r.blob();
   }).then(blob=>{
     const url=URL.createObjectURL(blob);const a=document.createElement('a');
-    a.href=url;a.download='INFORME_FIBRA_FINAL.xlsx';document.body.appendChild(a);a.click();
+    a.href=url;a.download='INFORME FIBRA FINAL.xlsx';document.body.appendChild(a);a.click();
     document.body.removeChild(a);URL.revokeObjectURL(url);toast('✅ Excel descargado');
   }).catch(()=>toast('❌ No se encontró el archivo Excel'));
 }
