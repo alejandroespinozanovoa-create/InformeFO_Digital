@@ -175,8 +175,9 @@ tbody tr:hover td{background:var(--surf2);}
     <div class="hbs">
       <div><div class="v" id="hb-pdc">—</div><div class="l">Días PDC</div></div>
       <div><div class="v" id="hb-rest">—</div><div class="l">Restantes</div></div>
-      <div><div class="v" id="hb-av">—%</div><div class="l">Avance</div></div>
       <div><div class="v" id="hb-meta">—</div><div class="l">Meta GEN</div></div>
+      <div><div class="v" id="hb-cumpl" style="color:var(--yellow)">—%</div><div class="l">% Cumpl. Real</div></div>
+      <div><div class="v" id="hb-proy" style="color:var(--blue)">—%</div><div class="l">% Proyectado</div></div>
     </div>
   </div>
   <div class="sh">KPIs Principales</div>
@@ -190,9 +191,12 @@ tbody tr:hover td{background:var(--surf2);}
   </div>
   <div class="g g3" style="margin-bottom:14px;">
     <div class="card"><div class="cbd">
-      <div class="kl" style="margin-bottom:8px;">Avance vs Meta GEN (<span id="m-gen-tot">—</span>)</div>
-      <div class="pw"><div class="pt"><div class="pf" id="m-gen" style="width:0%;background:var(--green)"></div></div><span class="num ng" id="m-gen-p" style="font-size:13px;min-width:42px;text-align:right;">—%</span></div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;"><span class="num nm" id="m-gen-v" style="font-size:11px;">—</span><span class="num nm" style="font-size:11px;" id="m-gen-sub">—</span></div>
+      <div class="kl" style="margin-bottom:8px;">Cumplimiento Altas vs Meta GEN (<span id="m-gen-tot">—</span>)</div>
+      <div class="pw" style="margin-bottom:4px;"><div class="pt"><div class="pf" id="m-gen" style="width:0%;background:var(--green)"></div></div><span class="num ng" id="m-gen-p" style="font-size:13px;min-width:48px;text-align:right;">—%</span></div>
+      <div style="display:flex;justify-content:space-between;margin-top:2px;margin-bottom:6px;"><span class="num nm" id="m-gen-v" style="font-size:11px;">— altas</span><span class="num nm" style="font-size:11px;" id="m-gen-sub">de — meta</span></div>
+      <div class="kl" style="margin-bottom:4px;font-size:10px;color:var(--muted);">Proyección al Cierre (ritmo actual)</div>
+      <div class="pw"><div class="pt"><div class="pf" id="m-proy-bar" style="width:0%;background:var(--blue)"></div></div><span class="num nb" id="m-proy-p" style="font-size:13px;min-width:48px;text-align:right;">—%</span></div>
+      <div style="display:flex;justify-content:space-between;margin-top:2px;"><span class="num nm" id="m-proy-v" style="font-size:11px;">— proyectadas</span><span class="num nm" id="m-proy-req" style="font-size:11px;color:var(--orange);">—</span></div>
     </div></div>
     <div class="card"><div class="cbd">
       <div class="kl" style="margin-bottom:8px;">BA vs Total Terminadas</div>
@@ -233,7 +237,9 @@ tbody tr:hover td{background:var(--surf2);}
           <th onclick="sc(this,'t-sup',7)">Empa.</th>
           <th onclick="sc(this,'t-sup',8)">Conv.</th>
           <th onclick="sc(this,'t-sup',9)">Meta</th>
-          <th onclick="sc(this,'t-sup',10)">% vs Meta</th>
+          <th onclick="sc(this,'t-sup',10)">% Cumpl.</th>
+          <th onclick="sc(this,'t-sup',11)">Proy. Altas</th>
+          <th onclick="sc(this,'t-sup',12)">% Proy.</th>
         </tr></thead><tbody></tbody>
       </table></div></div>
     </div>
@@ -318,10 +324,12 @@ tbody tr:hover td{background:var(--surf2);}
         <th onclick="sc(this,'t-ase',8)">Empa.</th>
         <th onclick="sc(this,'t-ase',9)">% Part.</th>
         <th onclick="sc(this,'t-ase',10)">Conv.</th>
-        <th onclick="sc(this,'t-ase',11)">Quiebres</th>
-        <th onclick="sc(this,'t-ase',12)">Reingresos</th>
-        <th onclick="sc(this,'t-ase',13)">Leg.</th>
-        <th onclick="sc(this,'t-ase',14)">Punto Venta</th>
+        <th onclick="sc(this,'t-ase',11)">Proy.</th>
+        <th onclick="sc(this,'t-ase',12)">% Cumpl.</th>
+        <th onclick="sc(this,'t-ase',13)">Quiebres</th>
+        <th onclick="sc(this,'t-ase',14)">Reingresos</th>
+        <th onclick="sc(this,'t-ase',15)">Leg.</th>
+        <th onclick="sc(this,'t-ase',16)">Punto Venta</th>
         <th>Estado</th>
       </tr></thead><tbody></tbody>
     </table></div></div>
@@ -628,7 +636,13 @@ function rKPIs(data){
   const cfg=DB.CONFIG;
   const dPDC=cfg.DIA_PDC||14,dTot=cfg.DIAS_MES_PDC||24,dRest=dTot-dPDC;
   const metaGen=cfg.META_GEN||0;
-  const av=dTot>0?Math.round((dPDC/dTot)*100):0;
+  // Cumplimiento: Altas/Meta (no tiempo)
+  const cumplReal=metaGen>0?Math.min(100,parseFloat(pct(trm,metaGen))):0;
+  // Proyección al cierre: ritmo actual × días restantes + terminadas
+  const ritmo=dPDC>0?trm/dPDC:0;
+  const proyT=Math.round(trm+ritmo*dRest);
+  const cumplProy=metaGen>0?Math.min(120,parseFloat(pct(proyT,metaGen))):0;
+  const reqR=dRest>0&&metaGen>trm?Math.ceil((metaGen-trm)/dRest):0;
 
   $('k-tot').textContent=fmt(tot);
   $('k-trm').textContent=fmt(trm);$('k-trms').textContent=pct(trm,tot)+'% del total';$('k-trmb').style.width=pct(trm,tot)+'%';
@@ -636,12 +650,25 @@ function rKPIs(data){
   $('k-anl').textContent=fmt(anl);$('k-anls').textContent=pct(anl,tot)+'% del total';$('k-anlb').style.width=pct(anl,tot)+'%';
   $('k-cv').textContent=cv+'%';$('k-cvb').style.width=cv+'%';
   $('k-emp').textContent=fmt(emp);$('k-emps').textContent=pct(emp,trm)+'% de terminadas';
-  $('hb-pdc').textContent=dPDC;$('hb-rest').textContent=dRest;$('hb-av').textContent=av+'%';$('hb-meta').textContent=fmt(metaGen);
 
-  const mGPct=metaGen>0?Math.min(100,parseFloat(pct(trm,metaGen))):0;
+  // Header band
+  $('hb-pdc').textContent=dPDC;$('hb-rest').textContent=dRest;$('hb-meta').textContent=fmt(metaGen);
+  $('hb-cumpl').textContent=cumplReal.toFixed(1)+'%';
+  $('hb-cumpl').style.color=cumplReal>=100?'var(--green)':cumplReal>=80?'var(--yellow)':'var(--red)';
+  $('hb-proy').textContent=cumplProy.toFixed(1)+'%';
+  $('hb-proy').style.color=cumplProy>=100?'var(--green)':cumplProy>=80?'var(--yellow)':'var(--red)';
+
+  // Main progress card
+  const mGPct=cumplReal;
   $('m-gen-tot').textContent=fmt(metaGen);
-  $('m-gen').style.width=mGPct+'%';$('m-gen-p').textContent=mGPct.toFixed(1)+'%';
-  $('m-gen-v').textContent=fmt(trm)+' terminadas';$('m-gen-sub').textContent='de '+fmt(metaGen);
+  $('m-gen').style.width=Math.min(100,mGPct)+'%';$('m-gen-p').textContent=mGPct.toFixed(1)+'%';
+  $('m-gen').style.background=mGPct>=100?'var(--green)':mGPct>=80?'var(--yellow)':'var(--red)';
+  $('m-gen-v').textContent=fmt(trm)+' altas';$('m-gen-sub').textContent='de '+fmt(metaGen)+' meta';
+  // Projection bar
+  $('m-proy-bar').style.width=Math.min(100,cumplProy)+'%';$('m-proy-p').textContent=cumplProy.toFixed(1)+'%';
+  $('m-proy-bar').style.background=cumplProy>=100?'var(--green)':cumplProy>=80?'var(--blue)':'var(--orange)';
+  $('m-proy-v').textContent=fmt(proyT)+' proyectadas';
+  $('m-proy-req').textContent=metaGen>0?(reqR>0?'Necesita '+reqR+'/día':proyT>=metaGen?'✅ Meta alcanzable':''):'';
 
   const baPct=trm>0?Math.min(100,parseFloat(pct(ba,trm))):0;
   $('m-ba').style.width=baPct+'%';$('m-ba-p').textContent=baPct.toFixed(1)+'%';
@@ -689,14 +716,22 @@ function rTblSup(data){
   const byS=gb(data,'SUPERVISOR');
   // FIXED: META per supervisor comes from CONFIG.META_SUP
   const metaSup=DB.CONFIG.META_SUP||{};
+  const cfg2=DB.CONFIG;
+  const dPDC2=cfg2.DIA_PDC||14,dTot2=cfg2.DIAS_MES_PDC||24,dRest2=dTot2-dPDC2;
   $('t-sup').querySelector('tbody').innerHTML=Object.keys(byS).filter(s=>s!=='(vacío)').sort().map(s=>{
     const rows=byS[s];
     const t=sum(rows,'TERMINADA'),a=sum(rows,'ANULADA'),p=sum(rows,'PENDIENTE'),e=sum(rows,'EMPAQUETADAS');
     const ba=sum(rows,'BA'),trio=sum(rows,'TRIO');
     const cv=conv(t,a);
-    // Use supervisor-specific meta from CONFIG.META_SUP
     const meta=metaSup[s]||0;
+    // Cumplimiento real: Altas/Meta
     const vsMeta=meta>0?parseFloat(pct(t,meta)):0;
+    // Proyección por supervisor: ritmo_sup × días restantes
+    const ritmoS=dPDC2>0?t/dPDC2:0;
+    const proyS=Math.round(t+ritmoS*dRest2);
+    const vsMetaProy=meta>0?Math.min(120,parseFloat(pct(proyS,meta))):0;
+    const cumplBadge=meta>0?`<span class="badge ${vsMeta>=100?'bg':vsMeta>=80?'by':'br'}">${vsMeta.toFixed(1)}%</span>`:'—';
+    const proyBadge=meta>0?`<span class="badge ${vsMetaProy>=100?'bg':vsMetaProy>=80?'by':'br'}" style="opacity:.85">${vsMetaProy.toFixed(1)}%</span>`:'—';
     return`<tr>
       <td><strong>${s}</strong></td>
       <td class="num" data-val="${rows.length}">${fmt(rows.length)}</td>
@@ -708,7 +743,9 @@ function rTblSup(data){
       <td class="num" data-val="${e}">${fmt(e)}</td>
       <td data-val="${cv}"><span class="badge ${cbadge(cv)}">${cv}%</span></td>
       <td class="num nm" data-val="${meta}">${meta>0?fmt(meta):'—'}</td>
-      <td data-val="${vsMeta}"><span class="badge ${meta>0?(vsMeta>=100?'bg':vsMeta>=80?'by':'br'):'bgr'}">${meta>0?vsMeta.toFixed(1)+'%':'—'}</span></td>
+      <td data-val="${vsMeta}">${cumplBadge}</td>
+      <td class="num nb" data-val="${proyS}">${meta>0?fmt(proyS):'—'}</td>
+      <td data-val="${vsMetaProy}">${proyBadge}</td>
     </tr>`;
   }).join('');
 }
@@ -912,6 +949,23 @@ function rAse(data){
     const sl=c>=75?'OK':c>=50?'Atención':'Foco';
     const empBadge=emp>0?`<span class="badge bg" style="font-size:11px;">${emp}</span>`:'<span style="color:var(--muted)">—</span>';
     const partBadge=emp>0?`<span style="font-size:11px;font-weight:700;color:var(--blue);">${empPart}%</span>`:'<span style="color:var(--muted)">—</span>';
+    // PDC projection per asesor: individual ritmo × días restantes + terminadas
+    const cfg3=DB.CONFIG;
+    const dPDC3=cfg3.DIA_PDC||14,dRest3=(cfg3.DIAS_MES_PDC||24)-dPDC3;
+    const ritmoA=dPDC3>0?t/dPDC3:0;
+    const proyA=Math.round(t+ritmoA*dRest3);
+    // % Cumpl. del asesor sobre la meta proporcional de su supervisor
+    const metaSupA=(DB.CONFIG.META_SUP||{})[sup]||0;
+    const metaAse=metaSupA>0&&Object.keys(gb(data,'Tramitador_Nom')).filter(x=>x!=='(vacío)'&&x!=='').length>0
+      ? Math.round(metaSupA / Object.keys(gb(data,'Tramitador_Nom')).filter(x=>x!=='(vacío)'&&x!=='').length)
+      : 0;
+    // Use supervisor meta proportional share for cumpl badge
+    // Simply show projected as % of supervisor meta if only 1 sup, else just show number
+    const cumplAse=metaSupA>0?Math.min(120,parseFloat(pct(proyA,metaSupA))):0;
+    const proyBadge=`<span class="num nb" style="font-size:11px;font-weight:700;">${fmt(proyA)}</span>`;
+    const cumplBadgeA=metaSupA>0
+      ? `<span class="badge ${cumplAse>=100?'bg':cumplAse>=80?'by':'br'}" style="font-size:10px;">${cumplAse.toFixed(1)}%</span>`
+      : '<span style="font-size:10px;color:var(--muted);">—</span>';
     return`<tr>
       <td><strong style="font-size:11px;">${a}</strong></td>
       <td style="font-size:11px;">${sup}</td><td>${lin}</td>
@@ -923,6 +977,8 @@ function rAse(data){
       <td data-val="${emp}">${empBadge}</td>
       <td data-val="${empPart}">${partBadge}</td>
       <td data-val="${c}"><span class="badge ${cbadge(c)}">${c}%</span></td>
+      <td data-val="${proyA}">${proyBadge}</td>
+      <td data-val="${cumplAse}">${cumplBadgeA}</td>
       <td class="num nr" data-val="${q}">${q}</td>
       <td class="num" data-val="${reing}">${reing}</td>
       <td class="num ng" data-val="${leg}">${leg}</td>
