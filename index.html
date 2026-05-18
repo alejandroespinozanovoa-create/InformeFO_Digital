@@ -126,6 +126,60 @@ tbody tr:hover td{background:var(--surf2);}
 #toast{position:fixed;bottom:20px;right:20px;background:var(--dark);color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;z-index:999;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;}
 #toast.show{opacity:1;transform:translateY(0);}
 ::-webkit-scrollbar{width:5px;height:5px;}::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px;}
+
+/* ── AI AGENT ──────────────────────────────────────────────────────────── */
+#ai-fab{position:fixed;bottom:22px;right:22px;z-index:1000;width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;cursor:pointer;
+  box-shadow:0 4px 20px rgba(99,102,241,.5);transition:all .2s;display:flex;align-items:center;justify-content:center;}
+#ai-fab:hover{transform:scale(1.1);box-shadow:0 6px 24px rgba(99,102,241,.7);}
+#ai-fab svg{width:24px;height:24px;color:#fff;}
+#ai-badge{position:absolute;top:-3px;right:-3px;background:var(--red);color:#fff;
+  font-size:9px;font-weight:800;width:16px;height:16px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;border:2px solid #fff;}
+#ai-panel{position:fixed;bottom:84px;right:22px;z-index:999;width:380px;max-width:calc(100vw - 32px);
+  background:var(--surf);border:1px solid var(--bdr);border-radius:16px;
+  box-shadow:0 20px 60px rgba(0,0,0,.15);display:none;flex-direction:column;overflow:hidden;
+  animation:slideUp .25s ease;}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+#ai-panel.open{display:flex;}
+#ai-header{background:linear-gradient(135deg,#1e1b4b,#312e81);padding:14px 16px;
+  display:flex;align-items:center;gap:10px;}
+#ai-header .ai-avatar{width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+#ai-header .ai-avatar svg{width:16px;height:16px;color:#fff;}
+#ai-header .ai-title{flex:1;}
+#ai-header .ai-title strong{color:#fff;font-size:13px;display:block;}
+#ai-header .ai-title span{color:rgba(255,255,255,.5);font-size:10px;}
+#ai-close{background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;
+  font-size:18px;padding:2px 6px;border-radius:4px;transition:color .15s;}
+#ai-close:hover{color:#fff;}
+#ai-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;max-height:340px;min-height:180px;}
+.ai-msg{display:flex;gap:8px;align-items:flex-start;}
+.ai-msg.user{flex-direction:row-reverse;}
+.ai-bubble{max-width:85%;padding:10px 13px;border-radius:12px;font-size:12.5px;line-height:1.55;word-break:break-word;}
+.ai-msg.bot .ai-bubble{background:var(--surf2);border:1px solid var(--bdr);color:var(--txt);border-bottom-left-radius:4px;}
+.ai-msg.user .ai-bubble{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border-bottom-right-radius:4px;}
+.ai-dot-wrap{display:flex;gap:4px;align-items:center;padding:4px 0;}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:blink 1.2s infinite;}
+.ai-dot:nth-child(2){animation-delay:.2s;}.ai-dot:nth-child(3){animation-delay:.4s;}
+@keyframes blink{0%,80%,100%{opacity:.3;}40%{opacity:1;}}
+.ai-chip-row{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 10px;}
+.ai-chip{background:var(--surf2);border:1px solid var(--bdr);color:var(--txt);font-size:11px;
+  padding:5px 10px;border-radius:20px;cursor:pointer;transition:all .15s;font-family:var(--font);font-weight:500;}
+.ai-chip:hover{border-color:#6366f1;color:#6366f1;background:#eef2ff;}
+#ai-inp-row{padding:10px 12px;border-top:1px solid var(--bdr);display:flex;gap:8px;align-items:center;}
+#ai-inp{flex:1;border:1px solid var(--bdr);border-radius:20px;padding:8px 14px;font-family:var(--font);
+  font-size:12px;background:var(--surf2);color:var(--txt);outline:none;transition:border-color .15s;}
+#ai-inp:focus{border-color:#6366f1;}
+#ai-send{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .15s;}
+#ai-send:hover{opacity:.85;}
+#ai-send svg{width:15px;height:15px;color:#fff;}
+#ai-send:disabled{opacity:.4;cursor:not-allowed;}
+@media(max-width:480px){#ai-panel{width:calc(100vw - 24px);right:12px;bottom:76px;}
+  #ai-msgs{max-height:280px;}
+}
 </style>
 </head>
 <body>
@@ -503,6 +557,57 @@ tbody tr:hover td{background:var(--surf2);}
     </table></div></div>
   </div>
 </div>
+</div>
+
+<!-- ── AI AGENT PANEL ──────────────────────────────────────────────────── -->
+<button id="ai-fab" onclick="aiToggle()" title="Pregunta al Agente IA">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+    <circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/>
+    <circle cx="12" cy="10" r="1" fill="currentColor" stroke="none"/>
+    <circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/>
+  </svg>
+  <div id="ai-badge">IA</div>
+</button>
+
+<div id="ai-panel">
+  <div id="ai-header">
+    <div class="ai-avatar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2a4 4 0 014 4v1h1a2 2 0 012 2v6a2 2 0 01-2 2h-1v1a4 4 0 01-8 0v-1H7a2 2 0 01-2-2V9a2 2 0 012-2h1V6a4 4 0 014-4z"/>
+        <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/>
+        <circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/>
+      </svg>
+    </div>
+    <div class="ai-title">
+      <strong>Agente IA · FO Digital</strong>
+      <span>Responde sobre el reporte con datos en tiempo real</span>
+    </div>
+    <button id="ai-close" onclick="aiToggle()">✕</button>
+  </div>
+  <div id="ai-msgs">
+    <div class="ai-msg bot">
+      <div class="ai-bubble">
+        👋 Hola, soy el agente IA del informe FO Digital. Puedo responder preguntas sobre <strong>KPIs, conversión, cumplimiento de meta, asesores, quiebres, fuentes y proyecciones</strong> basándome en los datos actuales del reporte.<br><br>¿En qué te puedo ayudar?
+      </div>
+    </div>
+  </div>
+  <div class="ai-chip-row" id="ai-chips">
+    <button class="ai-chip" onclick="aiChip(this)">¿Cómo vamos vs la meta?</button>
+    <button class="ai-chip" onclick="aiChip(this)">¿Qué asesores están en riesgo?</button>
+    <button class="ai-chip" onclick="aiChip(this)">¿Cuál es la proyección al cierre?</button>
+    <button class="ai-chip" onclick="aiChip(this)">¿Cuáles son los principales quiebres?</button>
+    <button class="ai-chip" onclick="aiChip(this)">¿Qué fuente tiene mejor conversión?</button>
+  </div>
+  <div id="ai-inp-row">
+    <input id="ai-inp" type="text" placeholder="Pregunta sobre el reporte..." maxlength="300"
+      onkeydown="if(event.key==='Enter')aiSend()"/>
+    <button id="ai-send" onclick="aiSend()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+      </svg>
+    </button>
+  </div>
 </div>
 <div id="toast"></div>
 
@@ -1465,6 +1570,206 @@ function render(){
   $('f-qmot')?.addEventListener('change',()=>rDrill(gf()));
   render();
 })();
+
+
+// ── AI AGENT ────────────────────────────────────────────────────────────
+let aiHistory=[];
+let aiTyping=false;
+
+function aiToggle(){
+  const panel=$('ai-panel');
+  panel.classList.toggle('open');
+  if(panel.classList.contains('open')){
+    setTimeout(()=>$('ai-inp')?.focus(),200);
+  }
+}
+
+function aiChip(el){
+  const q=el.textContent;
+  $('ai-inp').value=q;
+  aiSend();
+}
+
+function aiSend(){
+  const inp=$('ai-inp');
+  const q=(inp.value||'').trim();
+  if(!q||aiTyping)return;
+  inp.value='';
+  aiAddMsg('user',q);
+  aiHistory.push({role:'user',content:q});
+  aiAsk(q);
+}
+
+function aiAddMsg(role,html){
+  const msgs=$('ai-msgs');
+  const div=document.createElement('div');
+  div.className='ai-msg '+role;
+  const bub=document.createElement('div');
+  bub.className='ai-bubble';
+  if(role==='bot')bub.innerHTML=html;
+  else bub.textContent=html;
+  div.appendChild(bub);
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+  return bub;
+}
+
+function aiShowTyping(){
+  const msgs=$('ai-msgs');
+  const div=document.createElement('div');
+  div.className='ai-msg bot';div.id='ai-typing';
+  div.innerHTML='<div class="ai-bubble"><div class="ai-dot-wrap"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div></div>';
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function aiRemoveTyping(){const el=$('ai-typing');if(el)el.remove();}
+
+function aiContext(){
+  // Build a rich context snapshot from current filtered data
+  const data=gf();
+  const cfg=DB.CONFIG;
+  const dPDC=cfg.DIA_PDC||14,dTot=cfg.DIAS_MES_PDC||24,dRest=dTot-dPDC;
+  const metaGen=cfg.META_GEN||0;
+  const metaSup=cfg.META_SUP||{};
+
+  const trm=sum(data,'TERMINADA'),anl=sum(data,'ANULADA'),pnd=sum(data,'PENDIENTE');
+  const ba=sum(data,'BA'),trio=sum(data,'TRIO'),emp=sum(data,'EMPAQUETADAS');
+  const cv=conv(trm,anl);
+  const ritmo=dPDC>0?trm/dPDC:0;
+  const proyT=Math.round(trm+ritmo*dRest);
+  const cumplReal=metaGen>0?parseFloat(pct(trm,metaGen)):0;
+  const cumplProy=metaGen>0?parseFloat(pct(proyT,metaGen)):0;
+  const reqR=dRest>0&&metaGen>trm?Math.ceil((metaGen-trm)/dRest):0;
+
+  // By supervisor
+  const byS=gb(data,'SUPERVISOR');
+  const supResumen=Object.entries(byS).filter(([k])=>k&&k!=='(vacío)').map(([s,rows])=>{
+    const t=sum(rows,'TERMINADA'),a=sum(rows,'ANULADA'),p=sum(rows,'PENDIENTE'),e=sum(rows,'EMPAQUETADAS');
+    const ba2=sum(rows,'BA');
+    const meta=metaSup[s]||0;
+    const cumpl=meta>0?parseFloat(pct(t,meta)):null;
+    const ritmoS=dPDC>0?t/dPDC:0;
+    const proyS=Math.round(t+ritmoS*dRest);
+    const cumplP=meta>0?parseFloat(pct(proyS,meta)):null;
+    return{supervisor:s,total:rows.length,terminadas:t,anuladas:a,pendientes:p,ba:ba2,empaquetadas:e,
+      conversion:parseFloat(conv(t,a)),meta,cumplimientoReal:cumpl,proyeccion:proyS,cumplimientoProyectado:cumplP};
+  });
+
+  // By asesor top 20 by terminadas
+  const byA=gb(data,'Tramitador_Nom');
+  const aseResumen=Object.entries(byA).filter(([k])=>k&&k!=='(vacío)').map(([a,rows])=>{
+    const t=sum(rows,'TERMINADA'),an=sum(rows,'ANULADA');
+    const p=sum(rows,'PENDIENTE'),e=sum(rows,'EMPAQUETADAS');
+    const q=rows.filter(r=>r['QUIEBRE']&&String(r['QUIEBRE']).trim()!=='').length;
+    const sup=rows[0]?.['SUPERVISOR']||'—';
+    const c=parseFloat(conv(t,an));
+    const ritmoA=dPDC>0?t/dPDC:0;
+    const proyA=Math.round(t+ritmoA*dRest);
+    return{asesor:a,supervisor:sup,total:rows.length,terminadas:t,anuladas:an,pendientes:p,
+      empaquetadas:e,conversion:c,quiebres:q,proyeccion:proyA};
+  }).sort((a,b)=>b.terminadas-a.terminadas).slice(0,20);
+
+  // Quiebres top 10
+  const byQ={};data.filter(r=>r['QUIEBRE']&&String(r['QUIEBRE']).trim()!=='').forEach(r=>{
+    const k=String(r['QUIEBRE']).trim();byQ[k]=(byQ[k]||0)+1;});
+  const topQ=Object.entries(byQ).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([k,v])=>({motivo:k,cantidad:v}));
+
+  // Fuentes top 10 con efectividad
+  const bySrc={};data.forEach(r=>{
+    const k=r['ATR_VENTA_SOURCE']||'Sin definir';
+    if(!bySrc[k])bySrc[k]={total:0,terminadas:0,anuladas:0};
+    bySrc[k].total++;
+    if(r['TERMINADA']===1)bySrc[k].terminadas++;
+    if(r['ANULADA']===1)bySrc[k].anuladas++;
+  });
+  const topSrc=Object.entries(bySrc).sort((a,b)=>b[1].total-a[1].total).slice(0,10).map(([k,v])=>({
+    fuente:k,...v,efectividad:v.total>0?parseFloat(pct(v.terminadas,v.total)):0}));
+
+  // Active filters
+  const filtros={
+    semana:$('f-sem')?.value||'todas',
+    supervisor:$('f-sup')?.value||'todos',
+    asesor:$('f-ase')?.value||'todos',
+    linea:$('f-lin')?.value||'todas',
+    fuente:$('f-src')?.value||'todas',
+  };
+
+  return JSON.stringify({
+    resumenGeneral:{totalRegistros:data.length,terminadas:trm,anuladas:anl,pendientes:pnd,
+      ba,trio,empaquetadas:emp,conversion:parseFloat(cv),
+      diasPDC:dPDC,diasRestantes:dRest,diasTotalesMes:dTot,
+      metaGEN:metaGen,cumplimientoReal:cumplReal,proyeccionCierre:proyT,
+      cumplimientoProyectado:cumplProy,ritmoActual:parseFloat(ritmo.toFixed(2)),
+      altas_dia_requeridas:reqR},
+    supervisores:supResumen,
+    asesores:aseResumen,
+    quiebres:topQ,
+    fuentes:topSrc,
+    filtrosActivos:filtros,
+    metasPorSupervisor:metaSup
+  },null,2);
+}
+
+async function aiAsk(q){
+  aiTyping=true;
+  $('ai-send').disabled=true;
+  $('ai-chips').style.display='none';
+  aiShowTyping();
+
+  const contextStr=aiContext();
+  const systemPrompt=`Eres un analista experto del informe gerencial de operaciones del Canal Online FO Digital de Atento Colombia (cliente Fibra).
+Tu rol es responder preguntas de gerentes y supervisores sobre el reporte en tiempo real.
+
+CONTEXTO DEL REPORTE (datos filtrados actuales):
+${contextStr}
+
+REGLAS:
+- Responde SIEMPRE en español, de forma concisa y directa.
+- Usa los datos del contexto; nunca inventes cifras.
+- Cuando menciones porcentajes, redondea a 1 decimal.
+- Usa negritas HTML (<strong>) para destacar cifras clave.
+- Para listas usa guiones o <br>.
+- Máximo 200 palabras por respuesta.
+- Si la pregunta no se puede responder con los datos disponibles, dilo claramente.
+- Eres proactivo: si ves un problema relevante, menciónalo brevemente.`;
+
+  const messages=[...aiHistory];
+  // Keep last 10 exchanges to avoid large context
+  const trimmed=messages.length>20?messages.slice(-20):messages;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:600,
+        system:systemPrompt,
+        messages:trimmed
+      })
+    });
+    const data=await res.json();
+    aiRemoveTyping();
+    if(data.content&&data.content[0]?.text){
+      const reply=data.content[0].text;
+      aiAddMsg('bot',reply);
+      aiHistory.push({role:'assistant',content:reply});
+      // Keep history manageable
+      if(aiHistory.length>30)aiHistory=aiHistory.slice(-30);
+    } else {
+      const err=data.error?.message||'Error desconocido';
+      aiAddMsg('bot',`⚠️ No pude obtener respuesta: <em>${err}</em>`);
+    }
+  } catch(e){
+    aiRemoveTyping();
+    aiAddMsg('bot','⚠️ Error de conexión. Verifica que el informe está siendo servido correctamente.');
+  } finally{
+    aiTyping=false;
+    $('ai-send').disabled=false;
+  }
+}
+
 </script>
 </body>
 </html>
